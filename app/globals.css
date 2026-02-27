@@ -1,26 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #eef2ff;
+  --surface: #ffffff;
+  --surface-soft: #f6f8ff;
+  --border: #d8def8;
+  --text-primary: #0f152e;
+  --text-secondary: #3f4b7a;
+  --text-muted: #5a6490;
+  --accent: #2d5bff;
+  --accent-contrast: #f5f8ff;
+  --highlight: #14b8a6;
+  --bg-pattern: #d8def8;
+  --danger-surface: #feeceb;
+  --danger-border: #f3c4be;
+  --danger-text: #9f2f24;
+}
+
+[data-theme="dark"] {
+  --bg: #090f1f;
+  --surface: #0f1933;
+  --surface-soft: #18274a;
+  --border: #253763;
+  --text-primary: #f3f7ff;
+  --text-secondary: #b8c3e6;
+  --text-muted: #8da1d5;
+  --accent: #5b86ff;
+  --accent-contrast: #07122f;
+  --highlight: #2dd4bf;
+  --bg-pattern: #1e335f;
+  --danger-surface: #3f1f26;
+  --danger-border: #71333d;
+  --danger-text: #ffb4b4;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top right, rgba(45, 91, 255, 0.18), transparent 44%),
+    radial-gradient(circle at bottom left, rgba(45, 91, 255, 0.14), transparent 38%), var(--bg);
+  color: var(--text-primary);
+}
+
+.app-font {
+  font-family: var(--font-display), sans-serif;
 }
