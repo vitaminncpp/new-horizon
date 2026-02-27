@@ -14,7 +14,7 @@ export default async function HomePage() {
     <main className="min-h-screen bg-(--bg) text-(--text-primary)">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-8 md:px-10">
         <header className="flex items-center justify-between">
-          <p className="font-mono text-sm text-(--text-muted)">new-horizen</p>
+          <p className="font-mono text-sm text-(--text-muted)">new-horizon</p>
           <ThemeToggle />
         </header>
 
@@ -26,13 +26,13 @@ export default async function HomePage() {
             <h1 className="text-4xl font-bold leading-tight md:text-5xl">
               Secure login and registration with scalable architecture.
             </h1>
-            <p className="max-w-xl text-base text-[var(--text-secondary)] md:text-lg">
+            <p className="max-w-xl text-base text-(--text-secondary) md:text-lg">
               Built with Next.js App Router, Prisma ORM, PostgreSQL, and layered domain-driven auth services.
             </p>
             <div className="flex gap-3">
               <Link
                 href="/register"
-                className="rounded-xl bg-[var(--accent)] px-5 py-2.5 font-semibold text-[var(--accent-contrast)] transition hover:opacity-90"
+                className="rounded-xl bg-(--accent) px-5 py-2.5 font-semibold text-(--accent-contrast) transition hover:opacity-90"
               >
                 Create account
               </Link>
@@ -48,7 +48,7 @@ export default async function HomePage() {
           <div className="relative h-64 overflow-hidden rounded-2xl border border-(--border) bg-(--surface-soft) md:h-full">
             <div className="absolute -top-8 -right-8 h-36 w-36 rounded-full bg-(--accent)/35 blur-2xl" />
             <div className="absolute bottom-8 left-8 h-28 w-28 rounded-full bg-(--highlight)/35 blur-2xl" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,transparent_0,transparent_14px,var(--bg-pattern)_15px)] [background-size:20px_20px] opacity-35" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,transparent_0,transparent_14px,var(--bg-pattern)_15px)] bg-size-[20px_20px] opacity-35" />
           </div>
         </section>
       </div>

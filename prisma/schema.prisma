@@ -6,7 +6,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model user {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email        String   @unique
   passwordHash String
