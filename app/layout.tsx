@@ -11,10 +11,7 @@ export default function RootLayout({
       <head>
         <title>New Horizon</title>
       </head>
-      <body>
-        <h1>Header</h1>
-        {children}
-      </body>
+      <body data-theme="dark">{children}</body>
     </html>
   );
 }
