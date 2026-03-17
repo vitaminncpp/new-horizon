@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import React from "react";
-
-export const metadata: Metadata = {
-  title: "New Horizon",
-};
 
 export default function RootLayout({
   children,
@@ -13,7 +8,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+      <head>
+        <title>New Horizon</title>
+      </head>
+      <body>
+        <h1>Header</h1>
+        {children}
+      </body>
     </html>
   );
 }
