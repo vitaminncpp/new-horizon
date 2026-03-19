@@ -18,6 +18,7 @@ const eslintConfig = defineConfig([
   {
     rules: {
       "prettier/prettier": ["error", { endOfLine: "auto" }],
+      "@typescript-eslint/no-empty-object-type": "off",
     },
     plugins: {
       prettier: prettierPlugin,

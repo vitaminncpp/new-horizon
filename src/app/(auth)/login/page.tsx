@@ -1,12 +1,13 @@
+"use client";
 import Link from "next/link";
-
+import { login } from "@/src/server/actions/auth.actions";
 const highlights = [
   "Resume work across all your islands",
   "Track shared updates without leaving your flow",
   "Stay grounded with a calm, low-noise interface",
 ];
 
-export default async function Login() {
+export default function Login() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
       <div className="absolute inset-0 bg-(image:--gradient-page)" />
@@ -26,7 +27,7 @@ export default async function Login() {
                 </p>
               </div>
 
-              <form className="space-y-5">
+              <div className="space-y-5">
                 <label className="block space-y-2">
                   <span className="text-sm font-medium text-(--text-secondary)">Email</span>
                   <input
@@ -68,12 +69,15 @@ export default async function Login() {
                 </div>
 
                 <button
-                  type="submit"
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
+                  onClick={async () => {
+                    const l = await login("akshay", "pass");
+                    console.log(l);
+                  }}
                 >
                   Enter workspace
                 </button>
-              </form>
+              </div>
 
               <div className="mt-6 flex flex-col gap-3 text-sm text-(--text-secondary) sm:flex-row sm:items-center sm:justify-between">
                 <p>New here?</p>

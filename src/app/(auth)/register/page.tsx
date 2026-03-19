@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+import React, { useState } from "react";
+import { register } from "@/src/server/actions/auth.actions";
 
 const perks = [
   "Create a focused space for projects and notes",
@@ -6,7 +9,13 @@ const perks = [
   "Switch between calm light and moonlit dark themes",
 ];
 
-export default async function Register() {
+export default function Register() {
+  const [userData, setUserData] = useState({
+    email: "",
+    name: "",
+    password: "",
+    workspace: "",
+  });
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
       <div className="absolute inset-0 bg-(image:--gradient-page)" />
@@ -68,29 +77,22 @@ export default async function Register() {
                 </p>
               </div>
 
-              <form className="space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-(--text-secondary)">First name</span>
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="Ava"
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
-                    />
-                  </label>
-
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-(--text-secondary)">Last name</span>
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="Stone"
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
-                    />
-                  </label>
-                </div>
-
+              <div className="space-y-5">
+                <label className="block space-y-2">
+                  <span className="text-sm font-medium text-(--text-secondary)">Full Name</span>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Ava"
+                    className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        name: event.target.value,
+                      })
+                    }
+                  />
+                </label>
                 <label className="block space-y-2">
                   <span className="text-sm font-medium text-(--text-secondary)">Email</span>
                   <input
@@ -98,6 +100,12 @@ export default async function Register() {
                     name="email"
                     placeholder="you@example.com"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        email: event.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -108,6 +116,12 @@ export default async function Register() {
                     name="password"
                     placeholder="Create a strong password"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        password: event.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -120,6 +134,12 @@ export default async function Register() {
                     name="workspace"
                     placeholder="North Star Studio"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        workspace: event.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -136,12 +156,15 @@ export default async function Register() {
                 </label>
 
                 <button
-                  type="submit"
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
+                  onClick={async () => {
+                    const r = await register(userData.email, userData.name, userData.password);
+                    console.log(r);
+                  }}
                 >
-                  Create workspace
+                  SIGN UP
                 </button>
-              </form>
+              </div>
 
               <div className="mt-6 flex flex-col gap-3 text-sm text-(--text-secondary) sm:flex-row sm:items-center sm:justify-between">
                 <p>Already have an account?</p>
@@ -149,7 +172,7 @@ export default async function Register() {
                   href="/login"
                   className="inline-flex items-center justify-center rounded-full border border-(--border) bg-(--surface) px-4 py-2 font-medium text-(--text-primary) transition hover:border-(--border-accent) hover:bg-(--surface-soft)"
                 >
-                  Sign in
+                  Log in
                 </Link>
               </div>
             </div>
