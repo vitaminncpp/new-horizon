@@ -1,8 +1,44 @@
 import { User } from "@/src/infra/models/user.model";
 import { prisma } from "@/src/infra/prisma/prisma.client";
+import { Exception } from "@/src/infra/exception/app.exception";
+import ErrorCode from "@/src/infra/exception/error.enum";
 
-export async function create_user(data: User): Promise<User> {
-  const u = await prisma.user.create({ data });
-  delete u.password;
-  return u;
+const userSelect = {
+  id: true,
+  email: true,
+  name: true,
+  created_at: true,
+  is_deleted: true,
+  deleted_at: true,
+};
+
+export async function createUser(user: User): Promise<User> {
+  try {
+    return await prisma.user.create({ select: userSelect, data: user as never });
+  } catch (error: any) {
+    throw new Exception(
+      ErrorCode.DB_INTERNAL_ERROR,
+      error.message || "Error inserting user record in database",
+      user,
+    );
+  }
+}
+
+export async function getUser(id: string): Promise<User> {
+  const user = await prisma.user.findUnique({
+    select: userSelect,
+    where: { id },
+  });
+  if (!user) {
+    throw new Exception(ErrorCode.DB_USER_NOT_FOUND);
+  }
+  return user;
+}
+
+export async function getUserByEmail(email: string): Promise<User> {
+  const user = await prisma.user.findUnique({ select: userSelect, where: { email } });
+  if (!user) {
+    throw new Exception(ErrorCode.DB_USER_NOT_FOUND);
+  }
+  return user;
 }

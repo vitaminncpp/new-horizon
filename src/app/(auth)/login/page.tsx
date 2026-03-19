@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { login } from "@/src/server/actions/auth.actions";
+import { useState } from "react";
 const highlights = [
   "Resume work across all your islands",
   "Track shared updates without leaving your flow",
@@ -8,6 +9,10 @@ const highlights = [
 ];
 
 export default function Login() {
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
       <div className="absolute inset-0 bg-(image:--gradient-page)" />
@@ -35,6 +40,12 @@ export default function Login() {
                     name="email"
                     placeholder="you@example.com"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(e) =>
+                      setUserData({
+                        ...userData,
+                        email: e.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -53,6 +64,12 @@ export default function Login() {
                     name="password"
                     placeholder="Enter your password"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm text-(--text-primary) outline-none transition focus:border-(--border-accent) focus:ring-4 focus:ring-(--ring)"
+                    onChange={(e) =>
+                      setUserData({
+                        ...userData,
+                        password: e.target.value,
+                      })
+                    }
                   />
                 </label>
 
@@ -71,8 +88,8 @@ export default function Login() {
                 <button
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
                   onClick={async () => {
-                    const l = await login("akshay", "pass");
-                    console.log(l);
+                    const user = await login(userData.email, userData.password);
+                    localStorage.setItem("user.data", JSON.stringify(user));
                   }}
                 >
                   Enter workspace

@@ -1,9 +1,22 @@
-import "dotenv/config"
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import "dotenv/config";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import type { StringValue } from "ms";
 import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
+
+export function accessToken(payload: any) {
+  const secret: string = process.env.JWT_ACCESS_SECRET!;
+  const expiresIn: string = process.env.JWT_ACCESS_EXPIRE!;
+
+  return generateToken(payload, secret, expiresIn);
+}
+
+export function refreshToken(payload: any) {
+  const secret: string = process.env.JWT_REFRESH_SECRET!;
+  const expiresIn: string = process.env.JWT_REFRESH_EXPIRE!;
+  return generateToken(payload, secret, expiresIn);
+}
 
 export function generateToken(payload: any, secret: string, expiresIn: string | number): string {
   let accessToken;
@@ -12,9 +25,8 @@ export function generateToken(payload: any, secret: string, expiresIn: string | 
       expiresIn: expiresIn as StringValue | number,
     });
   } catch (err: Error | any) {
-    throw new Exception(ErrorCode.INTERNAL_SERVER_ERROR, err?.message, payload);
+    throw new Exception(ErrorCode.AUTH_JWT_SIGN, err?.message, payload);
   }
-
   return accessToken;
 }
 
@@ -39,5 +51,6 @@ export async function hash(password: string): Promise<string> {
 }
 
 export async function comparePass(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash);
+  const saltedPassword = password + process.env.PASSWORD_SALT;
+  return bcrypt.compare(saltedPassword, hash);
 }
