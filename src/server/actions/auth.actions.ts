@@ -17,7 +17,7 @@ export async function login(email: string, password: string) {
     maxAge: Number(process.env.COOKIE_AGE || 0),
   };
   cookie.set("access", auth.accessToken, c);
-  cookie.set("access", auth.refreshToken, c);
+  cookie.set("refresh", auth.refreshToken, c);
 
   return auth.user;
 }
