@@ -39,3 +39,5 @@ pnpm-workspace.yaml
 pnpm-lock.yaml
 package-lock.json
 .idea
+
+wsl

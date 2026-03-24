@@ -1,14 +1,23 @@
 "use server";
 import { cookies } from "next/headers";
 import * as authService from "@/src/services/auth.service";
+import AuthToken from "@/src/infra/models/auth.model";
 
 export async function register(email: string, name: string, password: string) {
-  return authService.register(email, name, password);
+  await authService.register(email, name, password);
+  const auth = await authService.login(email, password);
+  await setAuthCookies(auth);
+  return auth.user;
 }
 
 export async function login(email: string, password: string) {
-  const cookie = await cookies();
   const auth = await authService.login(email, password);
+  await setAuthCookies(auth);
+  return auth.user;
+}
+
+async function setAuthCookies(auth: AuthToken) {
+  const cookie = await cookies();
 
   const c = {
     secure: true,
@@ -18,6 +27,4 @@ export async function login(email: string, password: string) {
   };
   cookie.set("access", auth.accessToken, c);
   cookie.set("refresh", auth.refreshToken, c);
-
-  return auth.user;
 }
