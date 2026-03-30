@@ -4,7 +4,9 @@ import { User } from "@/src/infra/models/user.model";
 import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
 
-export async function authenticate() {}
+export function authenticate(access: string): User | null {
+  return token.verifyAccess(access);
+}
 
 export async function register(email: string, name: string, password: string) {
   const pHash = await token.hash(password);
