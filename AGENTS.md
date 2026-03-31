@@ -1,0 +1,1 @@
+- always use `pnpm` instead of `npm` or `npx`.
