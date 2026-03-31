@@ -14,8 +14,8 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
+    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
     "@types/bcrypt": "^6.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ms": "^2.1.0",
@@ -42,8 +42,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.1",
-    "prisma": "^7.5.0",
+    "prisma": "^7.6.0",
     "tailwindcss": "^4.2.2",
-    "typescript": "6.x.x"
+    "typescript": "6.0.2"
   }
 }
