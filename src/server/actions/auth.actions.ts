@@ -6,12 +6,14 @@ import AuthToken from "@/src/infra/models/auth.model";
 export async function register(email: string, name: string, password: string) {
   await authService.register(email, name, password);
   const auth = await authService.login(email, password);
+  delete auth.user.password;
   await setAuthCookies(auth);
   return auth.user;
 }
 
 export async function login(email: string, password: string) {
   const auth = await authService.login(email, password);
+  delete auth.user.password;
   await setAuthCookies(auth);
   return auth.user;
 }

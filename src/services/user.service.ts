@@ -24,9 +24,9 @@ export async function createUser(user: User): Promise<User> {
   }
 }
 
-export async function getUser(id: string): Promise<User> {
+export async function getUser(id: string, password?: boolean): Promise<User> {
   const user = await prisma.user.findUnique({
-    select: userSelect,
+    select: { ...userSelect, password },
     where: { id },
   });
   if (!user) {
@@ -35,8 +35,11 @@ export async function getUser(id: string): Promise<User> {
   return user;
 }
 
-export async function getUserByEmail(email: string): Promise<User> {
-  const user = await prisma.user.findUnique({ select: userSelect, where: { email } });
+export async function getUserByEmail(email: string, password?: boolean): Promise<User> {
+  const user = await prisma.user.findUnique({
+    select: { ...userSelect, password },
+    where: { email },
+  });
   if (!user) {
     throw new Exception(ErrorCode.DB_USER_NOT_FOUND);
   }

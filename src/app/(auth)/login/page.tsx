@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { login } from "@/src/server/actions/auth.actions";
 import { useState } from "react";
+import { AuthEnum } from "@/src/infra/enums/auth.enum";
+import { useRouter } from "next/navigation";
 const highlights = [
   "Resume work across all your islands",
   "Track shared updates without leaving your flow",
@@ -9,6 +11,7 @@ const highlights = [
 ];
 
 export default function Login() {
+  const router = useRouter();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -88,8 +91,13 @@ export default function Login() {
                 <button
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
                   onClick={async () => {
-                    const user = await login(userData.email, userData.password);
-                    localStorage.setItem("user.data", JSON.stringify(user));
+                    try {
+                      const user = await login(userData.email, userData.password);
+                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(user));
+                      router.push("/workspace");
+                    } catch (err) {
+                      console.log({ err });
+                    }
                   }}
                 >
                   Enter workspace

@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { register } from "@/src/server/actions/auth.actions";
+import { AuthEnum } from "@/src/infra/enums/auth.enum";
 
 const perks = [
   "Create a focused space for projects and notes",
@@ -10,6 +12,7 @@ const perks = [
 ];
 
 export default function Register() {
+  const router = useRouter();
   const [userData, setUserData] = useState({
     email: "",
     name: "",
@@ -158,8 +161,13 @@ export default function Register() {
                 <button
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
                   onClick={async () => {
-                    const r = await register(userData.email, userData.name, userData.password);
-                    console.log(r);
+                    try {
+                      const user = await register(userData.email, userData.name, userData.password);
+                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(user));
+                      router.push("/workspace");
+                    } catch (err) {
+                      console.log(err);
+                    }
                   }}
                 >
                   SIGN UP

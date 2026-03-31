@@ -18,7 +18,7 @@ export async function register(email: string, name: string, password: string) {
 }
 
 export async function login(email: string, password: string) {
-  const user = await userService.getUserByEmail(email);
+  const user = await userService.getUserByEmail(email, true);
   const match = await token.comparePass(password, user.password!);
   if (!match) {
     throw new Exception(ErrorCode.INVALID_PASSWORD, "Invalid password", {
