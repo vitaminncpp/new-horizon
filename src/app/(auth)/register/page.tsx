@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/src/server/actions/auth.actions";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
@@ -14,10 +14,8 @@ const perks = [
 export default function Register({ searchParams }: never) {
   const router = useRouter();
   const params = React.use(searchParams) satisfies Record<string, string>;
-  const [redir, setRedire] = useState("/login");
-  useEffect(() => {
-    setRedire(`/login${params.next ? `?next=${params.next}` : ""}`);
-  }, [params.next]);
+  const redir = `/login${params.next ? `?next=${params.next}` : ""}`;
+
   const [userData, setUserData] = useState({
     email: "",
     name: "",

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 import { login } from "@/src/server/actions/auth.actions";
 import { useState } from "react";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
@@ -14,11 +14,8 @@ const highlights = [
 
 export default function Login({ searchParams }: never) {
   const params = React.use(searchParams) satisfies Record<string, string>;
+  const redir = `/register${params.next ? `?next=${params.next}` : ""}`;
   const router = useRouter();
-  const [redir, setRedire] = useState("/register");
-  useEffect(() => {
-    setRedire(`/register${params.next ? `?next=${params.next}` : ""}`);
-  }, [params.next]);
 
   const [userData, setUserData] = useState({
     email: "",
