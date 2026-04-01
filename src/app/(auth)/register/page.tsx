@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/src/server/actions/auth.actions";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
@@ -11,8 +11,13 @@ const perks = [
   "Switch between calm light and moonlit dark themes",
 ];
 
-export default function Register() {
+export default function Register({ searchParams }: never) {
   const router = useRouter();
+  const params = React.use(searchParams) satisfies Record<string, string>;
+  const [redir, setRedire] = useState("/login");
+  useEffect(() => {
+    setRedire(`/login${params.next ? `?next=${params.next}` : ""}`);
+  }, [params.next]);
   const [userData, setUserData] = useState({
     email: "",
     name: "",
@@ -164,7 +169,7 @@ export default function Register() {
                     try {
                       const user = await register(userData.email, userData.name, userData.password);
                       localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(user));
-                      router.push("/workspace");
+                      router.push(params.next || "/worskapce");
                     } catch (err) {
                       console.log(err);
                     }
@@ -177,7 +182,7 @@ export default function Register() {
               <div className="mt-6 flex flex-col gap-3 text-sm text-(--text-secondary) sm:flex-row sm:items-center sm:justify-between">
                 <p>Already have an account?</p>
                 <Link
-                  href="/login"
+                  href={redir}
                   className="inline-flex items-center justify-center rounded-full border border-(--border) bg-(--surface) px-4 py-2 font-medium text-(--text-primary) transition hover:border-(--border-accent) hover:bg-(--surface-soft)"
                 >
                   Log in

@@ -2,6 +2,7 @@
 import { cookies } from "next/headers";
 import * as authService from "@/src/services/auth.service";
 import AuthToken from "@/src/infra/models/auth.model";
+import { AuthEnum } from "@/src/infra/enums/auth.enum";
 
 export async function register(email: string, name: string, password: string) {
   await authService.register(email, name, password);
@@ -27,6 +28,6 @@ async function setAuthCookies(auth: AuthToken) {
     path: "/",
     maxAge: Number(process.env.COOKIE_AGE || 0),
   };
-  cookie.set("access", auth.accessToken, c);
-  cookie.set("refresh", auth.refreshToken, c);
+  cookie.set(AuthEnum.ACCESS_TOKEN, auth.accessToken, c);
+  cookie.set(AuthEnum.REFRESH_TOKEN, auth.refreshToken, c);
 }
