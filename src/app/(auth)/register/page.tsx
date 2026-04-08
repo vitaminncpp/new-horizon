@@ -2,8 +2,8 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { register } from "@/src/server/actions/auth.actions";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
+import { setCookie } from "@/src/infra/utils/cookie.util";
 
 const perks = [
   "Create a focused space for projects and notes",
@@ -165,11 +165,33 @@ export default function Register({ searchParams }: never) {
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
                   onClick={async () => {
                     try {
-                      const user = await register(userData.email, userData.name, userData.password);
-                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(user));
-                      router.push(params.next || "/worskapce");
-                    } catch (err) {
-                      console.log(err);
+                      const res = await fetch("/api/auth/register", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          email: userData.email,
+                          name: userData.name,
+                          password: userData.password,
+                        }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+
+                      if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || "Registration failed");
+                      }
+
+                      const auth = await res.json();
+                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(auth.user));
+
+                      // Set cookies for the proxy
+                      setCookie(AuthEnum.ACCESS_TOKEN, auth.accessToken, 1);
+                      setCookie(AuthEnum.REFRESH_TOKEN, auth.refreshToken, 7);
+
+                      router.push(params.next || "/workspace");
+                    } catch (err: unknown) {
+                      console.error("Registration error:", (err as Error).message);
                     }
                   }}
                 >

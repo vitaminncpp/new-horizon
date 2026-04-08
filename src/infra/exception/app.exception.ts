@@ -1,6 +1,6 @@
 import ErrorCode from "@/src/infra/exception/error.enum";
 
-export class Exception<Data = any> extends Error {
+export class Exception<Data = unknown> extends Error {
   public readonly code: ErrorCode;
   public readonly data?: Data;
 

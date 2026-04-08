@@ -6,14 +6,14 @@ import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
 import { User } from "@/src/infra/models/user.model";
 
-export function accessToken(payload: any) {
+export function accessToken(payload: unknown) {
   const secret: string = process.env.JWT_ACCESS_SECRET!;
   const expiresIn: string = process.env.JWT_ACCESS_EXPIRE!;
 
   return generateToken(payload, secret, expiresIn);
 }
 
-export function refreshToken(payload: any) {
+export function refreshToken(payload: unknown) {
   const secret: string = process.env.JWT_REFRESH_SECRET!;
   const expiresIn: string = process.env.JWT_REFRESH_EXPIRE!;
   return generateToken(payload, secret, expiresIn);
@@ -29,30 +29,34 @@ export function verifyRefresh(token: string): User | null {
   return verifyToken(token, secret) as User;
 }
 
-export function generateToken(payload: any, secret: string, expiresIn: string | number): string {
-  let accessToken;
+export function generateToken(
+  payload: unknown,
+  secret: string,
+  expiresIn: string | number,
+): string {
+  let token;
   try {
-    accessToken = jwt.sign({ ...payload }, secret, {
+    token = jwt.sign({ ...(payload as object) }, secret, {
       expiresIn: expiresIn as StringValue | number,
     });
-  } catch (err: Error | any) {
-    throw new Exception(ErrorCode.AUTH_JWT_SIGN, err?.message, payload);
+  } catch (err: unknown) {
+    throw new Exception(ErrorCode.AUTH_JWT_SIGN, (err as Error)?.message, payload);
   }
-  return accessToken;
+  return token;
 }
 
-export function verifyToken(token: string, secret: string): any {
+export function verifyToken(token: string, secret: string): unknown {
   try {
     const payload = jwt.verify(token, secret);
     if (!payload) {
       throw new Exception(ErrorCode.INVALID_TOKEN, "Invalid Token", token);
     }
     return payload;
-  } catch (err: Error | any) {
+  } catch (err: unknown) {
     if (err instanceof Exception) {
       throw err;
     }
-    throw new Exception(ErrorCode.INTERNAL_SERVER_ERROR, err?.message, err);
+    throw new Exception(ErrorCode.INTERNAL_SERVER_ERROR, (err as Error)?.message, err);
   }
 }
 

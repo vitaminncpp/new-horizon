@@ -14,11 +14,14 @@ const userSelect = {
 
 export async function createUser(user: User): Promise<User> {
   try {
-    return await prisma.user.create({ select: userSelect, data: user as never });
-  } catch (error: any) {
+    return await prisma.user.create({
+      select: userSelect,
+      data: user as never,
+    });
+  } catch (error: unknown) {
     throw new Exception(
       ErrorCode.DB_INTERNAL_ERROR,
-      error.message || "Error inserting user record in database",
+      (error as Error).message || "Error inserting user record in the database",
       user,
     );
   }

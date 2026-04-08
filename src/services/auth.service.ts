@@ -31,4 +31,13 @@ export async function login(email: string, password: string) {
   return { accessToken, refreshToken, user };
 }
 
-export async function refreshToken() {}
+export async function refreshToken(refresh: string) {
+  const user = token.verifyRefresh(refresh);
+  if (!user) {
+    throw new Exception(ErrorCode.INVALID_TOKEN, "Invalid Refresh Token", refresh);
+  }
+  const fullUser = await userService.getUserByEmail(user.email);
+  const accessToken = token.accessToken(fullUser);
+  const refreshToken = token.refreshToken(fullUser);
+  return { accessToken, refreshToken, user: fullUser };
+}

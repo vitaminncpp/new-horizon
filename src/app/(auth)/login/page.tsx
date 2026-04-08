@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { login } from "@/src/server/actions/auth.actions";
 import { useState } from "react";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
 import { useRouter } from "next/navigation";
+import { setCookie } from "@/src/infra/utils/cookie.util";
 
 const highlights = [
   "Resume work across all your islands",
@@ -97,11 +97,32 @@ export default function Login({ searchParams }: never) {
                   className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-md) transition hover:bg-(--primary-hover) active:bg-(--primary-active)"
                   onClick={async () => {
                     try {
-                      const user = await login(userData.email, userData.password);
-                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(user));
-                      router.push(params.next || "/worskapce");
-                    } catch (err) {
-                      console.log({ err });
+                      const res = await fetch("/api/auth/login", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          email: userData.email,
+                          password: userData.password,
+                        }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+
+                      if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || "Login failed");
+                      }
+
+                      const auth = await res.json();
+                      localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(auth.user));
+
+                      // Set cookies for the proxy
+                      setCookie(AuthEnum.ACCESS_TOKEN, auth.accessToken, 1);
+                      setCookie(AuthEnum.REFRESH_TOKEN, auth.refreshToken, 7);
+
+                      router.push(params.next || "/workspace");
+                    } catch (err: unknown) {
+                      console.error("Login error:", (err as Error).message);
                     }
                   }}
                 >
