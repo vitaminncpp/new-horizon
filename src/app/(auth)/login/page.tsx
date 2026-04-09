@@ -4,7 +4,6 @@ import React from "react";
 import { useState } from "react";
 import { AuthEnum } from "@/src/infra/enums/auth.enum";
 import { useRouter } from "next/navigation";
-import { setCookie } from "@/src/infra/utils/cookie.util";
 
 const highlights = [
   "Resume work across all your islands",
@@ -115,10 +114,6 @@ export default function Login({ searchParams }: never) {
 
                       const auth = await res.json();
                       localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(auth.user));
-
-                      // Set cookies for the proxy
-                      setCookie(AuthEnum.ACCESS_TOKEN, auth.accessToken, 1);
-                      setCookie(AuthEnum.REFRESH_TOKEN, auth.refreshToken, 7);
 
                       router.push(params.next || "/workspace");
                     } catch (err: unknown) {
