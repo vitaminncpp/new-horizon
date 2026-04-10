@@ -540,7 +540,7 @@ export default function InstructorPage() {
       <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
         <div className="absolute inset-0 gradient-page opacity-50" />
         <div className="relative mx-auto flex min-h-screen items-center justify-center px-6 py-12">
-          <section className="w-full max-w-2xl rounded-xl border border-border bg-surface-glass p-10 shadow-lg backdrop-blur-xl">
+          <section className="w-full rounded-xl border border-border bg-surface-glass p-10 shadow-lg backdrop-blur-xl">
             <div className="flex items-center gap-2 mb-6">
               <div className="h-2 w-2 rounded-full bg-danger" />
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary">
@@ -576,7 +576,7 @@ export default function InstructorPage() {
     <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
       <div className="absolute inset-0 gradient-page opacity-30" />
 
-      <div className="relative mx-auto flex min-h-screen max-w-450 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex min-h-screen flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6 rounded-xl border border-border-accent bg-surface-glass p-8 shadow-lg backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -586,7 +586,7 @@ export default function InstructorPage() {
               </p>
             </div>
             <h1 className="text-3xl font-black tracking-tight">Curriculum Architect</h1>
-            <p className="mt-2 max-w-2xl text-sm font-medium text-text-secondary">
+            <p className="mt-2 text-sm font-medium text-text-secondary">
               Design, sequence, and manage interactive lessons. Toggle preview mode to see exactly
               how your content appears to learners.
             </p>

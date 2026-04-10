@@ -292,7 +292,7 @@ export default function LessonPlayerPage() {
                     <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
                       {lesson.title}
                     </h1>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary">
+                    <p className="mt-3 text-sm leading-relaxed text-text-secondary">
                       {lesson.description ||
                         "Follow the lesson materials and update progress as you go."}
                     </p>

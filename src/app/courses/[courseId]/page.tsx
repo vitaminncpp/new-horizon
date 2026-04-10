@@ -166,7 +166,7 @@ export default function CourseDetailPage() {
                   </div>
                 </div>
 
-                <div className="flex w-full max-w-sm flex-col gap-5 rounded-xl border border-border bg-surface-raised p-6 shadow-md">
+                <div className="flex w-full flex-col gap-5 rounded-xl border border-border bg-surface-raised p-6 shadow-md">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-widest text-text-secondary">
                       Your Progress
