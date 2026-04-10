@@ -5,7 +5,10 @@ import ErrorCode from "@/src/infra/exception/error.enum";
 
 export function assertCourseManagerRole(actor: User) {
   if (actor.role !== "instructor" && actor.role !== "admin") {
-    throw new Exception(ErrorCode.FORBIDDEN, "Only instructors and admins can manage course content");
+    throw new Exception(
+      ErrorCode.FORBIDDEN,
+      "Only instructors and admins can manage course content",
+    );
   }
 }
 

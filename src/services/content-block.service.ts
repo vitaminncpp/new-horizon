@@ -2,10 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/src/infra/prisma/prisma.client";
 import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
-import {
-  CreateContentBlockDto,
-  UpdateContentBlockDto,
-} from "@/src/infra/dtos/learning.dto";
+import { CreateContentBlockDto, UpdateContentBlockDto } from "@/src/infra/dtos/learning.dto";
 import { User } from "@/src/infra/models/user.model";
 import { getManagedCourse } from "@/src/services/learning-access.service";
 
@@ -20,7 +17,11 @@ const contentBlockSelect = {
   updated_at: true,
 } as const;
 
-export async function createContentBlock(actor: User, lessonId: string, data: CreateContentBlockDto) {
+export async function createContentBlock(
+  actor: User,
+  lessonId: string,
+  data: CreateContentBlockDto,
+) {
   const lesson = await prisma.lesson.findFirst({
     where: {
       id: lessonId,
@@ -53,7 +54,11 @@ export async function createContentBlock(actor: User, lessonId: string, data: Cr
   });
 }
 
-export async function updateContentBlock(actor: User, blockId: string, data: UpdateContentBlockDto) {
+export async function updateContentBlock(
+  actor: User,
+  blockId: string,
+  data: UpdateContentBlockDto,
+) {
   const block = await prisma.lesson_content_block.findUnique({
     where: { id: blockId },
     select: {

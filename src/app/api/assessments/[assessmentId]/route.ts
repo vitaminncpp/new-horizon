@@ -14,7 +14,10 @@ export async function GET(req: NextRequest, context: RouteContext) {
   try {
     const actor = await getRouteUser(req);
     const { assessmentId } = await context.params;
-    const assessment = await assessmentService.getAssessmentDetail(assessmentId, actor ?? undefined);
+    const assessment = await assessmentService.getAssessmentDetail(
+      assessmentId,
+      actor ?? undefined,
+    );
     return apiSuccess(assessment);
   } catch (error: unknown) {
     return apiError(error, 404);

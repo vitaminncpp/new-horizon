@@ -93,14 +93,22 @@ export async function getAssessmentDetail(assessmentId: string, actor?: User) {
   }
 
   const isLearner = !actor || actor.role === "learner";
-  if (isLearner && assessment.course.status !== "published" && actor?.id !== assessment.course.creator_id) {
+  if (
+    isLearner &&
+    assessment.course.status !== "published" &&
+    actor?.id !== assessment.course.creator_id
+  ) {
     throw new Exception(ErrorCode.FORBIDDEN, "Assessment is not available");
   }
 
   return assessment;
 }
 
-export async function updateAssessment(actor: User, assessmentId: string, data: UpdateAssessmentDto) {
+export async function updateAssessment(
+  actor: User,
+  assessmentId: string,
+  data: UpdateAssessmentDto,
+) {
   const assessment = await prisma.assessment.findFirst({
     where: {
       id: assessmentId,
@@ -153,7 +161,11 @@ export async function deleteAssessment(actor: User, assessmentId: string) {
   });
 }
 
-export async function submitAssessmentAttempt(user: User, assessmentId: string, payload: SubmitAssessmentDto) {
+export async function submitAssessmentAttempt(
+  user: User,
+  assessmentId: string,
+  payload: SubmitAssessmentDto,
+) {
   return prisma.$transaction(async (tx) => {
     const assessment = await tx.assessment.findFirst({
       where: {
@@ -297,7 +309,9 @@ export async function gradeAssessmentAttempt(
     });
 
     if (!attempt) {
-      throw new Exception(ErrorCode.RESOURCE_NOT_FOUND, "Assessment attempt not found", { attemptId });
+      throw new Exception(ErrorCode.RESOURCE_NOT_FOUND, "Assessment attempt not found", {
+        attemptId,
+      });
     }
 
     await getManagedCourse(actor, attempt.assessment.course_id);
@@ -329,8 +343,14 @@ export async function gradeAssessmentAttempt(
       },
     });
 
-    const totalPoints = attempt.assessment.questions.reduce((sum, question) => sum + question.points, 0);
-    const earnedPoints = gradedAnswers.reduce((sum, answer) => sum + Number(answer.score_awarded ?? 0), 0);
+    const totalPoints = attempt.assessment.questions.reduce(
+      (sum, question) => sum + question.points,
+      0,
+    );
+    const earnedPoints = gradedAnswers.reduce(
+      (sum, answer) => sum + Number(answer.score_awarded ?? 0),
+      0,
+    );
     const score = totalPoints === 0 ? 0 : Number(((earnedPoints / totalPoints) * 100).toFixed(2));
 
     return tx.assessment_attempt.update({
@@ -372,7 +392,9 @@ function evaluateAnswer(
   if (question.type === "single_choice" || question.type === "multiple_choice") {
     const expected = [...question.options.map((option) => option.id)].sort();
     const actual = [...(submittedAnswer.selected_option_ids ?? [])].sort();
-    const isCorrect = expected.length === actual.length && expected.every((value, index) => value === actual[index]);
+    const isCorrect =
+      expected.length === actual.length &&
+      expected.every((value, index) => value === actual[index]);
     return {
       isCorrect,
       scoreAwarded: isCorrect ? question.points : 0,
@@ -394,7 +416,9 @@ function evaluateAnswer(
   return {
     isCorrect: null,
     scoreAwarded: 0,
-    feedback: submittedAnswer.code_answer ? "Code answer submitted for review" : "No code submitted",
+    feedback: submittedAnswer.code_answer
+      ? "Code answer submitted for review"
+      : "No code submitted",
   };
 }
 

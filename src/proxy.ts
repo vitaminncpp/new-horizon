@@ -6,11 +6,7 @@ import {
   setRefreshCookie,
 } from "@/src/infra/auth/auth-cookie";
 import { getRouteUser, isRoleAllowed } from "@/src/infra/auth/auth.server";
-import {
-  authRoutes,
-  protectedRouteRules,
-  publicRoutes,
-} from "@/src/infra/config/routes.config";
+import { authRoutes, protectedRouteRules, publicRoutes } from "@/src/infra/config/routes.config";
 import * as authService from "@/src/services/auth.service";
 import { verifyRefreshClaims } from "@/src/services/token.service";
 

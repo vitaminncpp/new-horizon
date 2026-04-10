@@ -235,10 +235,10 @@ export default function LessonPlayerPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
       <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="relative mx-auto flex min-h-screen max-w-[1600px] flex-col px-4 py-5 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex min-h-screen max-w-400 flex-col px-4 py-5 sm:px-6 lg:px-8">
         {course && lesson ? (
           <div className="grid flex-1 gap-4 xl:grid-cols-[320px_minmax(0,1fr)_300px]">
-            <aside className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
+            <aside className="rounded-4xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
               <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
                 Progress map
               </p>
@@ -283,7 +283,7 @@ export default function LessonPlayerPage() {
             </aside>
 
             <section className="space-y-4">
-              <header className="rounded-[2rem] border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl">
+              <header className="rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
@@ -291,7 +291,8 @@ export default function LessonPlayerPage() {
                     </p>
                     <h1 className="mt-2 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
                     <p className="mt-3 max-w-3xl text-sm leading-7 text-(--text-secondary)">
-                      {lesson.description || "Follow the lesson materials and update progress as you go."}
+                      {lesson.description ||
+                        "Follow the lesson materials and update progress as you go."}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-3">
@@ -317,7 +318,9 @@ export default function LessonPlayerPage() {
                 </div>
               ) : null}
 
-              {lesson.type === "article" || lesson.type === "video" || lesson.type === "live_session" ? (
+              {lesson.type === "article" ||
+              lesson.type === "video" ||
+              lesson.type === "live_session" ? (
                 <div className="space-y-4">
                   {lesson.content_blocks.map((block) => (
                     <LearnerBlock key={block.id} block={block} />
@@ -326,17 +329,21 @@ export default function LessonPlayerPage() {
               ) : null}
 
               {lesson.type === "quiz" && assessment ? (
-                <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
+                <div className="rounded-4xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
                   <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
                     Quiz
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold">{assessment.title}</h2>
                   <div className="mt-5 space-y-4">
                     {assessment.questions.map((question) => (
-                      <div key={question.id} className="rounded-3xl border border-(--border) bg-(--surface) p-4">
+                      <div
+                        key={question.id}
+                        className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                      >
                         <p className="text-sm font-semibold">{question.prompt}</p>
                         <div className="mt-3 space-y-2">
-                          {(question.type === "single_choice" || question.type === "multiple_choice") &&
+                          {(question.type === "single_choice" ||
+                            question.type === "multiple_choice") &&
                             question.options.map((option) => {
                               const currentValue = quizAnswers[question.id];
                               const selected = Array.isArray(currentValue)
@@ -419,7 +426,9 @@ export default function LessonPlayerPage() {
                     Coding lab
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold">{exercise.title}</h2>
-                  <p className="mt-3 text-sm leading-7 text-(--text-secondary)">{exercise.prompt}</p>
+                  <p className="mt-3 text-sm leading-7 text-(--text-secondary)">
+                    {exercise.prompt}
+                  </p>
                   <textarea
                     value={codeAnswer}
                     onChange={(event) => setCodeAnswer(event.target.value)}
@@ -483,8 +492,8 @@ export default function LessonPlayerPage() {
                     Final lesson
                   </p>
                   <p className="mt-3 text-sm leading-6 text-(--text-secondary)">
-                    You’re at the end of this path. Completion is already tracked, and certificate logic
-                    can be added later without changing learner progression.
+                    You’re at the end of this path. Completion is already tracked, and certificate
+                    logic can be added later without changing learner progression.
                   </p>
                 </div>
               )}
@@ -500,11 +509,7 @@ export default function LessonPlayerPage() {
   );
 }
 
-function LearnerBlock({
-  block,
-}: {
-  block: LessonDetail["content_blocks"][number];
-}) {
+function LearnerBlock({ block }: { block: LessonDetail["content_blocks"][number] }) {
   if (block.type === "markdown") {
     return (
       <section className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-6 shadow-(--shadow-md) backdrop-blur-xl">

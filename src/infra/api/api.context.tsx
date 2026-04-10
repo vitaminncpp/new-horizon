@@ -87,9 +87,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
               return (await retryResponse.json()) as T;
             }
             const retryErrorData = await retryResponse.json().catch(() => ({}));
-            throw new Error(
-              retryErrorData.error || `HTTP error! status: ${retryResponse.status}`,
-            );
+            throw new Error(retryErrorData.error || `HTTP error! status: ${retryResponse.status}`);
           }
         }
 

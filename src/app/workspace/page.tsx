@@ -100,15 +100,19 @@ export default function Workspace() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
       <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-        <section className="rounded-[2rem] border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl">
+      <div className="absolute inset-x-0 top-0 h-[400px] bg-[radial-gradient(ellipse_100%_60%_at_50%_0%,oklch(0.35_0.14_280/0.25),oklch(0.25_0.10_275/0.15)_40%,transparent_70%)]" />
+
+      <div className="relative flex min-h-screen flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <section className="rounded-xl border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl lg:p-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-(--text-secondary)">
+              <p className="text-xs uppercase tracking-[0.2em] text-(--primary)">
                 Continue learning
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-                {user?.name ? `${user.name}, your next lesson is ready.` : "Your workspace is ready."}
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight lg:text-3xl">
+                {user?.name
+                  ? `${user.name}, your next lesson is ready.`
+                  : "Your workspace is ready."}
               </h1>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-(--text-secondary)">
                 Track recent progress, jump back into active paths, and review quizzes and coding
@@ -119,14 +123,14 @@ export default function Workspace() {
             {continueLearning ? (
               <Link
                 href={`/learn/${continueLearning.lesson.section.course.id}/lessons/${continueLearning.lesson.id}`}
-                className="rounded-full bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-contrast)"
+                className="rounded-lg bg-(--primary) px-5 py-2.5 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110"
               >
                 Resume {continueLearning.lesson.title}
               </Link>
             ) : (
               <Link
                 href="/"
-                className="rounded-full bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-contrast)"
+                className="rounded-lg bg-(--primary) px-5 py-2.5 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110"
               >
                 Explore catalog
               </Link>
@@ -134,47 +138,50 @@ export default function Workspace() {
           </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="space-y-4">
-            <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
+            <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
+                  <p className="text-xs uppercase tracking-[0.2em] text-(--secondary)">
                     Active paths
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold">Enrolled courses</h2>
+                  <h2 className="mt-1 text-lg font-semibold lg:text-xl">Enrolled courses</h2>
                 </div>
                 <Link
                   href="/"
-                  className="rounded-full border border-(--border) bg-(--surface) px-4 py-2 text-sm font-medium"
+                  className="rounded-lg border border-(--border) bg-(--surface-raised) px-3 py-1.5 text-sm font-medium transition-all hover:border-(--border-strong) hover:bg-(--surface-soft)"
                 >
                   Browse more
                 </Link>
               </div>
 
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {dashboard.enrollments.map((enrollment) => (
                   <article
                     key={enrollment.id}
-                    className="rounded-3xl border border-(--border) bg-(--surface) p-5"
+                    className="group relative rounded-lg border border-(--border) bg-(--surface) p-4 transition-all hover:border-(--primary-border) hover:shadow-(--shadow-sm)"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-(--primary-soft)/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <div className="relative flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-lg font-semibold">{enrollment.course.title}</p>
-                        <p className="mt-2 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
+                        <p className="text-base font-semibold">{enrollment.course.title}</p>
+                        <p className="mt-1 text-xs uppercase tracking-[0.1em] text-(--text-tertiary)">
                           {enrollment.course.level} • {enrollment.status}
                         </p>
                       </div>
-                      <span className="rounded-full bg-(--surface-accent) px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
+                      <span className="rounded-md border border-(--primary-border) bg-(--primary-soft) px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-(--primary)">
                         {enrollment.progress_percent}%
                       </span>
                     </div>
-                    <div className="mt-4 h-2 rounded-full bg-(--surface-inset)">
-                      <div className={`h-full rounded-full bg-(--primary) ${progressWidthClass(enrollment.progress_percent)}`} />
+                    <div className="mt-3 h-2 rounded-full bg-(--surface-inset) overflow-hidden">
+                      <div
+                        className={`h-full rounded-full bg-gradient-to-r from-(--primary) to-(--secondary) ${progressWidthClass(enrollment.progress_percent)} transition-all`}
+                      />
                     </div>
                     <Link
                       href={`/courses/${enrollment.course.id}`}
-                      className="mt-4 inline-flex rounded-full bg-(--surface-inset) px-4 py-2 text-sm font-medium"
+                      className="mt-3 inline-flex rounded-lg border border-(--border) bg-(--surface-inset) px-3 py-1.5 text-xs font-medium transition-all hover:border-(--primary-border) hover:bg-(--primary-soft) hover:text-(--primary)"
                     >
                       Open course
                     </Link>
@@ -183,25 +190,25 @@ export default function Workspace() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-              <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                Lesson stream
-              </p>
-              <h2 className="mt-2 text-xl font-semibold">Recent activity</h2>
-              <div className="mt-5 space-y-3">
+            <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-(--accent)">Lesson stream</p>
+              <h2 className="mt-1 text-lg font-semibold lg:text-xl">Recent activity</h2>
+              <div className="mt-4 space-y-2">
                 {dashboard.recentProgress.map((entry) => (
                   <Link
                     key={entry.id}
                     href={`/learn/${entry.lesson.section.course.id}/lessons/${entry.lesson.id}`}
-                    className="flex items-center justify-between gap-3 rounded-3xl border border-(--border) bg-(--surface) px-4 py-4"
+                    className="group flex items-center justify-between gap-3 rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong) hover:bg-(--surface-raised)"
                   >
                     <div>
-                      <p className="text-sm font-semibold">{entry.lesson.title}</p>
-                      <p className="mt-1 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
+                      <p className="text-sm font-semibold group-hover:text-(--primary) transition-colors">
+                        {entry.lesson.title}
+                      </p>
+                      <p className="mt-0.5 text-xs uppercase tracking-[0.1em] text-(--text-tertiary)">
                         {entry.lesson.section.course.title} • {entry.lesson.type}
                       </p>
                     </div>
-                    <span className="rounded-full bg-(--surface-accent) px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
+                    <span className="rounded-md border border-(--accent-border, oklch(0.5 0.1 75)) bg-(--warning-bg) px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-(--warning)">
                       {entry.progress_percent}%
                     </span>
                   </Link>
@@ -211,39 +218,53 @@ export default function Workspace() {
           </div>
 
           <aside className="space-y-4">
-            <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-              <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                Quiz outcomes
-              </p>
-              <div className="mt-4 space-y-3">
+            <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-(--info)">Quiz outcomes</p>
+              <div className="mt-4 space-y-2">
                 {dashboard.attempts.map((attempt) => (
-                  <div key={attempt.id} className="rounded-3xl bg-(--surface) px-4 py-4">
+                  <div
+                    key={attempt.id}
+                    className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong)"
+                  >
                     <p className="text-sm font-semibold">{attempt.assessment.title}</p>
                     <p className="mt-1 text-xs text-(--text-secondary)">
                       {attempt.assessment.course.title}
                     </p>
-                    <p className="mt-3 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
-                      {attempt.status} • {attempt.score ?? 0}%
-                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-[10px] uppercase tracking-[0.1em] text-(--text-tertiary)">
+                        {attempt.status}
+                      </span>
+                      <span className="text-(--text-tertiary)">•</span>
+                      <span className="text-sm font-semibold text-(--primary)">
+                        {attempt.score ?? 0}%
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-              <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                Coding labs
-              </p>
-              <div className="mt-4 space-y-3">
+            <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
+              <p className="text-xs uppercase tracking-[0.2em] text-(--success)">Coding labs</p>
+              <div className="mt-4 space-y-2">
                 {dashboard.submissions.map((submission) => (
-                  <div key={submission.id} className="rounded-3xl bg-(--surface) px-4 py-4">
+                  <div
+                    key={submission.id}
+                    className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong)"
+                  >
                     <p className="text-sm font-semibold">{submission.coding_exercise.title}</p>
                     <p className="mt-1 text-xs text-(--text-secondary)">
                       {submission.coding_exercise.language}
                     </p>
-                    <p className="mt-3 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
-                      {submission.status} • {submission.score ?? 0} points
-                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-[10px] uppercase tracking-[0.1em] text-(--text-tertiary)">
+                        {submission.status}
+                      </span>
+                      <span className="text-(--text-tertiary)">•</span>
+                      <span className="text-sm font-semibold text-(--success)">
+                        {submission.score ?? 0} pts
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>

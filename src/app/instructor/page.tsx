@@ -121,7 +121,10 @@ type AssessmentDetail = {
 
 const contentBlockTemplates = {
   markdown: { body: "## Lesson heading\n\nIntroduce the concept with concise copy." },
-  code: { language: "typescript", snippet: "export function greet(name: string) {\n  return `Hello, ${name}`;\n}" },
+  code: {
+    language: "typescript",
+    snippet: "export function greet(name: string) {\n  return `Hello, ${name}`;\n}",
+  },
   embed: { url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", caption: "External embed" },
   resource: { label: "Reference", url: "https://www.typescriptlang.org/docs/" },
 } satisfies Record<ContentBlock["type"], Record<string, unknown>>;
@@ -287,7 +290,9 @@ export default function InstructorPage() {
 
   async function loadCourses() {
     const query =
-      user?.role === "admin" ? "/api/courses" : `/api/courses?creatorId=${encodeURIComponent(user?.id ?? "")}`;
+      user?.role === "admin"
+        ? "/api/courses"
+        : `/api/courses?creatorId=${encodeURIComponent(user?.id ?? "")}`;
     const result = await api.get<CourseSummary[]>(query);
     setCourses(result);
     if (!selectedCourseId && result[0]) {
@@ -361,7 +366,11 @@ export default function InstructorPage() {
       description: sectionForm.description,
       position: Number(sectionForm.position),
     });
-    setSectionForm({ title: "", description: "", position: String((courseDetail.sections.length || 0) + 1) });
+    setSectionForm({
+      title: "",
+      description: "",
+      position: String((courseDetail.sections.length || 0) + 1),
+    });
     setMessage("Section created");
     await loadCourseDetail(courseDetail.id);
   }
@@ -422,16 +431,19 @@ export default function InstructorPage() {
 
   async function handleAssessmentCreate() {
     if (!courseDetail || !lessonDetail) return;
-    const created = await api.post<AssessmentSummary>(`/api/courses/${courseDetail.id}/assessments`, {
-      title: assessmentForm.title,
-      description: assessmentForm.description,
-      lesson_id: lessonDetail.id,
-      type: assessmentForm.type,
-      passing_score: Number(assessmentForm.passing_score),
-      max_attempts: Number(assessmentForm.max_attempts),
-      time_limit_mins: Number(assessmentForm.time_limit_mins),
-      is_published: assessmentForm.is_published,
-    });
+    const created = await api.post<AssessmentSummary>(
+      `/api/courses/${courseDetail.id}/assessments`,
+      {
+        title: assessmentForm.title,
+        description: assessmentForm.description,
+        lesson_id: lessonDetail.id,
+        type: assessmentForm.type,
+        passing_score: Number(assessmentForm.passing_score),
+        max_attempts: Number(assessmentForm.max_attempts),
+        time_limit_mins: Number(assessmentForm.time_limit_mins),
+        is_published: assessmentForm.is_published,
+      },
+    );
     setSelectedAssessmentId(created.id);
     setMessage("Quiz created");
     await loadLessonDetail(lessonDetail.id);
@@ -522,7 +534,9 @@ export default function InstructorPage() {
         <div className="absolute inset-0 bg-(image:--gradient-page)" />
         <div className="relative mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
           <section className="w-full max-w-2xl rounded-4xl border border-(--border) bg-(--surface-glass) p-8 shadow-(--shadow-lg) backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-(--text-secondary)">Restricted</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-(--text-secondary)">
+              Restricted
+            </p>
             <h1 className="mt-3 text-4xl font-semibold">Instructor access required</h1>
             <p className="mt-4 text-base leading-7 text-(--text-secondary)">
               This area is available only to instructors and admins. Sign in with an elevated role
@@ -628,7 +642,10 @@ export default function InstructorPage() {
               ))}
             </div>
 
-            <form onSubmit={handleCourseCreate} className="mt-6 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4">
+            <form
+              onSubmit={handleCourseCreate}
+              className="mt-6 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4"
+            >
               <p className="text-sm font-semibold">Create course</p>
               <input
                 value={courseForm.title}
@@ -644,13 +661,17 @@ export default function InstructorPage() {
               />
               <input
                 value={courseForm.slug}
-                onChange={(event) => setCourseForm((current) => ({ ...current, slug: slugify(event.target.value) }))}
+                onChange={(event) =>
+                  setCourseForm((current) => ({ ...current, slug: slugify(event.target.value) }))
+                }
                 placeholder="course-slug"
                 className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
               />
               <textarea
                 value={courseForm.summary}
-                onChange={(event) => setCourseForm((current) => ({ ...current, summary: event.target.value }))}
+                onChange={(event) =>
+                  setCourseForm((current) => ({ ...current, summary: event.target.value }))
+                }
                 placeholder="Short summary"
                 className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
               />
@@ -700,7 +721,10 @@ export default function InstructorPage() {
                     <input
                       value={courseForm.slug}
                       onChange={(event) =>
-                        setCourseForm((current) => ({ ...current, slug: slugify(event.target.value) }))
+                        setCourseForm((current) => ({
+                          ...current,
+                          slug: slugify(event.target.value),
+                        }))
                       }
                       className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                     />
@@ -708,7 +732,9 @@ export default function InstructorPage() {
                   <Field label="Summary" className="lg:col-span-2">
                     <textarea
                       value={courseForm.summary}
-                      onChange={(event) => setCourseForm((current) => ({ ...current, summary: event.target.value }))}
+                      onChange={(event) =>
+                        setCourseForm((current) => ({ ...current, summary: event.target.value }))
+                      }
                       className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                     />
                   </Field>
@@ -716,7 +742,10 @@ export default function InstructorPage() {
                     <textarea
                       value={courseForm.description}
                       onChange={(event) =>
-                        setCourseForm((current) => ({ ...current, description: event.target.value }))
+                        setCourseForm((current) => ({
+                          ...current,
+                          description: event.target.value,
+                        }))
                       }
                       className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                     />
@@ -774,11 +803,18 @@ export default function InstructorPage() {
 
                 <div className="mt-4 space-y-4">
                   {courseDetail?.sections.map((section) => (
-                    <div key={section.id} className="rounded-3xl border border-(--border) bg-(--surface) p-4">
+                    <div
+                      key={section.id}
+                      className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                    >
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-sm font-semibold">{section.position}. {section.title}</p>
-                          <p className="text-xs text-(--text-secondary)">{section.description || "No description"}</p>
+                          <p className="text-sm font-semibold">
+                            {section.position}. {section.title}
+                          </p>
+                          <p className="text-xs text-(--text-secondary)">
+                            {section.description || "No description"}
+                          </p>
                         </div>
                       </div>
 
@@ -797,7 +833,9 @@ export default function InstructorPage() {
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <p className="text-sm font-medium">{lesson.position}. {lesson.title}</p>
+                              <p className="text-sm font-medium">
+                                {lesson.position}. {lesson.title}
+                              </p>
                               <span className="rounded-full bg-(--surface-accent) px-2 py-1 text-[10px] uppercase tracking-[0.18em]">
                                 {lesson.type}
                               </span>
@@ -819,11 +857,16 @@ export default function InstructorPage() {
                   ))}
                 </div>
 
-                <form onSubmit={handleSectionCreate} className="mt-5 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4">
+                <form
+                  onSubmit={handleSectionCreate}
+                  className="mt-5 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4"
+                >
                   <p className="text-sm font-semibold">Add section</p>
                   <input
                     value={sectionForm.title}
-                    onChange={(event) => setSectionForm((current) => ({ ...current, title: event.target.value }))}
+                    onChange={(event) =>
+                      setSectionForm((current) => ({ ...current, title: event.target.value }))
+                    }
                     placeholder="Section title"
                     className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
                   />
@@ -890,7 +933,10 @@ export default function InstructorPage() {
                         <input
                           value={lessonForm.slug}
                           onChange={(event) =>
-                            setLessonForm((current) => ({ ...current, slug: slugify(event.target.value) }))
+                            setLessonForm((current) => ({
+                              ...current,
+                              slug: slugify(event.target.value),
+                            }))
                           }
                           className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                         />
@@ -899,7 +945,10 @@ export default function InstructorPage() {
                         <textarea
                           value={lessonForm.description}
                           onChange={(event) =>
-                            setLessonForm((current) => ({ ...current, description: event.target.value }))
+                            setLessonForm((current) => ({
+                              ...current,
+                              description: event.target.value,
+                            }))
                           }
                           className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                         />
@@ -927,7 +976,10 @@ export default function InstructorPage() {
                           type="number"
                           value={lessonForm.position}
                           onChange={(event) =>
-                            setLessonForm((current) => ({ ...current, position: event.target.value }))
+                            setLessonForm((current) => ({
+                              ...current,
+                              position: event.target.value,
+                            }))
                           }
                           className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
                         />
@@ -950,7 +1002,10 @@ export default function InstructorPage() {
                           type="checkbox"
                           checked={lessonForm.is_preview}
                           onChange={(event) =>
-                            setLessonForm((current) => ({ ...current, is_preview: event.target.checked }))
+                            setLessonForm((current) => ({
+                              ...current,
+                              is_preview: event.target.checked,
+                            }))
                           }
                           className="h-4 w-4 rounded border-(--border-strong)"
                         />
@@ -980,7 +1035,10 @@ export default function InstructorPage() {
                       <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
                         <div className="space-y-3">
                           {lessonDetail.content_blocks.map((block) => (
-                            <div key={block.id} className="rounded-3xl border border-(--border) bg-(--surface) p-4">
+                            <div
+                              key={block.id}
+                              className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                            >
                               <div className="flex items-start justify-between gap-3">
                                 <div>
                                   <p className="text-sm font-semibold">
@@ -1027,7 +1085,10 @@ export default function InstructorPage() {
                             <input
                               value={blockForm.title}
                               onChange={(event) =>
-                                setBlockForm((current) => ({ ...current, title: event.target.value }))
+                                setBlockForm((current) => ({
+                                  ...current,
+                                  title: event.target.value,
+                                }))
                               }
                               placeholder="Block title"
                               className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1035,7 +1096,10 @@ export default function InstructorPage() {
                             <input
                               value={blockForm.position}
                               onChange={(event) =>
-                                setBlockForm((current) => ({ ...current, position: event.target.value }))
+                                setBlockForm((current) => ({
+                                  ...current,
+                                  position: event.target.value,
+                                }))
                               }
                               type="number"
                               placeholder="Position"
@@ -1044,7 +1108,10 @@ export default function InstructorPage() {
                             <textarea
                               value={blockForm.content}
                               onChange={(event) =>
-                                setBlockForm((current) => ({ ...current, content: event.target.value }))
+                                setBlockForm((current) => ({
+                                  ...current,
+                                  content: event.target.value,
+                                }))
                               }
                               className="min-h-56 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
                             />
@@ -1090,7 +1157,10 @@ export default function InstructorPage() {
                         <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
                           <div className="space-y-3">
                             {assessmentDetail?.questions.map((question) => (
-                              <div key={question.id} className="rounded-3xl border border-(--border) bg-(--surface) p-4">
+                              <div
+                                key={question.id}
+                                className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                              >
                                 <div className="flex items-start justify-between gap-3">
                                   <div>
                                     <p className="text-sm font-semibold">
@@ -1133,7 +1203,10 @@ export default function InstructorPage() {
                               <input
                                 value={assessmentForm.title}
                                 onChange={(event) =>
-                                  setAssessmentForm((current) => ({ ...current, title: event.target.value }))
+                                  setAssessmentForm((current) => ({
+                                    ...current,
+                                    title: event.target.value,
+                                  }))
                                 }
                                 placeholder="Quiz title"
                                 className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1141,7 +1214,10 @@ export default function InstructorPage() {
                               <textarea
                                 value={assessmentForm.description}
                                 onChange={(event) =>
-                                  setAssessmentForm((current) => ({ ...current, description: event.target.value }))
+                                  setAssessmentForm((current) => ({
+                                    ...current,
+                                    description: event.target.value,
+                                  }))
                                 }
                                 placeholder="Quiz description"
                                 className="min-h-20 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1203,7 +1279,10 @@ export default function InstructorPage() {
                               <textarea
                                 value={questionForm.prompt}
                                 onChange={(event) =>
-                                  setQuestionForm((current) => ({ ...current, prompt: event.target.value }))
+                                  setQuestionForm((current) => ({
+                                    ...current,
+                                    prompt: event.target.value,
+                                  }))
                                 }
                                 placeholder="Prompt"
                                 className="min-h-20 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1227,7 +1306,10 @@ export default function InstructorPage() {
                                 <input
                                   value={questionForm.position}
                                   onChange={(event) =>
-                                    setQuestionForm((current) => ({ ...current, position: event.target.value }))
+                                    setQuestionForm((current) => ({
+                                      ...current,
+                                      position: event.target.value,
+                                    }))
                                   }
                                   type="number"
                                   className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1235,7 +1317,10 @@ export default function InstructorPage() {
                                 <input
                                   value={questionForm.points}
                                   onChange={(event) =>
-                                    setQuestionForm((current) => ({ ...current, points: event.target.value }))
+                                    setQuestionForm((current) => ({
+                                      ...current,
+                                      points: event.target.value,
+                                    }))
                                   }
                                   type="number"
                                   className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1244,7 +1329,10 @@ export default function InstructorPage() {
                               <textarea
                                 value={questionForm.options}
                                 onChange={(event) =>
-                                  setQuestionForm((current) => ({ ...current, options: event.target.value }))
+                                  setQuestionForm((current) => ({
+                                    ...current,
+                                    options: event.target.value,
+                                  }))
                                 }
                                 placeholder="Label|Content|true"
                                 className="min-h-28 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
@@ -1270,9 +1358,14 @@ export default function InstructorPage() {
                         <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
                           <div className="space-y-3">
                             {lessonDetail.coding_exercises.map((exercise) => (
-                              <div key={exercise.id} className="rounded-3xl border border-(--border) bg-(--surface) p-4">
+                              <div
+                                key={exercise.id}
+                                className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                              >
                                 <p className="text-sm font-semibold">{exercise.title}</p>
-                                <p className="mt-2 text-sm leading-6 text-(--text-secondary)">{exercise.prompt}</p>
+                                <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
+                                  {exercise.prompt}
+                                </p>
                                 <pre className="mt-3 overflow-x-auto rounded-2xl bg-(--surface-inset) p-3 text-xs text-(--text-secondary)">
                                   {exercise.starter_code}
                                 </pre>
@@ -1285,7 +1378,10 @@ export default function InstructorPage() {
                               <input
                                 value={exerciseForm.title}
                                 onChange={(event) =>
-                                  setExerciseForm((current) => ({ ...current, title: event.target.value }))
+                                  setExerciseForm((current) => ({
+                                    ...current,
+                                    title: event.target.value,
+                                  }))
                                 }
                                 placeholder="Exercise title"
                                 className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1293,7 +1389,10 @@ export default function InstructorPage() {
                               <textarea
                                 value={exerciseForm.prompt}
                                 onChange={(event) =>
-                                  setExerciseForm((current) => ({ ...current, prompt: event.target.value }))
+                                  setExerciseForm((current) => ({
+                                    ...current,
+                                    prompt: event.target.value,
+                                  }))
                                 }
                                 placeholder="Prompt"
                                 className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
@@ -1301,14 +1400,20 @@ export default function InstructorPage() {
                               <textarea
                                 value={exerciseForm.starter_code}
                                 onChange={(event) =>
-                                  setExerciseForm((current) => ({ ...current, starter_code: event.target.value }))
+                                  setExerciseForm((current) => ({
+                                    ...current,
+                                    starter_code: event.target.value,
+                                  }))
                                 }
                                 className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
                               />
                               <textarea
                                 value={exerciseForm.solution_code}
                                 onChange={(event) =>
-                                  setExerciseForm((current) => ({ ...current, solution_code: event.target.value }))
+                                  setExerciseForm((current) => ({
+                                    ...current,
+                                    solution_code: event.target.value,
+                                  }))
                                 }
                                 className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
                               />
@@ -1330,9 +1435,7 @@ export default function InstructorPage() {
           </section>
 
           <aside className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-            <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-              Preview
-            </p>
+            <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">Preview</p>
             <h2 className="mt-2 text-xl font-semibold">
               {previewMode && lessonDetail ? lessonDetail.title : "Toggle preview"}
             </h2>

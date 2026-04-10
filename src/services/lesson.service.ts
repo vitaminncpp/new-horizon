@@ -2,11 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/src/infra/prisma/prisma.client";
 import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
-import {
-  CreateLessonDto,
-  LessonProgressDto,
-  UpdateLessonDto,
-} from "@/src/infra/dtos/learning.dto";
+import { CreateLessonDto, LessonProgressDto, UpdateLessonDto } from "@/src/infra/dtos/learning.dto";
 import { User } from "@/src/infra/models/user.model";
 import { getManagedCourse } from "@/src/services/learning-access.service";
 
@@ -138,7 +134,11 @@ export async function getLessonDetail(lessonId: string, actor?: User) {
   }
 
   const isLearner = !actor || actor.role === "learner";
-  if (isLearner && lesson.section.course.status !== "published" && actor?.id !== lesson.section.course.creator_id) {
+  if (
+    isLearner &&
+    lesson.section.course.status !== "published" &&
+    actor?.id !== lesson.section.course.creator_id
+  ) {
     throw new Exception(ErrorCode.FORBIDDEN, "Lesson is not available");
   }
 
@@ -307,7 +307,8 @@ export async function markLessonProgress(user: User, lessonId: string, payload: 
       }),
     ]);
 
-    const enrollmentProgress = totalLessons === 0 ? 0 : Number(((completedLessons / totalLessons) * 100).toFixed(2));
+    const enrollmentProgress =
+      totalLessons === 0 ? 0 : Number(((completedLessons / totalLessons) * 100).toFixed(2));
     const enrollmentStatus = enrollmentProgress >= 100 ? "completed" : "active";
 
     await tx.course_enrollment.update({
