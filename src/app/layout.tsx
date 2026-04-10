@@ -1,5 +1,7 @@
 import "./globals.css";
 import React from "react";
+import { ApiProvider } from "@/src/infra/api/api.context";
+import { AuthProvider } from "@/src/infra/auth/auth.context";
 
 export default function RootLayout({
   children,
@@ -11,7 +13,9 @@ export default function RootLayout({
       <head>
         <title>New Horizon</title>
       </head>
-      <body data-theme="dark">{children}</body>
+      <body data-theme="dark">
+        <ApiProvider>{children}</ApiProvider>
+      </body>
     </html>
   );
 }
