@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { AuthProvider, useAuth } from "@/src/infra/auth/auth.context";
+import { useAuth } from "@/src/infra/auth/auth.context";
 
 const highlights = [
   "Resume work across all your islands",
@@ -10,24 +10,25 @@ const highlights = [
   "Stay grounded with a calm, low-noise interface",
 ];
 
-export default function Login({ searchParams }: never) {
-  const params = React.use(searchParams) satisfies Record<string, string>;
-  const redir = `/register${params.next ? `?next=${params.next}` : ""}`;
+export default function Login() {
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+  const redir = `/register${next ? `?next=${next}` : ""}`;
   const { login } = useAuth();
 
   const [userData, setUserData] = useState({
+    email: "",
     password: "",
   });
   return (
-    <AuthProvider>
-      <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-        <div className="absolute inset-0 bg-(image:--gradient-page)" />
-        <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,oklch(0.92_0.05_196/0.28),transparent_72%)]" />
+    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
+      <div className="absolute inset-0 bg-(image:--gradient-page)" />
+      <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_center,oklch(0.92_0.05_196/0.28),transparent_72%)]" />
 
-        <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-10 px-6 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-14">
-          <section className="flex items-center justify-center order-2 lg:order-1">
-            <div className="w-full max-w-md rounded-4xl border border-(--border) bg-(image:--gradient-island) p-px shadow-(--shadow-lg)">
-              <div className="rounded-[calc(2rem-1px)] bg-(--surface-raised) p-7 backdrop-blur-xl sm:p-8">
+      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-10 px-6 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-14">
+        <section className="order-2 flex items-center justify-center lg:order-1">
+          <div className="w-full max-w-md rounded-4xl border border-(--border) bg-(image:--gradient-island) p-px shadow-(--shadow-lg)">
+            <div className="rounded-[calc(2rem-1px)] bg-(--surface-raised) p-7 backdrop-blur-xl sm:p-8">
                 <div className="mb-8 space-y-2">
                   <p className="text-sm font-medium uppercase tracking-[0.24em] text-(--text-secondary)">
                     Welcome back
@@ -100,7 +101,7 @@ export default function Login({ searchParams }: never) {
                             email: userData.email,
                             password: userData.password,
                           },
-                          params.next,
+                          next ?? undefined,
                         );
                       } catch (err: unknown) {
                         console.error("Login error:", (err as Error).message);
@@ -121,56 +122,55 @@ export default function Login({ searchParams }: never) {
                     Create account
                   </Link>
                 </div>
-              </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="order-1 flex flex-col justify-between rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-7 shadow-(--shadow-lg) backdrop-blur-xl lg:order-2 lg:p-10">
-            <div className="space-y-6">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-(--border) bg-(--surface-raised) px-3 py-1 text-xs font-medium uppercase tracking-[0.28em] text-(--text-secondary)">
-                New Horizon
-              </div>
-
-              <div className="space-y-4">
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-(--text-secondary)">
-                  Return to the shoreline
-                </p>
-                <h2 className="max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
-                  Your focused workspace is ready when you are.
-                </h2>
-                <p className="max-w-2xl text-base leading-7 text-(--text-secondary) sm:text-lg">
-                  Sign back in to review updates, continue projects, and move through your day with
-                  the same calm visual rhythm.
-                </p>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-3">
-                {highlights.map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-3xl border border-(--border) bg-(--surface-raised) p-4 shadow-(--shadow-sm)"
-                  >
-                    <div className="mb-3 h-10 w-10 rounded-2xl border border-(--border) bg-(--surface-accent)" />
-                    <p className="text-sm leading-6 text-(--text-secondary)">{item}</p>
-                  </div>
-                ))}
-              </div>
+        <section className="order-1 flex flex-col justify-between rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-7 shadow-(--shadow-lg) backdrop-blur-xl lg:order-2 lg:p-10">
+          <div className="space-y-6">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-(--border) bg-(--surface-raised) px-3 py-1 text-xs font-medium uppercase tracking-[0.28em] text-(--text-secondary)">
+              New Horizon
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-(--text-secondary)">
-              <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
-                Session aware
-              </span>
-              <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
-                Fast re-entry
-              </span>
-              <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
-                Consistent auth UI
-              </span>
+            <div className="space-y-4">
+              <p className="text-sm font-medium uppercase tracking-[0.24em] text-(--text-secondary)">
+                Return to the shoreline
+              </p>
+              <h2 className="max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
+                Your focused workspace is ready when you are.
+              </h2>
+              <p className="max-w-2xl text-base leading-7 text-(--text-secondary) sm:text-lg">
+                Sign back in to review updates, continue projects, and move through your day with
+                the same calm visual rhythm.
+              </p>
             </div>
-          </section>
-        </div>
-      </main>
-    </AuthProvider>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {highlights.map((item) => (
+                <div
+                  key={item}
+                  className="rounded-3xl border border-(--border) bg-(--surface-raised) p-4 shadow-(--shadow-sm)"
+                >
+                  <div className="mb-3 h-10 w-10 rounded-2xl border border-(--border) bg-(--surface-accent)" />
+                  <p className="text-sm leading-6 text-(--text-secondary)">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-4 text-sm text-(--text-secondary)">
+            <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
+              Session aware
+            </span>
+            <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
+              Fast re-entry
+            </span>
+            <span className="rounded-full border border-(--border) bg-(--surface) px-3 py-1.5">
+              Consistent auth UI
+            </span>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

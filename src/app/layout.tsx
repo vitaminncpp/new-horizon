@@ -14,7 +14,9 @@ export default function RootLayout({
         <title>New Horizon</title>
       </head>
       <body data-theme="dark">
-        <ApiProvider>{children}</ApiProvider>
+        <ApiProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ApiProvider>
       </body>
     </html>
   );

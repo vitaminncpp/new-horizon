@@ -18,6 +18,7 @@ enum ErrorCode {
   INVALID_TOKEN = "auth.token.invalid",
   USER_INSERTION_FAILED = "auth.user.insert_failed",
   UNAUTHORIZED = "auth.user.unauthorized",
+  FORBIDDEN = "auth.user.forbidden",
 
   PROJECT_NOT_EXIST = "auth.project.not_found",
 

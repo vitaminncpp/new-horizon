@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, ReactNode } from "react";
+import { API_ENDPOINTS } from "@/src/infra/config/api.config";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -59,6 +60,7 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
     const config: RequestInit = {
       method,
       headers: defaultHeaders,
+      credentials: "same-origin",
     };
 
     if (body) {
@@ -69,6 +71,28 @@ export const ApiProvider = ({ children }: ApiProviderProps) => {
       const response = await fetch(url.toString(), config);
 
       if (!response.ok) {
+        if (
+          response.status === 401 &&
+          endpoint !== API_ENDPOINTS.AUTH.REFRESH &&
+          endpoint !== API_ENDPOINTS.AUTH.LOGOUT
+        ) {
+          const refreshResponse = await fetch(API_ENDPOINTS.AUTH.REFRESH, {
+            method: "POST",
+            credentials: "same-origin",
+          });
+
+          if (refreshResponse.ok) {
+            const retryResponse = await fetch(url.toString(), config);
+            if (retryResponse.ok) {
+              return (await retryResponse.json()) as T;
+            }
+            const retryErrorData = await retryResponse.json().catch(() => ({}));
+            throw new Error(
+              retryErrorData.error || `HTTP error! status: ${retryResponse.status}`,
+            );
+          }
+        }
+
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }

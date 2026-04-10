@@ -4,15 +4,14 @@ import React, { createContext, useContext, ReactNode, useState, useEffect } from
 import { useRouter } from "next/navigation";
 import { useApi } from "@/src/infra/api/api.context";
 import { API_ENDPOINTS } from "@/src/infra/config/api.config";
-import { AuthEnum } from "@/src/infra/enums/auth.enum";
-import { LoginRequestDto, RegisterRequestDto, AuthResponseDto } from "@/src/infra/dtos/auth.dto";
+import { AuthResponseDto, LoginRequestDto, RegisterRequestDto } from "@/src/infra/dtos/auth.dto";
 import { User } from "@/src/infra/models/user.model";
 
 interface AuthContextType {
   user: User | null;
   login: (data: LoginRequestDto, next?: string) => Promise<void>;
   register: (data: RegisterRequestDto, next?: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -37,43 +36,56 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(AuthEnum.USER_DATA);
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
-  }, []);
+    let isMounted = true;
+
+    const bootstrap = async () => {
+      try {
+        const auth = await api.get<AuthResponseDto>(API_ENDPOINTS.AUTH.ME);
+        if (isMounted) {
+          setUser(auth.user);
+        }
+      } catch {
+        if (isMounted) {
+          setUser(null);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void bootstrap();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [api]);
 
   const handleAuthSuccess = (auth: AuthResponseDto, next?: string) => {
     setUser(auth.user);
-    localStorage.setItem(AuthEnum.USER_DATA, JSON.stringify(auth.user));
     router.push(next || "/workspace");
+    router.refresh();
   };
 
   const login = async (data: LoginRequestDto, next?: string) => {
-    try {
-      const auth = await api.post<AuthResponseDto>(API_ENDPOINTS.AUTH.LOGIN, data);
-      handleAuthSuccess(auth, next);
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    }
+    const auth = await api.post<AuthResponseDto>(API_ENDPOINTS.AUTH.LOGIN, data);
+    handleAuthSuccess(auth, next);
   };
 
   const register = async (data: RegisterRequestDto, next?: string) => {
-    try {
-      const auth = await api.post<AuthResponseDto>(API_ENDPOINTS.AUTH.REGISTER, data);
-      handleAuthSuccess(auth, next);
-    } catch (error) {
-      console.error("Registration failed:", error);
-      throw error;
-    }
+    const auth = await api.post<AuthResponseDto>(API_ENDPOINTS.AUTH.REGISTER, data);
+    handleAuthSuccess(auth, next);
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem(AuthEnum.USER_DATA);
-    router.push("/login");
+  const logout = async () => {
+    try {
+      await api.post(API_ENDPOINTS.AUTH.LOGOUT, {});
+    } finally {
+      setUser(null);
+      router.push("/login");
+      router.refresh();
+    }
   };
 
   return (

@@ -1,14 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import * as authService from "@/src/services/auth.service";
+import { registerRequestSchema } from "@/src/infra/dtos/auth.dto";
+import { apiError, apiSuccess } from "@/src/infra/http/api-response";
+import { setAccessCookie, setRefreshCookie } from "@/src/infra/auth/auth-cookie";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, name, password } = await req.json();
+    const { email, name, password } = registerRequestSchema.parse(await req.json());
     await authService.register(email, name, password);
-    const auth = await authService.login(email, password);
-    delete (auth.user as unknown as Record<string, unknown>).password;
-    return NextResponse.json(auth);
+    const session = await authService.login(email, password);
+    const response = apiSuccess({ user: session.user });
+    setAccessCookie(response, session.accessToken);
+    setRefreshCookie(response, session.refreshToken);
+    return response;
   } catch (error: unknown) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+    return apiError(error, 400);
   }
 }

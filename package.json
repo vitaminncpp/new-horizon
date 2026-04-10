@@ -7,11 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "tsgo": "tsgo",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "tsx src/infra/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",

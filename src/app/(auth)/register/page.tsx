@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
-import { AuthProvider, useAuth } from "@/src/infra/auth/auth.context";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/src/infra/auth/auth.context";
 
 const perks = [
   "Create a focused space for projects and notes",
@@ -9,24 +10,25 @@ const perks = [
   "Switch between calm light and moonlit dark themes",
 ];
 
-export default function Register({ searchParams }: never) {
-  const params = React.use(searchParams) satisfies Record<string, string>;
-  const redir = `/login${params.next ? `?next=${params.next}` : ""}`;
+export default function Register() {
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+  const redir = `/login${next ? `?next=${next}` : ""}`;
   const { register } = useAuth();
 
   const [userData, setUserData] = useState({
+    email: "",
     name: "",
     password: "",
     workspace: "",
   });
   return (
-    <AuthProvider>
-      <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-        <div className="absolute inset-0 bg-(image:--gradient-page)" />
-        <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,oklch(1_0_0/0.3),transparent_70%)]" />
+    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
+      <div className="absolute inset-0 bg-(image:--gradient-page)" />
+      <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,oklch(1_0_0/0.3),transparent_70%)]" />
 
-        <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-10 px-6 py-10 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:py-14">
-          <section className="flex flex-col justify-between rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-7 shadow-(--shadow-lg) backdrop-blur-xl lg:p-10">
+      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-10 px-6 py-10 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:py-14">
+        <section className="flex flex-col justify-between rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-7 shadow-(--shadow-lg) backdrop-blur-xl lg:p-10">
             <div className="space-y-6">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-(--border) bg-(--surface-raised) px-3 py-1 text-xs font-medium uppercase tracking-[0.28em] text-(--text-secondary)">
                 New Horizon
@@ -69,11 +71,11 @@ export default function Register({ searchParams }: never) {
                 Island-inspired UI
               </span>
             </div>
-          </section>
+        </section>
 
-          <section className="flex items-center justify-center">
-            <div className="w-full max-w-md rounded-4xl border border-(--border) bg-(image:--gradient-island) p-px shadow-(--shadow-lg)">
-              <div className="rounded-[calc(2rem-1px)] bg-(--surface-raised) p-7 backdrop-blur-xl sm:p-8">
+        <section className="flex items-center justify-center">
+          <div className="w-full max-w-md rounded-4xl border border-(--border) bg-(image:--gradient-island) p-px shadow-(--shadow-lg)">
+            <div className="rounded-[calc(2rem-1px)] bg-(--surface-raised) p-7 backdrop-blur-xl sm:p-8">
                 <div className="mb-8 space-y-2">
                   <h2 className="text-3xl font-semibold tracking-tight">Create account</h2>
                   <p className="text-sm leading-6 text-(--text-secondary)">
@@ -169,7 +171,7 @@ export default function Register({ searchParams }: never) {
                             name: userData.name,
                             password: userData.password,
                           },
-                          params.next,
+                          next ?? undefined,
                         );
                       } catch (err: unknown) {
                         console.error("Registration error:", (err as Error).message);
@@ -190,11 +192,10 @@ export default function Register({ searchParams }: never) {
                     Log in
                   </Link>
                 </div>
-              </div>
             </div>
-          </section>
-        </div>
-      </main>
-    </AuthProvider>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
