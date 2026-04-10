@@ -7,11 +7,26 @@
 
 html {
   background: var(--bg);
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
   background: var(--gradient-page);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom Utilities for Gradients */
+@utility gradient-page {
+  background-image: var(--gradient-page);
+}
+
+@utility gradient-island {
+  background-image: var(--gradient-island);
+}
+
+@utility gradient-surface {
+  background-image: var(--gradient-surface);
+}

@@ -77,30 +77,20 @@ export default function CourseDetailPage() {
     [flatLessons],
   );
 
-  const progressClass =
-    (enrollment?.progress_percent ?? 0) >= 100
-      ? "w-full"
-      : (enrollment?.progress_percent ?? 0) >= 90
-        ? "w-11/12"
-        : (enrollment?.progress_percent ?? 0) >= 80
-          ? "w-10/12"
-          : (enrollment?.progress_percent ?? 0) >= 70
-            ? "w-9/12"
-            : (enrollment?.progress_percent ?? 0) >= 60
-              ? "w-8/12"
-              : (enrollment?.progress_percent ?? 0) >= 50
-                ? "w-6/12"
-                : (enrollment?.progress_percent ?? 0) >= 40
-                  ? "w-5/12"
-                  : (enrollment?.progress_percent ?? 0) >= 30
-                    ? "w-4/12"
-                    : (enrollment?.progress_percent ?? 0) >= 20
-                      ? "w-3/12"
-                      : (enrollment?.progress_percent ?? 0) >= 10
-                        ? "w-2/12"
-                        : (enrollment?.progress_percent ?? 0) > 0
-                          ? "w-1/12"
-                          : "w-0";
+  const progressWidthClass = (percent: number) => {
+    if (percent >= 100) return "w-full";
+    if (percent >= 90) return "w-11/12";
+    if (percent >= 80) return "w-10/12";
+    if (percent >= 70) return "w-9/12";
+    if (percent >= 60) return "w-8/12";
+    if (percent >= 50) return "w-6/12";
+    if (percent >= 40) return "w-5/12";
+    if (percent >= 30) return "w-4/12";
+    if (percent >= 20) return "w-3/12";
+    if (percent >= 10) return "w-2/12";
+    if (percent > 0) return "w-1/12";
+    return "w-0";
+  };
 
   async function handleEnroll() {
     if (!course) return;
@@ -121,153 +111,194 @@ export default function CourseDetailPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-      <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="absolute inset-x-0 top-0 h-[500px] bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,oklch(0.40_0.16_280/0.25),oklch(0.28_0.12_275/0.15)_40%,transparent_70%)]" />
+    <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
+      <div className="absolute inset-0 gradient-page opacity-50" />
 
-      <div className="relative flex min-h-screen flex-col px-6 py-8 lg:px-10 lg:py-10">
+      <div className="relative flex min-h-screen flex-col px-4 py-8 sm:px-8 lg:px-12 lg:py-12">
         {course ? (
-          <>
-            <header className="rounded-xl border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl lg:p-8">
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div className="max-w-3xl">
-                  <p className="text-xs uppercase tracking-[0.2em] text-(--primary)">
+          <div className="mx-auto w-full space-y-8">
+            <header className="rounded-xl border border-border-accent bg-surface-glass p-8 shadow-lg backdrop-blur-xl lg:p-12">
+              <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+                <div className="">
+                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">
                     {course.level} path
                   </p>
-                  <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+                  <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                     {course.title}
                   </h1>
-                  <p className="mt-4 text-base leading-7 text-(--text-secondary)">
+                  <p className="mt-6 text-lg leading-relaxed text-text-secondary">
                     {course.description || course.summary || "Course description coming soon."}
                   </p>
+                  <div className="mt-8 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-text-tertiary">
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="h-4 w-4 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                      {course.creator.name}
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="h-4 w-4 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      {course.estimated_minutes ?? 0}m
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex w-full max-w-md flex-col gap-3 rounded-lg border border-(--border) bg-(--surface-raised) p-5 shadow-(--shadow-sm)">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-(--text-secondary)">Progress</span>
-                    <span className="font-semibold text-(--primary)">
+                <div className="flex w-full max-w-sm flex-col gap-5 rounded-xl border border-border bg-surface-raised p-6 shadow-md">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-widest text-text-secondary">
+                      Your Progress
+                    </span>
+                    <span className="text-lg font-black text-primary">
                       {enrollment?.progress_percent ?? 0}%
                     </span>
                   </div>
-                  <div className="h-2 rounded-full bg-(--surface-inset) overflow-hidden">
+                  <div className="h-2.5 rounded-full bg-surface-inset overflow-hidden border border-border">
                     <div
-                      className={`h-full rounded-full bg-gradient-to-r from-(--primary) to-(--secondary) ${progressClass} transition-all`}
+                      className={`h-full rounded-full bg-gradient-to-r from-primary to-secondary ${progressWidthClass(enrollment?.progress_percent ?? 0)} transition-all duration-1000`}
                     />
                   </div>
                   {enrollment ? (
                     firstOpenLesson ? (
                       <Link
                         href={`/learn/${course.id}/lessons/${firstOpenLesson.id}`}
-                        className="rounded-lg bg-(--primary) px-5 py-2.5 text-center text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110"
+                        className="rounded-lg bg-primary px-6 py-3.5 text-center text-sm font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
                       >
-                        {enrollment.progress_percent > 0 ? "Continue learning" : "Start course"}
+                        {enrollment.progress_percent > 0 ? "Continue Learning" : "Start Path"}
                       </Link>
                     ) : (
-                      <div className="rounded-lg bg-(--surface-inset) px-4 py-2.5 text-sm text-(--text-secondary)">
-                        Lessons will appear here once the curriculum is published.
+                      <div className="rounded-lg bg-surface-inset px-4 py-3 text-center text-sm font-bold text-text-tertiary border border-border">
+                        Path curriculum coming soon
                       </div>
                     )
                   ) : (
                     <button
                       onClick={() => void handleEnroll()}
                       disabled={isSubmitting}
-                      className="rounded-lg bg-(--primary) px-5 py-2.5 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110 disabled:opacity-60"
+                      className="rounded-lg bg-primary px-6 py-3.5 text-center text-sm font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95 disabled:opacity-60"
                     >
-                      {isSubmitting ? "Enrolling…" : "Enroll now"}
+                      {isSubmitting ? "Enrolling..." : "Enroll Now"}
                     </button>
                   )}
-                  <div className="flex items-center gap-2 text-xs text-(--text-tertiary)">
-                    <span>
-                      Instructor:{" "}
-                      <span className="text-(--text-secondary)">{course.creator.name}</span>
-                    </span>
-                    <span>•</span>
-                    <span>{course.estimated_minutes ?? 0} minutes</span>
-                  </div>
                 </div>
               </div>
             </header>
 
             {message ? (
-              <div className="mt-4 rounded-lg border border-(--success-border, oklch(0.5 0.1 165)) bg-(--success-bg) px-5 py-3 text-sm text-(--success)">
+              <div className="rounded-lg border border-success/30 bg-success-bg px-6 py-4 text-sm font-bold text-success shadow-sm">
                 {message}
               </div>
             ) : null}
 
-            <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-              <section className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
-                <p className="text-xs uppercase tracking-[0.2em] text-(--secondary)">Curriculum</p>
-                <div className="mt-4 space-y-3">
+            <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+              <section className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl lg:p-8">
+                <div className="flex items-center gap-3 border-b border-border pb-6 mb-8">
+                  <div className="h-2 w-2 rounded-full bg-secondary" />
+                  <h2 className="text-xl font-bold uppercase tracking-widest text-text-primary">
+                    Curriculum
+                  </h2>
+                </div>
+                <div className="space-y-6">
                   {course.sections.map((section) => (
                     <article
                       key={section.id}
-                      className="rounded-lg border border-(--border) bg-(--surface) p-4 transition-all hover:border-(--border-strong)"
+                      className="rounded-xl border border-border bg-surface p-6 shadow-sm transition-all hover:border-border-strong"
                     >
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start justify-between gap-6">
                         <div>
-                          <p className="text-base font-semibold">
-                            {section.position}. {section.title}
+                          <p className="text-sm font-black text-text-tertiary tracking-widest uppercase">
+                            Section {section.position}
                           </p>
-                          <p className="mt-1 text-sm leading-6 text-(--text-secondary)">
-                            {section.description || "Structured lessons for this section."}
+                          <h3 className="mt-1 text-xl font-bold">{section.title}</h3>
+                          <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                            {section.description || "In-depth lessons exploring these concepts."}
                           </p>
                         </div>
-                        <span className="rounded-md border border-(--secondary-border, oklch(0.5 0.1 185)) bg-(--info-bg) px-2 py-1 text-[10px] uppercase tracking-[0.1em] text-(--info)">
-                          {section.lessons.length} lessons
+                        <span className="rounded bg-secondary/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-secondary border border-secondary/20">
+                          {section.lessons.length} Units
                         </span>
                       </div>
 
-                      <div className="mt-3 grid gap-2">
+                      <div className="mt-6 space-y-3">
                         {section.lessons.map((lesson) => {
                           const progress = lesson.progresses?.[0];
                           return (
                             <div
                               key={lesson.id}
-                              className="group rounded-lg border border-(--border) bg-(--surface-inset) px-4 py-3 transition-all hover:border-(--primary-border) hover:bg-(--surface)"
+                              className="group rounded-lg border border-border bg-surface-inset px-5 py-4 transition-all hover:border-primary-border hover:bg-surface shadow-sm"
                             >
-                              <div className="flex items-start justify-between gap-3">
-                                <div>
-                                  <p className="text-sm font-semibold group-hover:text-(--primary) transition-colors">
-                                    {lesson.position}. {lesson.title}
-                                  </p>
-                                  <p className="mt-0.5 text-xs uppercase tracking-[0.1em] text-(--text-tertiary)">
-                                    {lesson.type} • {lesson.estimated_minutes ?? 0} min
+                              <div className="flex items-center justify-between gap-4">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-bold text-text-tertiary">
+                                      #{lesson.position}
+                                    </span>
+                                    <p className="text-sm font-bold group-hover:text-primary transition-colors">
+                                      {lesson.title}
+                                    </p>
+                                  </div>
+                                  <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                                    {lesson.type.replace("_", " ")} •{" "}
+                                    {lesson.estimated_minutes ?? 0}m
                                     {lesson.is_preview ? " • preview" : ""}
                                   </p>
                                 </div>
                                 {enrollment ? (
                                   <Link
                                     href={`/learn/${course.id}/lessons/${lesson.id}`}
-                                    className="rounded-lg border border-(--border) bg-(--surface-raised) px-3 py-1.5 text-xs font-medium transition-all hover:border-(--primary-border) hover:bg-(--primary-soft) hover:text-(--primary)"
+                                    className="rounded-lg border border-border bg-surface-raised px-4 py-2 text-xs font-bold transition-all hover:border-primary-border hover:bg-primary-soft hover:text-primary shadow-sm"
                                   >
                                     Open
                                   </Link>
                                 ) : (
-                                  <span className="rounded-lg border border-(--border) px-3 py-1.5 text-xs text-(--text-secondary)">
-                                    Enroll
+                                  <span className="rounded-lg border border-border bg-surface-muted/50 px-4 py-2 text-xs font-bold text-text-tertiary opacity-50 cursor-not-allowed">
+                                    Locked
                                   </span>
                                 )}
                               </div>
-                              <div className="mt-2 flex items-center justify-between text-xs">
-                                <span
-                                  className={
-                                    progress?.status === "completed"
-                                      ? "text-(--success)"
-                                      : progress?.status === "in_progress"
-                                        ? "text-(--warning)"
-                                        : "text-(--text-tertiary)"
-                                  }
-                                >
-                                  {progress?.status === "completed"
-                                    ? "Completed"
-                                    : progress?.status === "in_progress"
-                                      ? "In progress"
-                                      : "Not started"}
-                                </span>
-                                <span className="font-medium text-(--text-secondary)">
-                                  {progress?.progress_percent ?? 0}%
-                                </span>
-                              </div>
+                              {enrollment && progress ? (
+                                <div className="mt-3 flex items-center justify-between border-t border-border/50 pt-3">
+                                  <div className="flex items-center gap-2">
+                                    <div
+                                      className={`h-1.5 w-1.5 rounded-full ${
+                                        progress.status === "completed"
+                                          ? "bg-success"
+                                          : progress.status === "in_progress"
+                                            ? "bg-warning"
+                                            : "bg-text-tertiary"
+                                      }`}
+                                    />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                                      {progress.status.replace("_", " ")}
+                                    </span>
+                                  </div>
+                                  <span className="text-[10px] font-bold text-text-secondary">
+                                    {progress.progress_percent}%
+                                  </span>
+                                </div>
+                              ) : null}
                             </div>
                           );
                         })}
@@ -277,39 +308,81 @@ export default function CourseDetailPage() {
                 </div>
               </section>
 
-              <aside className="space-y-4">
-                <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl lg:p-6">
-                  <p className="text-xs uppercase tracking-[0.2em] text-(--accent)">
-                    What you&apos;ll practice
+              <aside className="space-y-8">
+                <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                    Learning Experience
                   </p>
-                  <ul className="mt-4 space-y-2 text-sm leading-6 text-(--text-secondary)">
-                    <li className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong) hover:bg-(--surface-raised)">
-                      Article-based learning with checkpoint progress
+                  <ul className="mt-6 space-y-4">
+                    <li className="flex gap-4 rounded-lg border border-border bg-surface p-4 transition-all hover:border-border-strong shadow-sm">
+                      <div className="h-5 w-5 shrink-0 text-primary">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-xs font-bold leading-relaxed text-text-secondary uppercase tracking-wider">
+                        Guided lessons with checkpoint progress
+                      </p>
                     </li>
-                    <li className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong) hover:bg-(--surface-raised)">
-                      Quiz lessons with graded assessment attempts
+                    <li className="flex gap-4 rounded-lg border border-border bg-surface p-4 transition-all hover:border-border-strong shadow-sm">
+                      <div className="h-5 w-5 shrink-0 text-info">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-xs font-bold leading-relaxed text-text-secondary uppercase tracking-wider">
+                        Interactive quizzes with instant feedback
+                      </p>
                     </li>
-                    <li className="rounded-lg border border-(--border) bg-(--surface) px-4 py-3 transition-all hover:border-(--border-strong) hover:bg-(--surface-raised)">
-                      Coding labs with tracked submissions
+                    <li className="flex gap-4 rounded-lg border border-border bg-surface p-4 transition-all hover:border-border-strong shadow-sm">
+                      <div className="h-5 w-5 shrink-0 text-success">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-xs font-bold leading-relaxed text-text-secondary uppercase tracking-wider">
+                        Coding labs for hands-on mastery
+                      </p>
                     </li>
                   </ul>
                 </div>
 
-                <div className="rounded-xl border border-(--primary-border) bg-(--primary-soft)/20 p-5 shadow-(--shadow-md) lg:p-6">
-                  <p className="text-xs uppercase tracking-[0.2em] text-(--primary)">
-                    Continue path
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                    Learner completion is tracked across lessons and reflected in your dashboard.
-                    Certificate logic can be layered on top later without changing this flow.
+                <div className="rounded-xl border border-primary-border bg-primary-soft/30 p-6 shadow-md lg:p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-primary">
+                      Continuous Growth
+                    </p>
+                  </div>
+                  <p className="text-sm font-bold leading-relaxed text-text-secondary">
+                    Your journey is saved at every step. Complete paths to build a portfolio of
+                    verified skills across our engineering curriculum.
                   </p>
                 </div>
               </aside>
             </div>
-          </>
+          </div>
         ) : (
-          <div className="rounded-xl border border-(--border) bg-(--surface-glass) p-8 text-sm text-(--text-secondary) backdrop-blur-xl">
-            Loading course…
+          <div className="flex items-center justify-center p-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <span className="ml-3 text-sm font-bold tracking-widest uppercase text-text-tertiary">
+              Loading Path...
+            </span>
           </div>
         )}
       </div>

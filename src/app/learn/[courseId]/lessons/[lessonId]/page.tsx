@@ -106,10 +106,10 @@ type CodingExerciseDetail = {
 };
 
 function progressTone(value: number) {
-  if (value >= 100) return "bg-[oklch(0.72_0.13_160/0.9)]";
-  if (value >= 67) return "bg-[oklch(0.74_0.12_210/0.9)]";
-  if (value >= 34) return "bg-[oklch(0.84_0.08_85/0.9)]";
-  return "bg-(--surface-inset)";
+  if (value >= 100) return "bg-success";
+  if (value >= 67) return "bg-info";
+  if (value >= 34) return "bg-warning";
+  return "bg-surface-inset";
 }
 
 function progressWidthClass(value: number) {
@@ -233,20 +233,20 @@ export default function LessonPlayerPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-      <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="relative mx-auto flex min-h-screen max-w-400 flex-col px-4 py-5 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
+      <div className="absolute inset-0 gradient-page" />
+      <div className="relative mx-auto flex min-h-screen flex-col px-4 py-5 sm:px-6 lg:px-8">
         {course && lesson ? (
-          <div className="grid flex-1 gap-4 xl:grid-cols-[320px_minmax(0,1fr)_300px]">
-            <aside className="rounded-4xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-              <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                Progress map
+          <div className="grid flex-1 gap-6 xl:grid-cols-[300px_minmax(0,1fr)_280px]">
+            <aside className="rounded-xl border border-border bg-surface-glass p-5 shadow-md backdrop-blur-xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-text-tertiary">
+                Course Progress
               </p>
-              <h2 className="mt-2 text-xl font-semibold">{course.title}</h2>
-              <div className="mt-5 space-y-4">
+              <h2 className="mt-2 text-lg font-bold">{course.title}</h2>
+              <div className="mt-6 space-y-6">
                 {course.sections.map((section) => (
                   <div key={section.id}>
-                    <p className="text-sm font-semibold">
+                    <p className="text-sm font-bold text-text-secondary">
                       {section.position}. {section.title}
                     </p>
                     <div className="mt-3 space-y-2">
@@ -256,21 +256,21 @@ export default function LessonPlayerPage() {
                           <Link
                             key={item.id}
                             href={`/learn/${course.id}/lessons/${item.id}`}
-                            className={`block rounded-2xl border px-3 py-3 ${
+                            className={`block rounded-lg border p-3 transition-all ${
                               item.id === lesson.id
-                                ? "border-(--border-accent) bg-(--surface-raised)"
-                                : "border-(--border) bg-(--surface)"
+                                ? "border-border-accent bg-surface-raised shadow-sm"
+                                : "border-border bg-surface hover:border-border-strong"
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3">
                               <span className="text-sm font-medium">{item.title}</span>
-                              <span className="text-[10px] uppercase tracking-[0.16em] text-(--text-tertiary)">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
                                 {item.type}
                               </span>
                             </div>
-                            <div className="mt-3 h-2 rounded-full bg-(--surface-inset)">
+                            <div className="mt-3 h-1.5 rounded-full bg-surface-inset">
                               <div
-                                className={`h-full rounded-full ${progressTone(progress?.progress_percent ?? 0)} ${progressWidthClass(progress?.progress_percent ?? 0)}`}
+                                className={`h-full rounded-full transition-all duration-500 ${progressTone(progress?.progress_percent ?? 0)} ${progressWidthClass(progress?.progress_percent ?? 0)}`}
                               />
                             </div>
                           </Link>
@@ -282,226 +282,246 @@ export default function LessonPlayerPage() {
               </div>
             </aside>
 
-            <section className="space-y-4">
-              <header className="rounded-4xl border border-(--border-accent) bg-(--surface-glass) p-6 shadow-(--shadow-lg) backdrop-blur-xl">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <section className="space-y-6">
+              <header className="rounded-xl border border-border-accent bg-surface-glass p-6 shadow-lg backdrop-blur-xl">
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                       {lesson.type} lesson
                     </p>
-                    <h1 className="mt-2 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
-                    <p className="mt-3 max-w-3xl text-sm leading-7 text-(--text-secondary)">
+                    <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                      {lesson.title}
+                    </h1>
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary">
                       {lesson.description ||
                         "Follow the lesson materials and update progress as you go."}
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex shrink-0 flex-wrap gap-3">
                     <button
                       onClick={() => void markProgress("in_progress")}
-                      className="rounded-full border border-(--border) bg-(--surface) px-4 py-2 text-sm font-medium"
+                      className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold transition hover:border-border-strong hover:bg-surface-soft"
                     >
-                      Save progress
+                      Save Progress
                     </button>
                     <button
                       onClick={() => void markProgress("completed")}
-                      className="rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
+                      className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-contrast shadow-sm transition hover:brightness-110 active:scale-95"
                     >
-                      Mark complete
+                      Mark Complete
                     </button>
                   </div>
                 </div>
               </header>
 
               {message ? (
-                <div className="rounded-3xl border border-(--border-accent) bg-(--surface) px-5 py-3 text-sm">
+                <div className="rounded-lg border border-success/30 bg-success-bg px-5 py-3 text-sm font-medium text-success">
                   {message}
                 </div>
               ) : null}
 
-              {lesson.type === "article" ||
-              lesson.type === "video" ||
-              lesson.type === "live_session" ? (
-                <div className="space-y-4">
-                  {lesson.content_blocks.map((block) => (
-                    <LearnerBlock key={block.id} block={block} />
-                  ))}
-                </div>
-              ) : null}
+              <div className="space-y-6">
+                {lesson.type === "article" ||
+                lesson.type === "video" ||
+                lesson.type === "live_session"
+                  ? lesson.content_blocks.map((block) => (
+                      <LearnerBlock key={block.id} block={block} />
+                    ))
+                  : null}
 
-              {lesson.type === "quiz" && assessment ? (
-                <div className="rounded-4xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                    Quiz
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold">{assessment.title}</h2>
-                  <div className="mt-5 space-y-4">
-                    {assessment.questions.map((question) => (
-                      <div
-                        key={question.id}
-                        className="rounded-3xl border border-(--border) bg-(--surface) p-4"
-                      >
-                        <p className="text-sm font-semibold">{question.prompt}</p>
-                        <div className="mt-3 space-y-2">
-                          {(question.type === "single_choice" ||
-                            question.type === "multiple_choice") &&
-                            question.options.map((option) => {
-                              const currentValue = quizAnswers[question.id];
-                              const selected = Array.isArray(currentValue)
-                                ? currentValue.includes(option.id)
-                                : currentValue === option.id;
-                              return (
-                                <label
-                                  key={option.id}
-                                  className={`flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm ${
-                                    selected
-                                      ? "border-(--border-accent) bg-(--surface-raised)"
-                                      : "border-(--border) bg-(--surface-inset)"
-                                  }`}
-                                >
-                                  <input
-                                    type={question.type === "single_choice" ? "radio" : "checkbox"}
-                                    checked={selected}
-                                    onChange={(event) => {
-                                      setQuizAnswers((current) => {
-                                        if (question.type === "single_choice") {
-                                          return { ...current, [question.id]: option.id };
-                                        }
+                {lesson.type === "quiz" && assessment ? (
+                  <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-warning" />
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary">
+                        Quiz
+                      </p>
+                    </div>
+                    <h2 className="mt-2 text-xl font-bold">{assessment.title}</h2>
+                    <div className="mt-6 space-y-6">
+                      {assessment.questions.map((question) => (
+                        <div
+                          key={question.id}
+                          className="rounded-lg border border-border bg-surface p-5 shadow-sm"
+                        >
+                          <p className="text-base font-bold text-text-primary">{question.prompt}</p>
+                          <div className="mt-4 space-y-3">
+                            {(question.type === "single_choice" ||
+                              question.type === "multiple_choice") &&
+                              question.options.map((option) => {
+                                const currentValue = quizAnswers[question.id];
+                                const selected = Array.isArray(currentValue)
+                                  ? currentValue.includes(option.id)
+                                  : currentValue === option.id;
+                                return (
+                                  <label
+                                    key={option.id}
+                                    className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-all ${
+                                      selected
+                                        ? "border-primary bg-primary-soft text-primary"
+                                        : "border-border bg-surface-inset hover:border-border-strong"
+                                    }`}
+                                  >
+                                    <input
+                                      type={
+                                        question.type === "single_choice" ? "radio" : "checkbox"
+                                      }
+                                      checked={selected}
+                                      onChange={(event) => {
+                                        setQuizAnswers((current) => {
+                                          if (question.type === "single_choice") {
+                                            return { ...current, [question.id]: option.id };
+                                          }
 
-                                        const existing = Array.isArray(current[question.id])
-                                          ? (current[question.id] as string[])
-                                          : [];
-                                        return {
-                                          ...current,
-                                          [question.id]: event.target.checked
-                                            ? [...existing, option.id]
-                                            : existing.filter((value) => value !== option.id),
-                                        };
-                                      });
-                                    }}
-                                  />
-                                  <span>{option.content}</span>
-                                </label>
-                              );
-                            })}
-                          {question.type === "short_text" ? (
-                            <textarea
-                              value={String(quizAnswers[question.id] ?? "")}
-                              onChange={(event) =>
-                                setQuizAnswers((current) => ({
-                                  ...current,
-                                  [question.id]: event.target.value,
-                                }))
-                              }
-                              className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-4 py-3 text-sm outline-none"
-                            />
-                          ) : null}
-                          {question.type === "code" ? (
-                            <textarea
-                              value={String(quizAnswers[question.id] ?? "")}
-                              onChange={(event) =>
-                                setQuizAnswers((current) => ({
-                                  ...current,
-                                  [question.id]: event.target.value,
-                                }))
-                              }
-                              className="min-h-40 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-4 py-3 font-mono text-xs outline-none"
-                            />
-                          ) : null}
+                                          const existing = Array.isArray(current[question.id])
+                                            ? (current[question.id] as string[])
+                                            : [];
+                                          return {
+                                            ...current,
+                                            [question.id]: event.target.checked
+                                              ? [...existing, option.id]
+                                              : existing.filter((value) => value !== option.id),
+                                          };
+                                        });
+                                      }}
+                                      className="accent-primary"
+                                    />
+                                    <span className="font-medium">{option.content}</span>
+                                  </label>
+                                );
+                              })}
+                            {question.type === "short_text" ? (
+                              <textarea
+                                value={String(quizAnswers[question.id] ?? "")}
+                                onChange={(event) =>
+                                  setQuizAnswers((current) => ({
+                                    ...current,
+                                    [question.id]: event.target.value,
+                                  }))
+                                }
+                                placeholder="Type your answer here..."
+                                className="min-h-24 w-full rounded-lg border border-border bg-surface-inset px-4 py-3 text-sm transition focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                              />
+                            ) : null}
+                            {question.type === "code" ? (
+                              <textarea
+                                value={String(quizAnswers[question.id] ?? "")}
+                                onChange={(event) =>
+                                  setQuizAnswers((current) => ({
+                                    ...current,
+                                    [question.id]: event.target.value,
+                                  }))
+                                }
+                                placeholder="Write your code here..."
+                                className="min-h-48 w-full rounded-lg border border-border bg-surface-inset px-4 py-3 font-mono text-xs transition focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                              />
+                            ) : null}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => void submitQuiz()}
+                      className="mt-6 w-full rounded-lg bg-primary px-6 py-3 text-sm font-bold text-primary-contrast shadow-md transition hover:brightness-110 active:scale-95 sm:w-auto"
+                    >
+                      Submit Quiz
+                    </button>
                   </div>
-                  <button
-                    onClick={() => void submitQuiz()}
-                    className="mt-5 rounded-full bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-contrast)"
-                  >
-                    Submit quiz
-                  </button>
-                </div>
-              ) : null}
+                ) : null}
 
-              {lesson.type === "coding_lab" && exercise ? (
-                <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                    Coding lab
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold">{exercise.title}</h2>
-                  <p className="mt-3 text-sm leading-7 text-(--text-secondary)">
-                    {exercise.prompt}
-                  </p>
-                  <textarea
-                    value={codeAnswer}
-                    onChange={(event) => setCodeAnswer(event.target.value)}
-                    className="mt-5 min-h-[360px] w-full rounded-[1.5rem] border border-(--border) bg-(--surface) px-4 py-4 font-mono text-xs outline-none"
-                  />
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    <button
-                      onClick={() => void submitCodingExercise()}
-                      className="rounded-full bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-contrast)"
-                    >
-                      Submit solution
-                    </button>
-                    <button
-                      onClick={() => setCodeAnswer(exercise.starter_code ?? "")}
-                      className="rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm font-medium"
-                    >
-                      Reset starter code
-                    </button>
+                {lesson.type === "coding_lab" && exercise ? (
+                  <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-success" />
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary">
+                        Coding Lab
+                      </p>
+                    </div>
+                    <h2 className="mt-2 text-xl font-bold">{exercise.title}</h2>
+                    <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                      {exercise.prompt}
+                    </p>
+                    <textarea
+                      value={codeAnswer}
+                      onChange={(event) => setCodeAnswer(event.target.value)}
+                      className="mt-6 min-h-[400px] w-full rounded-lg border border-border bg-surface px-4 py-4 font-mono text-xs shadow-inner focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none"
+                    />
+                    <div className="mt-6 flex flex-wrap gap-4">
+                      <button
+                        onClick={() => void submitCodingExercise()}
+                        className="rounded-lg bg-primary px-6 py-3 text-sm font-bold text-primary-contrast shadow-md transition hover:brightness-110 active:scale-95"
+                      >
+                        Submit Solution
+                      </button>
+                      <button
+                        onClick={() => setCodeAnswer(exercise.starter_code ?? "")}
+                        className="rounded-lg border border-border bg-surface px-6 py-3 text-sm font-semibold transition hover:border-border-strong hover:bg-surface-soft"
+                      >
+                        Reset Starter Code
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
             </section>
 
-            <aside className="space-y-4">
-              <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                  Status
+            <aside className="space-y-6">
+              <div className="rounded-xl border border-border bg-surface-glass p-5 shadow-md backdrop-blur-xl">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary">
+                  Lesson Info
                 </p>
-                <div className="mt-4 space-y-3 text-sm">
-                  <div className="rounded-2xl bg-(--surface) px-4 py-3">
-                    Progress: {currentProgress?.progress_percent ?? 0}%
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-center justify-between rounded-lg bg-surface px-4 py-3 border border-border shadow-sm">
+                    <span className="text-xs text-text-secondary">Progress</span>
+                    <span className="text-sm font-bold text-primary">
+                      {currentProgress?.progress_percent ?? 0}%
+                    </span>
                   </div>
-                  <div className="rounded-2xl bg-(--surface) px-4 py-3">
-                    State: {currentProgress?.status ?? "not_started"}
+                  <div className="flex items-center justify-between rounded-lg bg-surface px-4 py-3 border border-border shadow-sm">
+                    <span className="text-xs text-text-secondary">Status</span>
+                    <span className="text-sm font-bold capitalize">
+                      {currentProgress?.status?.replace("_", " ") ?? "not started"}
+                    </span>
                   </div>
-                  <div className="rounded-2xl bg-(--surface) px-4 py-3">
-                    Time: {lesson.estimated_minutes ?? 0} min
+                  <div className="flex items-center justify-between rounded-lg bg-surface px-4 py-3 border border-border shadow-sm">
+                    <span className="text-xs text-text-secondary">Duration</span>
+                    <span className="text-sm font-bold">{lesson.estimated_minutes ?? 0} mins</span>
                   </div>
                 </div>
               </div>
 
               {nextLesson ? (
-                <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                    Up next
+                <div className="rounded-xl border border-border bg-surface-glass p-5 shadow-md backdrop-blur-xl">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">
+                    Up Next
                   </p>
-                  <p className="mt-3 text-lg font-semibold">{nextLesson.title}</p>
-                  <p className="mt-2 text-sm text-(--text-secondary)">
-                    Move directly into the next lesson when you finish here.
+                  <p className="mt-3 text-lg font-bold leading-tight">{nextLesson.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    Ready to move forward? Jump into the next lesson now.
                   </p>
                   <Link
                     href={`/learn/${course.id}/lessons/${nextLesson.id}`}
-                    className="mt-4 inline-flex rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
+                    className="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-primary-contrast shadow-sm transition hover:brightness-110 active:scale-95"
                   >
-                    Open next lesson
+                    Start Next Lesson
                   </Link>
                 </div>
               ) : (
-                <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                    Final lesson
+                <div className="rounded-xl border border-border bg-surface-glass p-5 shadow-md backdrop-blur-xl">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-info">
+                    Path Complete
                   </p>
-                  <p className="mt-3 text-sm leading-6 text-(--text-secondary)">
-                    You’re at the end of this path. Completion is already tracked, and certificate
-                    logic can be added later without changing learner progression.
+                  <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                    You’ve reached the final lesson of this course. Your progress has been saved.
                   </p>
                 </div>
               )}
             </aside>
           </div>
         ) : (
-          <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-8 text-sm text-(--text-secondary)">
-            Loading lesson…
+          <div className="flex items-center justify-center p-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <span className="ml-3 text-sm font-medium text-text-secondary">Loading lesson...</span>
           </div>
         )}
       </div>
@@ -510,27 +530,32 @@ export default function LessonPlayerPage() {
 }
 
 function LearnerBlock({ block }: { block: LessonDetail["content_blocks"][number] }) {
+  const containerClasses =
+    "rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl";
+  const labelClasses = "text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary";
+
   if (block.type === "markdown") {
     return (
-      <section className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-6 shadow-(--shadow-md) backdrop-blur-xl">
-        <p className="text-xs uppercase tracking-[0.2em] text-(--text-tertiary)">
-          {block.title || "Lesson notes"}
-        </p>
-        <pre className="mt-4 whitespace-pre-wrap text-sm leading-8 text-(--text-secondary)">
-          {String(block.content.body ?? "")}
-        </pre>
+      <section className={containerClasses}>
+        <p className={labelClasses}>{block.title || "Lesson notes"}</p>
+        <div className="mt-5 prose prose-sm text-text-secondary leading-relaxed">
+          <pre className="whitespace-pre-wrap font-sans">{String(block.content.body ?? "")}</pre>
+        </div>
       </section>
     );
   }
 
   if (block.type === "code") {
     return (
-      <section className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-6 shadow-(--shadow-md) backdrop-blur-xl">
-        <p className="text-xs uppercase tracking-[0.2em] text-(--text-tertiary)">
-          {block.title || "Code example"} • {String(block.content.language ?? "text")}
-        </p>
-        <pre className="mt-4 overflow-x-auto rounded-[1.5rem] bg-(--surface) p-4 text-xs text-(--text-primary)">
-          {String(block.content.snippet ?? "")}
+      <section className={containerClasses}>
+        <div className="flex items-center justify-between">
+          <p className={labelClasses}>{block.title || "Code example"}</p>
+          <span className="rounded bg-surface-inset px-2 py-0.5 text-[10px] font-bold text-text-tertiary border border-border">
+            {String(block.content.language ?? "text")}
+          </span>
+        </div>
+        <pre className="mt-5 overflow-x-auto rounded-lg bg-surface-inset p-5 text-xs font-mono text-text-primary shadow-inner border border-border">
+          <code>{String(block.content.snippet ?? "")}</code>
         </pre>
       </section>
     );
@@ -538,29 +563,36 @@ function LearnerBlock({ block }: { block: LessonDetail["content_blocks"][number]
 
   if (block.type === "embed") {
     return (
-      <section className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-6 shadow-(--shadow-md) backdrop-blur-xl">
-        <p className="text-xs uppercase tracking-[0.2em] text-(--text-tertiary)">
-          {block.title || "Embedded resource"}
-        </p>
-        <div className="mt-4 rounded-[1.5rem] border border-dashed border-(--border-accent) bg-(--surface) px-5 py-12 text-center text-sm text-(--text-secondary)">
-          External embed: {String(block.content.url ?? "")}
+      <section className={containerClasses}>
+        <p className={labelClasses}>{block.title || "Embedded resource"}</p>
+        <div className="mt-5 rounded-lg border border-dashed border-border-strong bg-surface-inset px-5 py-16 text-center shadow-inner">
+          <p className="text-sm font-medium text-text-secondary">External Content</p>
+          <p className="mt-1 text-xs text-text-tertiary truncate">
+            {String(block.content.url ?? "")}
+          </p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-6 shadow-(--shadow-md) backdrop-blur-xl">
-      <p className="text-xs uppercase tracking-[0.2em] text-(--text-tertiary)">
-        {block.title || "Resource"}
-      </p>
+    <section className={containerClasses}>
+      <p className={labelClasses}>{block.title || "Resource"}</p>
       <a
         href={String(block.content.url ?? "#")}
         target="_blank"
         rel="noreferrer"
-        className="mt-4 block rounded-[1.5rem] bg-(--surface) px-5 py-4 text-sm font-medium text-(--primary)"
+        className="mt-5 flex items-center justify-between rounded-lg bg-primary-soft px-5 py-4 text-sm font-bold text-primary transition hover:bg-primary/20 border border-primary-border"
       >
-        {String(block.content.label ?? block.content.url ?? "Open resource")}
+        <span>{String(block.content.label ?? block.content.url ?? "Open resource")}</span>
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+          />
+        </svg>
       </a>
     </section>
   );

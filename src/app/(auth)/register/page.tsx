@@ -38,10 +38,10 @@ export default function Register() {
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-(--accent)">
                 Build your base camp
               </p>
-              <h1 className="max-w-xl text-3xl font-semibold tracking-tight lg:text-4xl">
+              <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">
                 Start with a calm workspace designed like a set of digital islands.
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-(--text-secondary)">
+              <p className="text-base leading-7 text-(--text-secondary)">
                 Create your account to organize projects, conversations, and daily momentum in one
                 place without the usual visual noise.
               </p>
@@ -76,7 +76,7 @@ export default function Register() {
         </section>
 
         <section className="flex items-center justify-center">
-          <div className="w-full max-w-lg rounded-xl border border-(--border) bg-(--surface-glass) p-px shadow-(--shadow-lg) backdrop-blur-xl">
+          <div className="w-full rounded-xl border border-(--border) bg-(--surface-glass) p-px shadow-(--shadow-lg) backdrop-blur-xl">
             <div className="rounded-xl bg-(--surface-raised) p-6 lg:p-8">
               <div className="mb-6 space-y-2">
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-(--primary)">

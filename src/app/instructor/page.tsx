@@ -525,35 +525,45 @@ export default function InstructorPage() {
   }
 
   if (isLoading) {
-    return <main className="min-h-screen bg-(--bg) text-(--text-primary) p-8">Loading…</main>;
+    return (
+      <main className="min-h-screen bg-bg text-text-primary p-12 flex flex-col items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <p className="mt-4 text-sm font-bold tracking-widest uppercase text-text-tertiary">
+          Loading studio...
+        </p>
+      </main>
+    );
   }
 
   if (!user || (user.role !== "instructor" && user.role !== "admin")) {
     return (
-      <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-        <div className="absolute inset-0 bg-(image:--gradient-page)" />
-        <div className="relative mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-12">
-          <section className="w-full max-w-2xl rounded-4xl border border-(--border) bg-(--surface-glass) p-8 shadow-(--shadow-lg) backdrop-blur-xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-(--text-secondary)">
-              Restricted
+      <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
+        <div className="absolute inset-0 gradient-page opacity-50" />
+        <div className="relative mx-auto flex min-h-screen items-center justify-center px-6 py-12">
+          <section className="w-full max-w-2xl rounded-xl border border-border bg-surface-glass p-10 shadow-lg backdrop-blur-xl">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-2 w-2 rounded-full bg-danger" />
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-tertiary">
+                Restricted Access
+              </p>
+            </div>
+            <h1 className="text-3xl font-black tracking-tight">Instructor studio required.</h1>
+            <p className="mt-4 text-base leading-relaxed text-text-secondary">
+              This environment is reserved for authorized instructors and platform administrators.
+              If you believe this is an error, please contact support or switch accounts.
             </p>
-            <h1 className="mt-3 text-4xl font-semibold">Instructor access required</h1>
-            <p className="mt-4 text-base leading-7 text-(--text-secondary)">
-              This area is available only to instructors and admins. Sign in with an elevated role
-              or return to the learner workspace.
-            </p>
-            <div className="mt-8 flex gap-3">
+            <div className="mt-10 flex flex-wrap gap-4">
               <a
                 href="/workspace"
-                className="rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm font-medium text-(--text-primary)"
+                className="rounded-lg border border-border bg-surface px-6 py-3 text-sm font-bold transition hover:border-border-strong hover:bg-surface-soft active:scale-95"
               >
-                Go to workspace
+                Return to Workspace
               </a>
               <button
                 onClick={() => void logout()}
-                className="rounded-full bg-(--primary) px-5 py-3 text-sm font-semibold text-(--primary-contrast)"
+                className="rounded-lg bg-primary px-6 py-3 text-sm font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
               >
-                Switch account
+                Switch Account
               </button>
             </div>
           </section>
@@ -563,80 +573,90 @@ export default function InstructorPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-      <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,oklch(0.74_0.12_210/0.24),transparent_70%)]" />
+    <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
+      <div className="absolute inset-0 gradient-page opacity-30" />
 
-      <div className="relative mx-auto flex min-h-screen max-w-[1600px] flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 rounded-[2rem] border border-(--border-accent) bg-(--surface-glass) px-6 py-5 shadow-(--shadow-lg) backdrop-blur-xl lg:flex-row lg:items-end lg:justify-between">
+      <div className="relative mx-auto flex min-h-screen max-w-450 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+        <header className="flex flex-col gap-6 rounded-xl border border-border-accent bg-surface-glass p-8 shadow-lg backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-(--text-secondary)">
-              Instructor Studio
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">Structured lesson editor</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-(--text-secondary)">
-              Build courses, arrange lessons, manage quizzes and coding labs, and preview the
-              learner experience from one place.
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">
+                Instructor Studio
+              </p>
+            </div>
+            <h1 className="text-3xl font-black tracking-tight">Curriculum Architect</h1>
+            <p className="mt-2 max-w-2xl text-sm font-medium text-text-secondary">
+              Design, sequence, and manage interactive lessons. Toggle preview mode to see exactly
+              how your content appears to learners.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setPreviewMode((current) => !current)}
-              className="rounded-full border border-(--border) bg-(--surface) px-4 py-2 text-sm font-medium text-(--text-primary)"
+              className={`rounded-lg border px-5 py-2.5 text-xs font-bold transition active:scale-95 ${
+                previewMode
+                  ? "border-primary bg-primary text-primary-contrast shadow-glow"
+                  : "border-border bg-surface text-text-primary hover:border-border-strong"
+              }`}
             >
-              {previewMode ? "Hide preview" : "Show preview"}
+              {previewMode ? "Exit Preview" : "Enter Preview"}
             </button>
             <a
               href="/workspace"
-              className="rounded-full border border-(--border) bg-(--surface) px-4 py-2 text-sm font-medium text-(--text-primary)"
+              className="rounded-lg border border-border bg-surface px-5 py-2.5 text-xs font-bold text-text-primary transition hover:border-border-strong active:scale-95"
             >
-              Workspace
+              Back to Workspace
             </a>
           </div>
         </header>
 
         {message ? (
-          <div className="rounded-3xl border border-(--border-accent) bg-(--surface-raised) px-5 py-3 text-sm text-(--text-primary) shadow-(--shadow-sm)">
+          <div className="rounded-lg border border-primary/20 bg-primary-soft px-6 py-3 text-xs font-bold text-primary shadow-sm animate-in fade-in slide-in-from-top-2">
             {message}
           </div>
         ) : null}
 
-        <div className="grid flex-1 gap-4 xl:grid-cols-[320px_minmax(0,1fr)_380px]">
-          <aside className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                  Catalog
-                </p>
-                <h2 className="mt-2 text-xl font-semibold">Courses</h2>
-              </div>
+        <div className="grid flex-1 gap-6 xl:grid-cols-[340px_minmax(0,1fr)_400px]">
+          {/* Catalog Sidebar */}
+          <aside className="flex flex-col gap-6 rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl overflow-hidden">
+            <div className="border-b border-border pb-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                Global Catalog
+              </p>
+              <h2 className="mt-1 text-xl font-bold">Managed Courses</h2>
             </div>
 
-            <div className="mt-4 space-y-3">
+            <div className="flex-1 space-y-3 overflow-y-auto pr-2 custom-scrollbar">
               {courses.map((course) => (
                 <button
                   key={course.id}
                   onClick={() => setSelectedCourseId(course.id)}
-                  className={`w-full rounded-3xl border px-4 py-4 text-left transition ${
+                  className={`group w-full rounded-lg border p-4 text-left transition active:scale-[0.98] ${
                     selectedCourseId === course.id
-                      ? "border-(--border-accent) bg-(--surface-raised)"
-                      : "border-(--border) bg-(--surface)"
+                      ? "border-primary bg-primary-soft shadow-sm"
+                      : "border-border bg-surface hover:border-border-strong"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold">{course.title}</p>
-                      <p className="mt-1 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
-                        /{course.slug}
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-(--surface-accent) px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-(--text-primary)">
+                    <p
+                      className={`text-sm font-bold group-hover:text-primary transition-colors ${selectedCourseId === course.id ? "text-primary" : "text-text-primary"}`}
+                    >
+                      {course.title}
+                    </p>
+                    <span
+                      className={`rounded-md px-2 py-0.5 text-[9px] font-black uppercase tracking-widest border ${
+                        course.status === "published"
+                          ? "border-success/30 bg-success-bg text-success"
+                          : "border-border bg-surface-inset text-text-tertiary"
+                      }`}
+                    >
                       {course.status}
                     </span>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-(--text-secondary)">
-                    {course.summary || "No summary yet"}
+                  <p className="mt-2 text-xs font-medium text-text-secondary line-clamp-2">
+                    {course.summary || "No course summary defined."}
                   </p>
                 </button>
               ))}
@@ -644,9 +664,11 @@ export default function InstructorPage() {
 
             <form
               onSubmit={handleCourseCreate}
-              className="mt-6 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4"
+              className="mt-4 space-y-3 rounded-lg border border-border bg-surface-inset p-5 shadow-inner"
             >
-              <p className="text-sm font-semibold">Create course</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-text-tertiary">
+                Add New Path
+              </p>
               <input
                 value={courseForm.title}
                 onChange={(event) =>
@@ -657,53 +679,39 @@ export default function InstructorPage() {
                   }))
                 }
                 placeholder="Course title"
-                className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
+                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium outline-none focus:border-primary transition"
               />
-              <input
-                value={courseForm.slug}
-                onChange={(event) =>
-                  setCourseForm((current) => ({ ...current, slug: slugify(event.target.value) }))
-                }
-                placeholder="course-slug"
-                className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-              />
-              <textarea
-                value={courseForm.summary}
-                onChange={(event) =>
-                  setCourseForm((current) => ({ ...current, summary: event.target.value }))
-                }
-                placeholder="Short summary"
-                className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-              />
-              <button className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast)">
-                Create course
+              <button className="w-full rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95">
+                Initialize Course
               </button>
             </form>
           </aside>
 
-          <section className="space-y-4">
-            <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-              <div className="flex items-center justify-between">
+          {/* Main Editor */}
+          <section className="flex flex-col gap-6 overflow-hidden">
+            {/* Course Settings */}
+            <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+              <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                    Course settings
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                    Course Management
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold">
-                    {courseDetail?.title || "Select a course"}
+                  <h2 className="mt-1 text-2xl font-black">
+                    {courseDetail?.title || "Identify a Target Course"}
                   </h2>
                 </div>
                 {courseDetail ? (
                   <button
                     onClick={() => void handleCourseUpdate()}
-                    className="rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
+                    className="rounded-lg bg-primary px-5 py-2 text-xs font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
                   >
-                    Save course
+                    Save Changes
                   </button>
                 ) : null}
               </div>
 
               {courseDetail ? (
-                <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                <div className="grid gap-5 lg:grid-cols-2">
                   <Field label="Title">
                     <input
                       value={courseForm.title}
@@ -714,10 +722,10 @@ export default function InstructorPage() {
                           slug: slugify(event.target.value),
                         }))
                       }
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
+                      className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium outline-none focus:border-primary transition shadow-sm"
                     />
                   </Field>
-                  <Field label="Slug">
+                  <Field label="Identifier (Slug)">
                     <input
                       value={courseForm.slug}
                       onChange={(event) =>
@@ -726,99 +734,85 @@ export default function InstructorPage() {
                           slug: slugify(event.target.value),
                         }))
                       }
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
+                      className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-mono outline-none focus:border-primary transition shadow-sm"
                     />
                   </Field>
-                  <Field label="Summary" className="lg:col-span-2">
+                  <Field label="Brief Summary" className="lg:col-span-2">
                     <textarea
                       value={courseForm.summary}
                       onChange={(event) =>
                         setCourseForm((current) => ({ ...current, summary: event.target.value }))
                       }
-                      className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
+                      className="min-h-20 w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium outline-none focus:border-primary transition shadow-sm"
                     />
                   </Field>
-                  <Field label="Description" className="lg:col-span-2">
-                    <textarea
-                      value={courseForm.description}
-                      onChange={(event) =>
-                        setCourseForm((current) => ({
-                          ...current,
-                          description: event.target.value,
-                        }))
-                      }
-                      className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                    />
-                  </Field>
-                  <Field label="Status">
-                    <select
-                      value={courseForm.status}
-                      onChange={(event) =>
-                        setCourseForm((current) => ({
-                          ...current,
-                          status: event.target.value as CourseSummary["status"],
-                        }))
-                      }
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                      <option value="archived">Archived</option>
-                    </select>
-                  </Field>
-                  <Field label="Level">
-                    <select
-                      value={courseForm.level}
-                      onChange={(event) =>
-                        setCourseForm((current) => ({
-                          ...current,
-                          level: event.target.value as CourseSummary["level"],
-                        }))
-                      }
-                      className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                    >
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                    </select>
-                  </Field>
+                  <div className="grid grid-cols-2 gap-5 lg:col-span-2">
+                    <Field label="Target Status">
+                      <select
+                        value={courseForm.status}
+                        onChange={(event) =>
+                          setCourseForm((current) => ({
+                            ...current,
+                            status: event.target.value as CourseSummary["status"],
+                          }))
+                        }
+                        className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-bold outline-none focus:border-primary transition shadow-sm"
+                      >
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                        <option value="archived">Archived</option>
+                      </select>
+                    </Field>
+                    <Field label="Expertise Level">
+                      <select
+                        value={courseForm.level}
+                        onChange={(event) =>
+                          setCourseForm((current) => ({
+                            ...current,
+                            level: event.target.value as CourseSummary["level"],
+                          }))
+                        }
+                        className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-bold outline-none focus:border-primary transition shadow-sm"
+                      >
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                      </select>
+                    </Field>
+                  </div>
                 </div>
               ) : (
-                <p className="mt-5 text-sm text-(--text-secondary)">
-                  Choose a course from the left sidebar to begin editing.
-                </p>
+                <div className="py-12 text-center rounded-lg border border-dashed border-border bg-surface-inset">
+                  <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
+                    Select a path from the left to configure metadata.
+                  </p>
+                </div>
               )}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-[320px_minmax(0,1fr)]">
-              <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                      Structure
-                    </p>
-                    <h3 className="mt-2 text-xl font-semibold">Sections and lessons</h3>
-                  </div>
+            <div className="grid gap-6 lg:grid-cols-[1fr_minmax(0,1.5fr)]">
+              {/* Structure Panel */}
+              <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl overflow-y-auto custom-scrollbar">
+                <div className="border-b border-border pb-4 mb-6">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                    Curriculum Flow
+                  </p>
+                  <h3 className="mt-1 text-xl font-bold">Structure Map</h3>
                 </div>
 
-                <div className="mt-4 space-y-4">
+                <div className="space-y-6">
                   {courseDetail?.sections.map((section) => (
                     <div
                       key={section.id}
-                      className="rounded-3xl border border-(--border) bg-(--surface) p-4"
+                      className="rounded-lg border border-border bg-surface p-5 shadow-sm"
                     >
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-semibold">
-                            {section.position}. {section.title}
-                          </p>
-                          <p className="text-xs text-(--text-secondary)">
-                            {section.description || "No description"}
-                          </p>
-                        </div>
+                      <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
+                        <p className="text-sm font-black text-primary tracking-widest uppercase">
+                          {section.position}. {section.title}
+                        </p>
                       </div>
 
-                      <div className="mt-3 space-y-2">
+                      <div className="space-y-2">
                         {section.lessons.map((lesson) => (
                           <button
                             key={lesson.id}
@@ -826,32 +820,31 @@ export default function InstructorPage() {
                               setSelectedLessonId(lesson.id);
                               setSelectedAssessmentId(null);
                             }}
-                            className={`w-full rounded-2xl border px-3 py-3 text-left ${
+                            className={`w-full rounded-md border p-3 text-left transition active:scale-[0.98] ${
                               selectedLessonId === lesson.id
-                                ? "border-(--border-accent) bg-(--surface-raised)"
-                                : "border-(--border) bg-(--surface-inset)"
+                                ? "border-primary bg-primary-soft shadow-sm"
+                                : "border-border bg-surface-inset hover:border-border-strong"
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <p className="text-sm font-medium">
+                              <p
+                                className={`text-sm font-bold ${selectedLessonId === lesson.id ? "text-primary" : "text-text-primary"}`}
+                              >
                                 {lesson.position}. {lesson.title}
                               </p>
-                              <span className="rounded-full bg-(--surface-accent) px-2 py-1 text-[10px] uppercase tracking-[0.18em]">
+                              <span className="rounded bg-surface px-1.5 py-0.5 text-[8px] font-black uppercase tracking-widest border border-border">
                                 {lesson.type}
                               </span>
                             </div>
-                            <p className="mt-2 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
-                              /{lesson.slug} {lesson.is_preview ? "• preview enabled" : ""}
-                            </p>
                           </button>
                         ))}
                       </div>
 
                       <button
                         onClick={() => void handleLessonCreate(section.id)}
-                        className="mt-3 w-full rounded-2xl border border-dashed border-(--border-accent) bg-(--surface-raised) px-4 py-3 text-sm font-medium"
+                        className="mt-4 w-full rounded-md border border-dashed border-primary/30 bg-primary-soft/30 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-primary-soft transition"
                       >
-                        Add lesson using current lesson form
+                        Append Unit
                       </button>
                     </div>
                   ))}
@@ -859,89 +852,83 @@ export default function InstructorPage() {
 
                 <form
                   onSubmit={handleSectionCreate}
-                  className="mt-5 space-y-3 rounded-3xl border border-(--border) bg-(--surface) p-4"
+                  className="mt-8 space-y-4 rounded-lg border border-border bg-surface-inset p-5 shadow-inner"
                 >
-                  <p className="text-sm font-semibold">Add section</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-text-tertiary">
+                    New Section
+                  </p>
                   <input
                     value={sectionForm.title}
                     onChange={(event) =>
                       setSectionForm((current) => ({ ...current, title: event.target.value }))
                     }
-                    placeholder="Section title"
-                    className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
+                    placeholder="Section Name"
+                    className="w-full rounded-lg border border-border bg-surface px-4 py-2 text-sm font-bold outline-none focus:border-primary transition"
                   />
-                  <textarea
-                    value={sectionForm.description}
-                    onChange={(event) =>
-                      setSectionForm((current) => ({ ...current, description: event.target.value }))
-                    }
-                    placeholder="Section description"
-                    className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                  />
-                  <input
-                    value={sectionForm.position}
-                    onChange={(event) =>
-                      setSectionForm((current) => ({ ...current, position: event.target.value }))
-                    }
-                    placeholder="Position"
-                    type="number"
-                    className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                  />
-                  <button className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast)">
-                    Add section
+                  <button className="w-full rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95">
+                    Create Section
                   </button>
                 </form>
               </div>
 
-              <div className="space-y-4">
-                <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                  <div className="flex items-center justify-between">
+              {/* Lesson Editor */}
+              <div className="space-y-6 overflow-y-auto custom-scrollbar">
+                <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+                  <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                        Lesson editor
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                        Unit Editor
                       </p>
-                      <h3 className="mt-2 text-xl font-semibold">
-                        {lessonDetail ? lessonDetail.title : "Select a lesson"}
+                      <h3 className="mt-1 text-2xl font-black">
+                        {lessonDetail ? lessonDetail.title : "Initialize a Unit"}
                       </h3>
                     </div>
                     {lessonDetail ? (
                       <button
                         onClick={() => void handleLessonUpdate()}
-                        className="rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
+                        className="rounded-lg bg-primary px-5 py-2 text-xs font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
                       >
-                        Save lesson
+                        Commit Changes
                       </button>
                     ) : null}
                   </div>
 
                   {lessonDetail ? (
-                    <div className="mt-5 grid gap-4 lg:grid-cols-2">
-                      <Field label="Title">
-                        <input
-                          value={lessonForm.title}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              title: event.target.value,
-                              slug: slugify(event.target.value),
-                            }))
-                          }
-                          className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                        />
-                      </Field>
-                      <Field label="Slug">
-                        <input
-                          value={lessonForm.slug}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              slug: slugify(event.target.value),
-                            }))
-                          }
-                          className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                        />
-                      </Field>
-                      <Field label="Description" className="lg:col-span-2">
+                    <div className="grid gap-5">
+                      <div className="grid gap-5 lg:grid-cols-2">
+                        <Field label="Unit Title">
+                          <input
+                            value={lessonForm.title}
+                            onChange={(event) =>
+                              setLessonForm((current) => ({
+                                ...current,
+                                title: event.target.value,
+                                slug: slugify(event.target.value),
+                              }))
+                            }
+                            className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium outline-none focus:border-primary transition shadow-sm"
+                          />
+                        </Field>
+                        <Field label="Unit Type">
+                          <select
+                            value={lessonForm.type}
+                            onChange={(event) =>
+                              setLessonForm((current) => ({
+                                ...current,
+                                type: event.target.value as LessonDetail["type"],
+                              }))
+                            }
+                            className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-bold outline-none focus:border-primary transition shadow-sm"
+                          >
+                            <option value="article">Article</option>
+                            <option value="video">Video</option>
+                            <option value="live_session">Live session</option>
+                            <option value="quiz">Quiz</option>
+                            <option value="coding_lab">Coding lab</option>
+                          </select>
+                        </Field>
+                      </div>
+                      <Field label="Pedagogical Intent">
                         <textarea
                           value={lessonForm.description}
                           onChange={(event) =>
@@ -950,138 +937,143 @@ export default function InstructorPage() {
                               description: event.target.value,
                             }))
                           }
-                          className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
+                          className="min-h-24 w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium outline-none focus:border-primary transition shadow-sm"
                         />
                       </Field>
-                      <Field label="Type">
-                        <select
-                          value={lessonForm.type}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              type: event.target.value as LessonDetail["type"],
-                            }))
-                          }
-                          className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                        >
-                          <option value="article">Article</option>
-                          <option value="video">Video</option>
-                          <option value="live_session">Live session</option>
-                          <option value="quiz">Quiz</option>
-                          <option value="coding_lab">Coding lab</option>
-                        </select>
-                      </Field>
-                      <Field label="Position">
-                        <input
-                          type="number"
-                          value={lessonForm.position}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              position: event.target.value,
-                            }))
-                          }
-                          className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                        />
-                      </Field>
-                      <Field label="Estimated minutes">
-                        <input
-                          type="number"
-                          value={lessonForm.estimated_minutes}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              estimated_minutes: event.target.value,
-                            }))
-                          }
-                          className="w-full rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm outline-none"
-                        />
-                      </Field>
-                      <label className="flex items-center gap-3 rounded-2xl border border-(--border) bg-(--surface) px-4 py-3 text-sm">
-                        <input
-                          type="checkbox"
-                          checked={lessonForm.is_preview}
-                          onChange={(event) =>
-                            setLessonForm((current) => ({
-                              ...current,
-                              is_preview: event.target.checked,
-                            }))
-                          }
-                          className="h-4 w-4 rounded border-(--border-strong)"
-                        />
-                        <span>Preview mode enabled for learners</span>
-                      </label>
+                      <div className="flex flex-wrap gap-5">
+                        <Field label="Position" className="w-24">
+                          <input
+                            type="number"
+                            value={lessonForm.position}
+                            onChange={(event) =>
+                              setLessonForm((current) => ({
+                                ...current,
+                                position: event.target.value,
+                              }))
+                            }
+                            className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-bold text-center outline-none focus:border-primary transition shadow-sm"
+                          />
+                        </Field>
+                        <Field label="Minutes" className="w-24">
+                          <input
+                            type="number"
+                            value={lessonForm.estimated_minutes}
+                            onChange={(event) =>
+                              setLessonForm((current) => ({
+                                ...current,
+                                estimated_minutes: event.target.value,
+                              }))
+                            }
+                            className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-bold text-center outline-none focus:border-primary transition shadow-sm"
+                          />
+                        </Field>
+                        <label className="mt-7 flex items-center gap-3 rounded-lg border border-border bg-surface px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition hover:bg-surface-soft cursor-pointer shadow-sm">
+                          <input
+                            type="checkbox"
+                            checked={lessonForm.is_preview}
+                            onChange={(event) =>
+                              setLessonForm((current) => ({
+                                ...current,
+                                is_preview: event.target.checked,
+                              }))
+                            }
+                            className="h-4 w-4 rounded accent-primary"
+                          />
+                          <span>Public Preview</span>
+                        </label>
+                      </div>
                     </div>
                   ) : (
-                    <p className="mt-5 text-sm text-(--text-secondary)">
-                      Pick a lesson from the structure panel to edit ordering, preview, slug, and
-                      lesson-specific content.
-                    </p>
+                    <div className="py-12 text-center rounded-lg border border-dashed border-border bg-surface-inset">
+                      <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
+                        Choose a unit from the structure map to begin authoring.
+                      </p>
+                    </div>
                   )}
                 </div>
 
                 {lessonDetail ? (
-                  <>
-                    <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                            Content blocks
-                          </p>
-                          <h3 className="mt-2 text-xl font-semibold">Structured lesson content</h3>
-                        </div>
+                  <div className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl">
+                    <div className="flex items-center justify-between border-b border-border pb-4 mb-6">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                          Content Pipeline
+                        </p>
+                        <h3 className="mt-1 text-xl font-bold">Content Blocks</h3>
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="space-y-3">
+                        {lessonDetail.content_blocks.map((block) => (
+                          <div
+                            key={block.id}
+                            className="group rounded-lg border border-border bg-surface p-4 shadow-sm transition-all hover:border-border-strong"
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div>
+                                <p className="text-sm font-bold">
+                                  {block.position}. {block.title || block.type}
+                                </p>
+                                <span className="rounded bg-surface-inset px-1.5 py-0.5 text-[8px] font-black uppercase tracking-widest border border-border text-text-tertiary">
+                                  {block.type}
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => void handleBlockDelete(block.id)}
+                                className="text-[10px] font-black uppercase tracking-widest text-danger hover:underline"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
 
-                      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-                        <div className="space-y-3">
-                          {lessonDetail.content_blocks.map((block) => (
-                            <div
-                              key={block.id}
-                              className="rounded-3xl border border-(--border) bg-(--surface) p-4"
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <div>
-                                  <p className="text-sm font-semibold">
-                                    {block.position}. {block.title || block.type}
-                                  </p>
-                                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-(--text-tertiary)">
-                                    {block.type}
-                                  </p>
-                                </div>
-                                <button
-                                  onClick={() => void handleBlockDelete(block.id)}
-                                  className="rounded-full border border-(--border) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--text-secondary)"
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                              <pre className="mt-3 overflow-x-auto rounded-2xl bg-(--surface-inset) p-3 text-xs text-(--text-secondary)">
-                                {JSON.stringify(block.content, null, 2)}
-                              </pre>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-                          <p className="text-sm font-semibold">Add block</p>
-                          <div className="mt-3 space-y-3">
-                            <select
-                              value={blockForm.type}
-                              onChange={(event) => {
-                                const nextType = event.target.value as ContentBlock["type"];
-                                setBlockForm((current) => ({
-                                  ...current,
-                                  type: nextType,
-                                  content: JSON.stringify(contentBlockTemplates[nextType], null, 2),
-                                }));
-                              }}
-                              className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                            >
-                              <option value="markdown">Markdown</option>
-                              <option value="code">Code</option>
-                              <option value="embed">Embed</option>
-                              <option value="resource">Resource</option>
-                            </select>
+                      <div className="rounded-lg border border-border bg-surface-inset p-5 shadow-inner">
+                        <p className="text-xs font-black uppercase tracking-widest text-text-tertiary mb-4">
+                          Append Component
+                        </p>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <Field label="Type">
+                              <select
+                                value={blockForm.type}
+                                onChange={(event) => {
+                                  const nextType = event.target.value as ContentBlock["type"];
+                                  setBlockForm((current) => ({
+                                    ...current,
+                                    type: nextType,
+                                    content: JSON.stringify(
+                                      contentBlockTemplates[nextType],
+                                      null,
+                                      2,
+                                    ),
+                                  }));
+                                }}
+                                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-xs font-bold outline-none focus:border-primary transition"
+                              >
+                                <option value="markdown">Markdown</option>
+                                <option value="code">Code</option>
+                                <option value="embed">Embed</option>
+                                <option value="resource">Resource</option>
+                              </select>
+                            </Field>
+                            <Field label="Order">
+                              <input
+                                value={blockForm.position}
+                                onChange={(event) =>
+                                  setBlockForm((current) => ({
+                                    ...current,
+                                    position: event.target.value,
+                                  }))
+                                }
+                                type="number"
+                                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-xs font-bold text-center outline-none focus:border-primary transition"
+                              />
+                            </Field>
+                          </div>
+                          <Field label="Title">
                             <input
                               value={blockForm.title}
                               onChange={(event) =>
@@ -1090,21 +1082,11 @@ export default function InstructorPage() {
                                   title: event.target.value,
                                 }))
                               }
-                              placeholder="Block title"
-                              className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
+                              placeholder="Component Heading"
+                              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-xs font-bold outline-none focus:border-primary transition"
                             />
-                            <input
-                              value={blockForm.position}
-                              onChange={(event) =>
-                                setBlockForm((current) => ({
-                                  ...current,
-                                  position: event.target.value,
-                                }))
-                              }
-                              type="number"
-                              placeholder="Position"
-                              className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                            />
+                          </Field>
+                          <Field label="Payload (JSON)">
                             <textarea
                               value={blockForm.content}
                               onChange={(event) =>
@@ -1113,352 +1095,79 @@ export default function InstructorPage() {
                                   content: event.target.value,
                                 }))
                               }
-                              className="min-h-56 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
+                              className="min-h-48 w-full rounded-lg border border-border bg-surface px-3 py-2 font-mono text-[10px] outline-none focus:border-primary transition shadow-inner"
                             />
-                            <button
-                              onClick={() => void handleBlockCreate()}
-                              className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast)"
-                            >
-                              Add content block
-                            </button>
-                          </div>
+                          </Field>
+                          <button
+                            onClick={() => void handleBlockCreate()}
+                            className="w-full rounded-lg bg-secondary px-4 py-3 text-xs font-black uppercase tracking-widest text-secondary-contrast shadow-md transition hover:brightness-110 active:scale-95"
+                          >
+                            Integrate Component
+                          </button>
                         </div>
                       </div>
                     </div>
-
-                    {lessonForm.type === "quiz" ? (
-                      <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                              Quiz builder
-                            </p>
-                            <h3 className="mt-2 text-xl font-semibold">
-                              {assessmentDetail?.title || "Create a quiz"}
-                            </h3>
-                          </div>
-                          {assessmentDetail ? (
-                            <button
-                              onClick={() => void handleAssessmentUpdate()}
-                              className="rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
-                            >
-                              Save quiz
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => void handleAssessmentCreate()}
-                              className="rounded-full bg-(--primary) px-4 py-2 text-sm font-semibold text-(--primary-contrast)"
-                            >
-                              Create quiz
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-                          <div className="space-y-3">
-                            {assessmentDetail?.questions.map((question) => (
-                              <div
-                                key={question.id}
-                                className="rounded-3xl border border-(--border) bg-(--surface) p-4"
-                              >
-                                <div className="flex items-start justify-between gap-3">
-                                  <div>
-                                    <p className="text-sm font-semibold">
-                                      {question.position}. {question.prompt}
-                                    </p>
-                                    <p className="mt-1 text-xs uppercase tracking-[0.16em] text-(--text-tertiary)">
-                                      {question.type} • {question.points} pts
-                                    </p>
-                                  </div>
-                                  <button
-                                    onClick={() => void handleQuestionDelete(question.id)}
-                                    className="rounded-full border border-(--border) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--text-secondary)"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                                {question.options.length ? (
-                                  <div className="mt-3 grid gap-2">
-                                    {question.options.map((option) => (
-                                      <div
-                                        key={option.id}
-                                        className={`rounded-2xl px-3 py-2 text-sm ${
-                                          option.is_correct
-                                            ? "bg-[oklch(0.72_0.13_160/0.18)]"
-                                            : "bg-(--surface-inset)"
-                                        }`}
-                                      >
-                                        {option.label || "Option"}: {option.content}
-                                      </div>
-                                    ))}
-                                  </div>
-                                ) : null}
-                              </div>
-                            ))}
-                          </div>
-
-                          <div className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-                            <p className="text-sm font-semibold">Quiz settings</p>
-                            <div className="mt-3 space-y-3">
-                              <input
-                                value={assessmentForm.title}
-                                onChange={(event) =>
-                                  setAssessmentForm((current) => ({
-                                    ...current,
-                                    title: event.target.value,
-                                  }))
-                                }
-                                placeholder="Quiz title"
-                                className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                              />
-                              <textarea
-                                value={assessmentForm.description}
-                                onChange={(event) =>
-                                  setAssessmentForm((current) => ({
-                                    ...current,
-                                    description: event.target.value,
-                                  }))
-                                }
-                                placeholder="Quiz description"
-                                className="min-h-20 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                              />
-                              <div className="grid grid-cols-3 gap-3">
-                                <input
-                                  value={assessmentForm.passing_score}
-                                  onChange={(event) =>
-                                    setAssessmentForm((current) => ({
-                                      ...current,
-                                      passing_score: event.target.value,
-                                    }))
-                                  }
-                                  type="number"
-                                  placeholder="Pass %"
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                />
-                                <input
-                                  value={assessmentForm.max_attempts}
-                                  onChange={(event) =>
-                                    setAssessmentForm((current) => ({
-                                      ...current,
-                                      max_attempts: event.target.value,
-                                    }))
-                                  }
-                                  type="number"
-                                  placeholder="Attempts"
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                />
-                                <input
-                                  value={assessmentForm.time_limit_mins}
-                                  onChange={(event) =>
-                                    setAssessmentForm((current) => ({
-                                      ...current,
-                                      time_limit_mins: event.target.value,
-                                    }))
-                                  }
-                                  type="number"
-                                  placeholder="Minutes"
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                />
-                              </div>
-                              <label className="flex items-center gap-3 rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm">
-                                <input
-                                  type="checkbox"
-                                  checked={assessmentForm.is_published}
-                                  onChange={(event) =>
-                                    setAssessmentForm((current) => ({
-                                      ...current,
-                                      is_published: event.target.checked,
-                                    }))
-                                  }
-                                  className="h-4 w-4 rounded"
-                                />
-                                Publish quiz
-                              </label>
-                              <hr className="border-(--border)" />
-                              <p className="text-sm font-semibold">Add question</p>
-                              <textarea
-                                value={questionForm.prompt}
-                                onChange={(event) =>
-                                  setQuestionForm((current) => ({
-                                    ...current,
-                                    prompt: event.target.value,
-                                  }))
-                                }
-                                placeholder="Prompt"
-                                className="min-h-20 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                              />
-                              <div className="grid grid-cols-3 gap-3">
-                                <select
-                                  value={questionForm.type}
-                                  onChange={(event) =>
-                                    setQuestionForm((current) => ({
-                                      ...current,
-                                      type: event.target.value as AssessmentQuestion["type"],
-                                    }))
-                                  }
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                >
-                                  <option value="single_choice">Single</option>
-                                  <option value="multiple_choice">Multiple</option>
-                                  <option value="short_text">Short text</option>
-                                  <option value="code">Code</option>
-                                </select>
-                                <input
-                                  value={questionForm.position}
-                                  onChange={(event) =>
-                                    setQuestionForm((current) => ({
-                                      ...current,
-                                      position: event.target.value,
-                                    }))
-                                  }
-                                  type="number"
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                />
-                                <input
-                                  value={questionForm.points}
-                                  onChange={(event) =>
-                                    setQuestionForm((current) => ({
-                                      ...current,
-                                      points: event.target.value,
-                                    }))
-                                  }
-                                  type="number"
-                                  className="rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                                />
-                              </div>
-                              <textarea
-                                value={questionForm.options}
-                                onChange={(event) =>
-                                  setQuestionForm((current) => ({
-                                    ...current,
-                                    options: event.target.value,
-                                  }))
-                                }
-                                placeholder="Label|Content|true"
-                                className="min-h-28 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
-                              />
-                              <button
-                                onClick={() => void handleQuestionCreate()}
-                                className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast)"
-                              >
-                                Add question
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {lessonForm.type === "coding_lab" ? (
-                      <div className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-                        <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">
-                          Coding lab
-                        </p>
-                        <h3 className="mt-2 text-xl font-semibold">Exercise builder</h3>
-                        <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-                          <div className="space-y-3">
-                            {lessonDetail.coding_exercises.map((exercise) => (
-                              <div
-                                key={exercise.id}
-                                className="rounded-3xl border border-(--border) bg-(--surface) p-4"
-                              >
-                                <p className="text-sm font-semibold">{exercise.title}</p>
-                                <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                                  {exercise.prompt}
-                                </p>
-                                <pre className="mt-3 overflow-x-auto rounded-2xl bg-(--surface-inset) p-3 text-xs text-(--text-secondary)">
-                                  {exercise.starter_code}
-                                </pre>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-                            <p className="text-sm font-semibold">Add exercise</p>
-                            <div className="mt-3 space-y-3">
-                              <input
-                                value={exerciseForm.title}
-                                onChange={(event) =>
-                                  setExerciseForm((current) => ({
-                                    ...current,
-                                    title: event.target.value,
-                                  }))
-                                }
-                                placeholder="Exercise title"
-                                className="w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                              />
-                              <textarea
-                                value={exerciseForm.prompt}
-                                onChange={(event) =>
-                                  setExerciseForm((current) => ({
-                                    ...current,
-                                    prompt: event.target.value,
-                                  }))
-                                }
-                                placeholder="Prompt"
-                                className="min-h-24 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 text-sm outline-none"
-                              />
-                              <textarea
-                                value={exerciseForm.starter_code}
-                                onChange={(event) =>
-                                  setExerciseForm((current) => ({
-                                    ...current,
-                                    starter_code: event.target.value,
-                                  }))
-                                }
-                                className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
-                              />
-                              <textarea
-                                value={exerciseForm.solution_code}
-                                onChange={(event) =>
-                                  setExerciseForm((current) => ({
-                                    ...current,
-                                    solution_code: event.target.value,
-                                  }))
-                                }
-                                className="min-h-32 w-full rounded-2xl border border-(--border) bg-(--surface-inset) px-3 py-2 font-mono text-xs outline-none"
-                              />
-                              <button
-                                onClick={() => void handleExerciseCreate()}
-                                className="w-full rounded-2xl bg-(--primary) px-4 py-3 text-sm font-semibold text-(--primary-contrast)"
-                              >
-                                Add coding exercise
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : null}
-                  </>
+                  </div>
                 ) : null}
               </div>
             </div>
           </section>
 
-          <aside className="rounded-[2rem] border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl">
-            <p className="text-xs uppercase tracking-[0.24em] text-(--text-secondary)">Preview</p>
-            <h2 className="mt-2 text-xl font-semibold">
-              {previewMode && lessonDetail ? lessonDetail.title : "Toggle preview"}
-            </h2>
-            {previewMode && lessonDetail ? (
-              <div className="mt-5 space-y-4">
-                <div className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-(--text-tertiary)">
-                    /{lessonDetail.slug}
+          {/* Contextual Preview */}
+          <aside className="rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl flex flex-col overflow-hidden">
+            <div className="border-b border-border pb-4 mb-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
+                Real-time Feedback
+              </p>
+              <h2 className="mt-1 text-xl font-bold">
+                {previewMode && lessonDetail ? "Live Lens" : "Architectural View"}
+              </h2>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
+              {previewMode && lessonDetail ? (
+                <>
+                  <div className="rounded-lg border border-border bg-surface-inset p-5 shadow-inner">
+                    <p className="text-[9px] font-black uppercase tracking-widest text-text-tertiary mb-2">
+                      /{lessonDetail.slug}
+                    </p>
+                    <p className="text-sm font-medium leading-relaxed text-text-secondary">
+                      {lessonDetail.description ||
+                        "The pedagogical intent for this unit has not been established yet."}
+                    </p>
+                  </div>
+                  {previewBlocks.map((block) => (
+                    <PreviewBlock key={block.id} block={block} />
+                  ))}
+                </>
+              ) : (
+                <div className="h-full flex flex-col items-center justify-center text-center p-8 border border-dashed border-border rounded-lg bg-surface-inset">
+                  <div className="h-12 w-12 rounded-full bg-surface border border-border flex items-center justify-center mb-4 text-text-tertiary">
+                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-bold text-text-tertiary uppercase tracking-widest">
+                    Live Preview Hidden
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                    {lessonDetail.description || "No description set for this lesson yet."}
+                  <p className="mt-2 text-xs text-text-tertiary leading-relaxed">
+                    Toggle the Lens above to visualize how components will render in the learner
+                    environment.
                   </p>
                 </div>
-                {previewBlocks.map((block) => (
-                  <PreviewBlock key={block.id} block={block} />
-                ))}
-              </div>
-            ) : (
-              <p className="mt-5 text-sm leading-6 text-(--text-secondary)">
-                Preview mode lets instructors sanity-check article flow, code snippets, resources,
-                and embeds before publishing.
-              </p>
-            )}
+              )}
+            </div>
           </aside>
         </div>
       </div>
@@ -1477,34 +1186,40 @@ function Field({
 }) {
   return (
     <label className={className}>
-      <span className="mb-2 block text-sm font-medium text-(--text-secondary)">{label}</span>
+      <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-text-tertiary">
+        {label}
+      </span>
       {children}
     </label>
   );
 }
 
 function PreviewBlock({ block }: { block: ContentBlock }) {
+  const containerClasses = "rounded-lg border border-border bg-surface p-5 shadow-sm";
+  const labelClasses = "text-[9px] font-black uppercase tracking-widest text-text-tertiary mb-3";
+
   if (block.type === "markdown") {
     return (
-      <section className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-        <p className="text-xs uppercase tracking-[0.18em] text-(--text-tertiary)">
-          {block.title || "Markdown"}
-        </p>
-        <pre className="mt-3 whitespace-pre-wrap text-sm leading-7 text-(--text-secondary)">
+      <section className={containerClasses}>
+        <p className={labelClasses}>{block.title || "Markdown Component"}</p>
+        <div className="prose prose-sm text-text-secondary leading-relaxed font-sans whitespace-pre-wrap">
           {String(block.content.body ?? "")}
-        </pre>
+        </div>
       </section>
     );
   }
 
   if (block.type === "code") {
     return (
-      <section className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-        <p className="text-xs uppercase tracking-[0.18em] text-(--text-tertiary)">
-          {block.title || "Code"} • {String(block.content.language ?? "text")}
-        </p>
-        <pre className="mt-3 overflow-x-auto rounded-2xl bg-(--surface-inset) p-3 text-xs text-(--text-primary)">
-          {String(block.content.snippet ?? "")}
+      <section className={containerClasses}>
+        <div className="flex items-center justify-between mb-3">
+          <p className={labelClasses.replace("mb-3", "")}>{block.title || "Code Snippet"}</p>
+          <span className="rounded bg-surface-inset px-1.5 py-0.5 text-[8px] font-black border border-border text-text-tertiary">
+            {String(block.content.language ?? "text")}
+          </span>
+        </div>
+        <pre className="overflow-x-auto rounded-md bg-surface-inset p-4 text-[11px] font-mono text-text-primary shadow-inner border border-border">
+          <code>{String(block.content.snippet ?? "")}</code>
         </pre>
       </section>
     );
@@ -1512,29 +1227,38 @@ function PreviewBlock({ block }: { block: ContentBlock }) {
 
   if (block.type === "embed") {
     return (
-      <section className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-        <p className="text-xs uppercase tracking-[0.18em] text-(--text-tertiary)">
-          {block.title || "Embed"}
-        </p>
-        <div className="mt-3 rounded-2xl border border-dashed border-(--border-accent) bg-(--surface-inset) px-4 py-8 text-center text-sm text-(--text-secondary)">
-          {String(block.content.url ?? "")}
+      <section className={containerClasses}>
+        <p className={labelClasses}>{block.title || "External Resource"}</p>
+        <div className="rounded-md border border-dashed border-primary/40 bg-primary-soft/30 px-4 py-12 text-center shadow-inner">
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary">
+            Content Frame
+          </p>
+          <p className="mt-1 text-[10px] text-primary truncate opacity-60">
+            {String(block.content.url ?? "")}
+          </p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="rounded-3xl border border-(--border) bg-(--surface) p-4">
-      <p className="text-xs uppercase tracking-[0.18em] text-(--text-tertiary)">
-        {block.title || "Resource"}
-      </p>
+    <section className={containerClasses}>
+      <p className={labelClasses}>{block.title || "Asset Link"}</p>
       <a
         href={String(block.content.url ?? "#")}
         target="_blank"
         rel="noreferrer"
-        className="mt-3 block rounded-2xl bg-(--surface-inset) px-4 py-3 text-sm font-medium text-(--primary)"
+        className="flex items-center justify-between rounded-md bg-primary-soft px-4 py-3 text-xs font-bold text-primary transition hover:bg-primary/20 border border-primary-border"
       >
-        {String(block.content.label ?? block.content.url ?? "Open resource")}
+        <span>{String(block.content.label ?? block.content.url ?? "Launch Resource")}</span>
+        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+          />
+        </svg>
       </a>
     </section>
   );

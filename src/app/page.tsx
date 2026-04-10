@@ -31,12 +31,6 @@ type CourseCard = {
   }>;
 };
 
-const levelCopy: Record<CourseCard["level"], string> = {
-  beginner: "Build the foundation",
-  intermediate: "Sharpen practical fluency",
-  advanced: "Tackle production complexity",
-};
-
 export default function HomePage() {
   const api = useApi();
   const { user } = useAuth();
@@ -52,111 +46,120 @@ export default function HomePage() {
   }, [courses, activeLevel]);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-      <div className="absolute inset-0 bg-(image:--gradient-page)" />
-      <div className="absolute inset-x-0 top-0 h-[500px] bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,oklch(0.40_0.16_280/0.30),oklch(0.30_0.12_275/0.15)_40%,transparent_70%)]" />
+    <main className="relative min-h-screen overflow-hidden bg-bg text-text-primary">
+      <div className="absolute inset-0 gradient-page" />
 
-      <div className="relative flex min-h-screen flex-col px-6 py-8 lg:px-10 lg:py-10">
-        <header className="rounded-xl border border-(--border-accent) bg-(--surface-glass) px-6 py-6 shadow-(--shadow-lg) backdrop-blur-xl lg:px-8 lg:py-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
-              <p className="text-xs font-medium uppercase tracking-[0.3em] text-(--primary)">
+      <div className="relative flex min-h-screen flex-col px-6 py-8 lg:px-12 lg:py-12">
+        <header className="rounded-xl border border-border-accent bg-surface-glass px-8 py-10 shadow-lg backdrop-blur-xl lg:px-12 lg:py-16">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+            <div className="">
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">
                 New Horizon Learning
               </p>
-              <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-                Learn through guided lessons, quizzes, and coding labs.
+              <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+                Master modern engineering through practice.
               </h1>
-              <p className="mt-4 text-base leading-7 text-(--text-secondary) sm:text-lg">
-                Browse the catalog, enroll in a path, and move from reading to practice without
-                switching contexts.
+              <p className="mt-6 text-lg leading-relaxed text-text-secondary sm:text-xl">
+                Browse guided paths, enroll in interactive labs, and build production-ready skills
+                without switching contexts.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col gap-4 sm:flex-row lg:flex-col xl:flex-row">
               {user ? (
                 <Link
                   href="/workspace"
-                  className="rounded-lg bg-(--primary) px-5 py-2.5 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-4 text-base font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
                 >
-                  Continue learning
+                  Go to Workspace
                 </Link>
               ) : (
                 <Link
                   href="/register"
-                  className="rounded-lg bg-(--primary) px-5 py-2.5 text-sm font-semibold text-(--primary-contrast) shadow-(--shadow-glow) transition hover:brightness-110"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-4 text-base font-bold text-primary-contrast shadow-glow transition hover:brightness-110 active:scale-95"
                 >
-                  Create learner account
+                  Start Learning Free
                 </Link>
               )}
               {user?.role === "instructor" || user?.role === "admin" ? (
                 <Link
                   href="/instructor"
-                  className="rounded-lg border border-(--border) bg-(--surface-raised) px-4 py-2.5 text-sm font-medium text-(--text-primary) transition hover:border-(--border-strong) hover:bg-(--surface-soft)"
+                  className="inline-flex items-center justify-center rounded-lg border border-border bg-surface-raised px-8 py-4 text-base font-bold text-text-primary transition hover:border-border-strong hover:bg-surface-soft active:scale-95"
                 >
-                  Instructor studio
+                  Instructor Studio
                 </Link>
               ) : null}
             </div>
           </div>
         </header>
 
-        <section className="mt-6 flex flex-wrap gap-2">
+        <section className="mt-12 flex flex-wrap items-center gap-3">
+          <span className="mr-2 text-xs font-bold uppercase tracking-widest text-text-tertiary">
+            Filter by level:
+          </span>
           {(["all", "beginner", "intermediate", "advanced"] as const).map((level) => (
             <button
               key={level}
               onClick={() => setActiveLevel(level)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+              className={`rounded-lg px-5 py-2.5 text-sm font-bold transition-all ${
                 activeLevel === level
-                  ? "bg-(--primary) text-(--primary-contrast) shadow-(--shadow-glow)"
-                  : "border border-(--border) bg-(--surface-glass) text-(--text-secondary) hover:border-(--border-strong) hover:text-(--text-primary)"
+                  ? "bg-primary text-primary-contrast shadow-glow"
+                  : "border border-border bg-surface-glass text-text-secondary hover:border-border-strong hover:text-text-primary"
               }`}
             >
-              {level === "all" ? "All paths" : level}
+              {level.charAt(0).toUpperCase() + level.slice(1)}
             </button>
           ))}
         </section>
 
-        <section className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredCourses.map((course) => (
             <article
               key={course.id}
-              className="group relative rounded-xl border border-(--border) bg-(--surface-glass) p-5 shadow-(--shadow-md) backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-(--primary-border) hover:shadow-(--shadow-lg)"
+              className="group flex flex-col rounded-xl border border-border bg-surface-glass p-6 shadow-md backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-primary-border hover:shadow-lg"
             >
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-(--primary-soft)/5 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-
-              <div className="relative rounded-lg bg-gradient-to-br from-(--bg-subtle) via-(--surface) to-(--surface-soft) border border-(--border) p-5">
+              <div className="flex-1">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="rounded-md border border-(--primary-border) bg-(--primary-soft) px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-(--primary)">
+                  <span className="rounded bg-primary-soft px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-primary border border-primary-border">
                     {course.level}
                   </span>
-                  <span className="text-xs uppercase tracking-[0.15em] text-(--text-tertiary)">
-                    {course.estimated_minutes ?? 0} min
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-text-tertiary">
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    {course.estimated_minutes ?? 0}m
                   </span>
                 </div>
-                <h2 className="mt-4 text-xl font-semibold tracking-tight">{course.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-(--text-secondary)">
-                  {course.summary || course.description || "Course summary coming soon."}
+                <h2 className="mt-5 text-xl font-bold tracking-tight group-hover:text-primary transition-colors">
+                  {course.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-text-secondary line-clamp-3">
+                  {course.summary || course.description || "No description provided."}
                 </p>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="mt-6 flex flex-wrap gap-2">
                 <StatPill label="Sections" value={course._count.sections} />
-                <StatPill label="Assessments" value={course._count.assessments} />
-                <StatPill label="Learners" value={course._count.enrollments} />
+                <StatPill label="Labs" value={course._count.assessments} />
               </div>
 
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-(--text-tertiary)">
+              <div className="mt-6 flex items-center justify-between border-t border-border pt-6">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">
                     Instructor
-                  </p>
-                  <p className="mt-0.5 text-sm font-medium">{course.creator.name}</p>
+                  </span>
+                  <span className="text-sm font-bold text-text-primary">{course.creator.name}</span>
                 </div>
                 <Link
                   href={`/courses/${course.id}`}
-                  className="rounded-lg border border-(--border) bg-(--surface-raised) px-3 py-1.5 text-xs font-medium text-(--text-primary) transition-all hover:border-(--primary-border) hover:bg-(--primary-soft) hover:text-(--primary)"
+                  className="rounded-lg border border-border bg-surface-raised px-4 py-2 text-xs font-bold text-text-primary transition-all hover:border-primary-border hover:bg-primary-soft hover:text-primary active:scale-95"
                 >
-                  View
+                  View Path
                 </Link>
               </div>
             </article>
@@ -169,9 +172,9 @@ export default function HomePage() {
 
 function StatPill({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-(--border) bg-(--surface) px-2 py-2 text-center">
-      <p className="text-[10px] uppercase tracking-[0.15em] text-(--text-tertiary)">{label}</p>
-      <p className="mt-1 text-base font-semibold">{value}</p>
+    <div className="rounded-lg border border-border bg-surface px-3 py-2 shadow-sm">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary">{label}</p>
+      <p className="mt-1 text-sm font-extrabold">{value}</p>
     </div>
   );
 }

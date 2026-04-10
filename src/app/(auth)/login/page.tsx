@@ -22,12 +22,12 @@ export default function Login() {
   });
   return (
     <main className="relative min-h-screen overflow-hidden bg-(--bg) text-(--text-primary)">
-      <div className="absolute inset-0 bg-(image:--gradient-page)" />
+      <div className="absolute inset-0 gradient-page" />
       <div className="absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(ellipse_80%_60%_at_100%_50%,oklch(0.35_0.14_280/0.30),oklch(0.25_0.10_275/0.20)_50%,transparent_70%)]" />
 
       <div className="relative grid min-h-screen w-full gap-10 px-6 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-14">
         <section className="order-2 flex items-center justify-center lg:order-1">
-          <div className="w-full max-w-lg rounded-xl border border-(--border) bg-(--surface-glass) p-px shadow-(--shadow-lg) backdrop-blur-xl">
+          <div className="w-full rounded-xl border border-(--border) bg-(--surface-glass) p-px shadow-(--shadow-lg) backdrop-blur-xl">
             <div className="rounded-xl bg-(--surface-raised) p-6 lg:p-8">
               <div className="mb-6 space-y-2">
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-(--primary)">
@@ -63,7 +63,7 @@ export default function Login() {
                     <span className="text-sm font-medium text-(--text-secondary)">Password</span>
                     <Link
                       href="#"
-                      className="text-xs font-medium uppercase tracking-[0.1em] text-(--primary) transition hover:text-(--primary-hover)"
+                      className="text-xs font-medium uppercase tracking-widest text-(--primary) transition hover:text-(--primary-hover)"
                     >
                       Reset
                     </Link>
@@ -138,10 +138,10 @@ export default function Login() {
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-(--secondary)">
                 Return to the shoreline
               </p>
-              <h2 className="max-w-xl text-3xl font-semibold tracking-tight lg:text-4xl">
+              <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
                 Your focused workspace is ready when you are.
               </h2>
-              <p className="max-w-2xl text-base leading-7 text-(--text-secondary)">
+              <p className="text-base leading-7 text-(--text-secondary)">
                 Sign back in to review updates, continue projects, and move through your day with
                 the same calm visual rhythm.
               </p>
