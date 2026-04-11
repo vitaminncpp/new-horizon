@@ -9,6 +9,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
   { href: "/courses", label: "My Courses", icon: "school" },
   { href: "/courses", label: "Explore", icon: "explore" },
+  { href: "/simulator", label: "Circuit Simulator", icon: "memory", match: "/simulator" },
   { href: "/profile", label: "Learning Path", icon: "route" },
   { href: "/dashboard", label: "Assignments", icon: "assignment", match: "/assignments" },
   { href: "/dashboard", label: "Quizzes", icon: "quiz", match: "/quizzes" },
@@ -28,6 +29,10 @@ function getActiveLabel(pathname: string) {
 
   if (pathname === "/dashboard") {
     return "Dashboard";
+  }
+
+  if (pathname.startsWith("/simulator")) {
+    return "Circuit Simulator";
   }
 
   if (pathname.startsWith("/assignments")) {
