@@ -9,14 +9,6 @@ interface Point {
   y: number;
 }
 
-interface ConnectionPoint {
-  id: string;
-  componentId: string;
-  position: "left" | "right" | "top" | "bottom";
-  x: number;
-  y: number;
-}
-
 interface CircuitComponent {
   id: string;
   type: string;
@@ -27,14 +19,12 @@ interface CircuitComponent {
   unit: string;
   color: string;
   borderColor: string;
-  connections: string[];
 }
 
 interface Wire {
   id: string;
-  from: { componentId: string; point: string };
-  to: { componentId: string; point: string };
-  path: string;
+  from: { componentId: string; point: "left" | "right" };
+  to: { componentId: string; point: "left" | "right" };
 }
 
 type CanvasTool = "select" | "wire" | "pan";
@@ -47,7 +37,6 @@ interface ComponentTemplate {
   borderColor: string;
   defaultValue: number;
   unit: string;
-  canHaveMultiple: boolean;
 }
 
 const componentTemplates: ComponentTemplate[] = [
@@ -59,17 +48,15 @@ const componentTemplates: ComponentTemplate[] = [
     borderColor: "primary",
     defaultValue: 10000,
     unit: "Ω",
-    canHaveMultiple: true,
   },
   {
     type: "capacitor",
-    icon: "battery_full",
+    icon: "battery_charging_full",
     label: "Capacitor",
-    color: "text-tertiary-fixed-dim",
+    color: "text-tertiary",
     borderColor: "tertiary",
     defaultValue: 100,
     unit: "μF",
-    canHaveMultiple: true,
   },
   {
     type: "inductor",
@@ -79,17 +66,15 @@ const componentTemplates: ComponentTemplate[] = [
     borderColor: "secondary",
     defaultValue: 10,
     unit: "mH",
-    canHaveMultiple: true,
   },
   {
     type: "power",
     icon: "electric_bolt",
-    label: "Power Source",
+    label: "Power",
     color: "text-secondary",
     borderColor: "secondary",
     defaultValue: 5,
     unit: "V",
-    canHaveMultiple: true,
   },
   {
     type: "ground",
@@ -99,7 +84,6 @@ const componentTemplates: ComponentTemplate[] = [
     borderColor: "outline",
     defaultValue: 0,
     unit: "GND",
-    canHaveMultiple: true,
   },
   {
     type: "led",
@@ -109,26 +93,13 @@ const componentTemplates: ComponentTemplate[] = [
     borderColor: "error",
     defaultValue: 2,
     unit: "V",
-    canHaveMultiple: true,
   },
 ];
 
 const toolCategories = [
-  {
-    id: "passive",
-    label: "Passive",
-    components: ["resistor", "capacitor", "inductor"],
-  },
-  {
-    id: "sources",
-    label: "Sources",
-    components: ["power", "ground"],
-  },
-  {
-    id: "output",
-    label: "Output",
-    components: ["led"],
-  },
+  { id: "passive", label: "Passive", components: ["resistor", "capacitor", "inductor"] },
+  { id: "sources", label: "Sources", components: ["power", "ground"] },
+  { id: "output", label: "Output", components: ["led"] },
 ];
 
 function formatValue(value: number): string {
@@ -137,10 +108,12 @@ function formatValue(value: number): string {
   return value.toString();
 }
 
+const COMPONENT_SIZE = 64;
+
 export default function CircuitSimulatorPage() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(100);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [pan, setPan] = useState<Point>({ x: 100, y: 100 });
   const [isSimulating, setIsSimulating] = useState(false);
   const [tool, setTool] = useState<CanvasTool>("select");
   const [components, setComponents] = useState<CircuitComponent[]>([]);
@@ -148,16 +121,14 @@ export default function CircuitSimulatorPage() {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("passive");
   const [draggingComponent, setDraggingComponent] = useState<string | null>(null);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState<Point | null>(null);
   const [wireStart, setWireStart] = useState<{
     componentId: string;
-    point: string;
-    x: number;
-    y: number;
+    point: "left" | "right";
   } | null>(null);
-  const [wireEnd, setWireEnd] = useState<Point | null>(null);
+  const [wireEndPoint, setWireEndPoint] = useState<Point | null>(null);
   const [isPanning, setIsPanning] = useState(false);
-  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [panStart, setPanStart] = useState<Point>({ x: 0, y: 0 });
 
   const selectedComp = components.find((c) => c.id === selectedComponent);
 
@@ -168,6 +139,26 @@ export default function CircuitSimulatorPage() {
       .map((type) => componentTemplates.find((t) => t.type === type))
       .filter(Boolean) as ComponentTemplate[];
   }, [selectedCategory]);
+
+  const getConnectorPosition = (comp: CircuitComponent, point: "left" | "right"): Point => {
+    return {
+      x: point === "left" ? comp.x : comp.x + COMPONENT_SIZE,
+      y: comp.y + COMPONENT_SIZE / 2,
+    };
+  };
+
+  const getCanvasCoords = useCallback(
+    (clientX: number, clientY: number): Point => {
+      if (!canvasRef.current) return { x: 0, y: 0 };
+      const rect = canvasRef.current.getBoundingClientRect();
+      const scale = zoom / 100;
+      return {
+        x: (clientX - rect.left - pan.x) / scale,
+        y: (clientY - rect.top - pan.y) / scale,
+      };
+    },
+    [zoom, pan],
+  );
 
   const addComponent = useCallback(
     (template: ComponentTemplate) => {
@@ -182,47 +173,23 @@ export default function CircuitSimulatorPage() {
         id,
         type: template.type,
         name,
-        x: 200 + Math.random() * 200,
-        y: 200 + Math.random() * 200,
+        x: 150 + Math.random() * 300,
+        y: 150 + Math.random() * 300,
         value: template.defaultValue,
         unit: template.unit,
         color: template.color,
         borderColor: template.borderColor,
-        connections: [],
       };
 
       setComponents((prev) => [...prev, component]);
       setSelectedComponent(id);
-      setTool("select");
     },
     [components],
   );
 
-  const getConnectionPoints = useCallback((component: CircuitComponent): ConnectionPoint[] => {
-    const points: ConnectionPoint[] = [];
-    const size = 60;
-
-    points.push({
-      id: `${component.id}-left`,
-      componentId: component.id,
-      position: "left",
-      x: component.x,
-      y: component.y + size / 2,
-    });
-    points.push({
-      id: `${component.id}-right`,
-      componentId: component.id,
-      position: "right",
-      x: component.x + size,
-      y: component.y + size / 2,
-    });
-
-    return points;
-  }, []);
-
-  const handleCanvasMouseDown = useCallback(
+  const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (tool === "pan" || e.button === 1) {
+      if (e.button === 1 || tool === "pan") {
         setIsPanning(true);
         setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
         return;
@@ -230,156 +197,133 @@ export default function CircuitSimulatorPage() {
 
       if (tool === "wire" && wireStart) {
         setWireStart(null);
-        setWireEnd(null);
-      } else {
+        setWireEndPoint(null);
+        return;
+      }
+
+      if (tool === "select") {
         setSelectedComponent(null);
       }
     },
     [tool, wireStart, pan],
   );
 
-  const handleCanvasMouseMove = useCallback(
+  const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
+      const coords = getCanvasCoords(e.clientX, e.clientY);
+
       if (isPanning) {
         setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
         return;
       }
 
-      if (draggingComponent) {
-        const scale = zoom / 100;
+      if (draggingComponent && dragStart) {
         setComponents((prev) =>
           prev.map((c) =>
             c.id === draggingComponent
-              ? {
-                  ...c,
-                  x: (e.clientX - dragOffset.x) / scale,
-                  y: (e.clientY - dragOffset.y) / scale,
-                }
+              ? { ...c, x: coords.x - dragStart.x, y: coords.y - dragStart.y }
               : c,
           ),
         );
         return;
       }
 
-      if (tool === "wire" && wireStart && canvasRef.current) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        const scale = zoom / 100;
-        setWireEnd({
-          x: (e.clientX - rect.left - pan.x) / scale,
-          y: (e.clientY - rect.top - pan.y) / scale,
-        });
+      if (tool === "wire" && wireStart) {
+        setWireEndPoint(coords);
       }
     },
-    [isPanning, panStart, draggingComponent, dragOffset, tool, wireStart, zoom, pan],
+    [isPanning, panStart, draggingComponent, dragStart, tool, wireStart, getCanvasCoords],
   );
 
-  const handleCanvasMouseUp = useCallback(() => {
+  const handleMouseUp = useCallback(() => {
     setIsPanning(false);
     setDraggingComponent(null);
+    setDragStart(null);
   }, []);
 
-  const handleComponentMouseDown = useCallback(
+  const handleComponentClick = useCallback(
     (e: React.MouseEvent, componentId: string) => {
       e.stopPropagation();
 
-      if (tool === "wire") {
-        const component = components.find((c) => c.id === componentId);
-        if (!component) return;
-
-        const rect = (e.target as HTMLElement).getBoundingClientRect();
-        const scale = zoom / 100;
-        const x = (rect.left + rect.width / 2 - pan.x) / scale;
-        const y = (rect.top + rect.height / 2 - pan.y) / scale;
-
-        if (!wireStart) {
-          setWireStart({ componentId, point: "left", x, y });
-        } else if (wireStart.componentId !== componentId) {
-          const newWire: Wire = {
-            id: `wire-${Date.now()}`,
-            from: { componentId: wireStart.componentId, point: wireStart.point },
-            to: { componentId, point: "right" },
-            path: "",
-          };
-          setWires((prev) => [...prev, newWire]);
-          setWireStart(null);
-          setWireEnd(null);
-        }
-        return;
-      }
+      if (tool === "wire") return;
 
       setSelectedComponent(componentId);
       setDraggingComponent(componentId);
-
-      const component = components.find((c) => c.id === componentId);
-      if (component && canvasRef.current) {
-        const scale = zoom / 100;
-        setDragOffset({
-          x: e.clientX - component.x * scale - pan.x,
-          y: e.clientY - component.y * scale - pan.y,
-        });
+      const coords = getCanvasCoords(e.clientX, e.clientY);
+      const comp = components.find((c) => c.id === componentId);
+      if (comp) {
+        setDragStart({ x: coords.x - comp.x, y: coords.y - comp.y });
       }
     },
-    [tool, wireStart, components, zoom, pan],
+    [tool, components, getCanvasCoords],
   );
 
-  const handleConnectionClick = useCallback(
-    (componentId: string, point: string) => {
-      if (tool !== "wire") return;
+  const handleConnectorClick = useCallback(
+    (e: React.MouseEvent, componentId: string, point: "left" | "right") => {
+      e.stopPropagation();
+      e.preventDefault();
 
-      const component = components.find((c) => c.id === componentId);
-      if (!component) return;
-
-      const points = getConnectionPoints(component);
-      const connPoint = points.find((p) => p.id === `${componentId}-${point}`);
+      if (tool !== "wire") {
+        setTool("wire");
+      }
 
       if (!wireStart) {
-        setWireStart({ componentId, point, x: connPoint?.x ?? 0, y: connPoint?.y ?? 0 });
+        setWireStart({ componentId, point });
+        const coords = getCanvasCoords(e.clientX, e.clientY);
+        setWireEndPoint(coords);
       } else if (wireStart.componentId !== componentId) {
         const newWire: Wire = {
           id: `wire-${Date.now()}`,
-          from: { componentId: wireStart.componentId, point: wireStart.point },
+          from: wireStart,
           to: { componentId, point },
-          path: "",
         };
         setWires((prev) => [...prev, newWire]);
         setWireStart(null);
-        setWireEnd(null);
+        setWireEndPoint(null);
+      } else {
+        setWireStart(null);
+        setWireEndPoint(null);
       }
     },
-    [tool, wireStart, components, getConnectionPoints],
+    [tool, wireStart, getCanvasCoords],
   );
 
   const updateComponent = useCallback((id: string, updates: Partial<CircuitComponent>) => {
     setComponents((prev) => prev.map((c) => (c.id === id ? { ...c, ...updates } : c)));
   }, []);
 
-  const deleteComponent = useCallback((id: string) => {
-    setComponents((prev) => prev.filter((c) => c.id !== id));
-    setWires((prev) => prev.filter((w) => w.from.componentId !== id && w.to.componentId !== id));
-    setSelectedComponent(null);
-  }, []);
+  const deleteComponent = useCallback(
+    (id: string) => {
+      setComponents((prev) => prev.filter((c) => c.id !== id));
+      setWires((prev) => prev.filter((w) => w.from.componentId !== id && w.to.componentId !== id));
+      if (selectedComponent === id) setSelectedComponent(null);
+    },
+    [selectedComponent],
+  );
 
   const deleteSelected = useCallback(() => {
-    if (selectedComponent) {
-      deleteComponent(selectedComponent);
-    }
+    if (selectedComponent) deleteComponent(selectedComponent);
   }, [selectedComponent, deleteComponent]);
 
   const clearCanvas = useCallback(() => {
     setComponents([]);
     setWires([]);
     setSelectedComponent(null);
+    setWireStart(null);
+    setWireEndPoint(null);
   }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Delete" || e.key === "Backspace") {
-        deleteSelected();
+        if (document.activeElement?.tagName !== "INPUT") {
+          deleteSelected();
+        }
       }
       if (e.key === "Escape") {
         setSelectedComponent(null);
         setWireStart(null);
-        setWireEnd(null);
+        setWireEndPoint(null);
         setTool("select");
       }
     };
@@ -392,43 +336,71 @@ export default function CircuitSimulatorPage() {
     const toComp = components.find((c) => c.id === wire.to.componentId);
     if (!fromComp || !toComp) return null;
 
-    const fromPoints = getConnectionPoints(fromComp);
-    const toPoints = getConnectionPoints(toComp);
-    const from = fromPoints.find((p) => p.position === wire.from.point);
-    const to = toPoints.find((p) => p.position === wire.to.point);
-    if (!from || !to) return null;
+    const start = getConnectorPosition(fromComp, wire.from.point);
+    const end = getConnectorPosition(toComp, wire.to.point);
 
-    const midX = (from.x + to.x) / 2;
-    const path = `M ${from.x + 30} ${from.y + 30} C ${midX} ${from.y + 30}, ${midX} ${to.y + 30}, ${to.x + 30} ${to.y + 30}`;
+    const dx = Math.abs(end.x - start.x);
+    const cpOffset = Math.max(30, dx * 0.4);
 
     return (
-      <path
-        key={wire.id}
-        d={path}
-        fill="none"
-        stroke="#5ffbd6"
-        strokeWidth="3"
-        className="drop-shadow-[0_0_4px_rgba(95,251,214,0.5)]"
-      />
+      <g key={wire.id}>
+        <path
+          d={`M ${start.x} ${start.y} C ${start.x + cpOffset} ${start.y}, ${end.x - cpOffset} ${end.y}, ${end.x} ${end.y}`}
+          fill="none"
+          stroke={isSimulating ? "#5ffbd6" : "#5ffbd6"}
+          strokeWidth="3"
+          strokeLinecap="round"
+          opacity={isSimulating ? 1 : 0.7}
+        />
+        {isSimulating && (
+          <circle
+            cx={(start.x + end.x) / 2}
+            cy={(start.y + end.y) / 2}
+            r="4"
+            fill="#5ffbd6"
+            className="animate-pulse"
+          />
+        )}
+      </g>
     );
   };
 
   const renderWirePreview = () => {
-    if (!wireStart || !wireEnd) return null;
+    if (!wireStart || !wireEndPoint) return null;
 
-    const midX = (wireStart.x + wireEnd.x) / 2;
-    const path = `M ${wireStart.x + 30} ${wireStart.y + 30} C ${midX} ${wireStart.y + 30}, ${midX} ${wireEnd.y + 30}, ${wireEnd.x + 30} ${wireEnd.y + 30}`;
+    const fromComp = components.find((c) => c.id === wireStart.componentId);
+    if (!fromComp) return null;
+
+    const start = getConnectorPosition(fromComp, wireStart.point);
+    const dx = Math.abs(wireEndPoint.x - start.x);
+    const cpOffset = Math.max(30, dx * 0.4);
 
     return (
       <path
-        d={path}
+        d={`M ${start.x} ${start.y} C ${start.x + cpOffset} ${start.y}, ${wireEndPoint.x - cpOffset} ${wireEndPoint.y}, ${wireEndPoint.x} ${wireEndPoint.y}`}
         fill="none"
         stroke="#aca3ff"
         strokeWidth="2"
-        strokeDasharray="8,4"
-        className="animate-dash"
+        strokeDasharray="6,4"
+        strokeLinecap="round"
       />
     );
+  };
+
+  const borderColors: Record<string, string> = {
+    primary: "border-primary shadow-[0_0_15px_rgba(172,163,255,0.3)]",
+    secondary: "border-secondary shadow-[0_0_15px_rgba(95,251,214,0.3)]",
+    tertiary: "border-tertiary shadow-[0_0_15px_rgba(225,146,255,0.3)]",
+    error: "border-error shadow-[0_0_15px_rgba(255,110,132,0.3)]",
+    outline: "border-outline",
+  };
+
+  const connectorColors: Record<string, string> = {
+    primary: "bg-primary",
+    secondary: "bg-secondary",
+    tertiary: "bg-tertiary",
+    error: "bg-error",
+    outline: "bg-outline",
   };
 
   return (
@@ -447,13 +419,9 @@ export default function CircuitSimulatorPage() {
           </span>
           <div className="flex items-center gap-1 bg-surface-lowest/50 px-2 py-1 rounded-lg border border-border-soft">
             <button
-              onClick={() => setIsSimulating(!isSimulating)}
-              className={`p-1.5 rounded-md transition-all ${
-                isSimulating
-                  ? "bg-secondary/20 text-secondary"
-                  : "text-text-secondary hover:text-secondary"
-              }`}
-              title={isSimulating ? "Running" : "Run Simulation"}
+              onClick={() => setIsSimulating(true)}
+              className={`p-1.5 rounded-md transition-all ${isSimulating ? "bg-secondary/20 text-secondary" : "text-text-secondary hover:text-secondary"}`}
+              title={isSimulating ? "Running" : "Run"}
             >
               <span className="material-symbols-outlined text-[18px]">play_arrow</span>
             </button>
@@ -473,6 +441,12 @@ export default function CircuitSimulatorPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {isSimulating && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-secondary/10 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              <span className="text-xs font-medium text-secondary">Simulating</span>
+            </div>
+          )}
           <button
             onClick={clearCanvas}
             className="px-3 py-1.5 text-xs font-medium text-text-secondary hover:text-error hover:bg-surface-low rounded-lg transition-all"
@@ -485,9 +459,6 @@ export default function CircuitSimulatorPage() {
           >
             {isSimulating ? "Stop" : "Run Simulation"}
           </button>
-          <button className="p-2 text-text-secondary hover:bg-surface-high rounded-lg transition-all">
-            <span className="material-symbols-outlined text-lg">settings</span>
-          </button>
         </div>
       </header>
 
@@ -495,6 +466,7 @@ export default function CircuitSimulatorPage() {
         <aside className="w-64 h-full bg-surface-low border-r border-border-soft flex flex-col z-40 shrink-0">
           <div className="p-4 border-b border-border-soft">
             <h2 className="text-sm font-bold text-text-primary">Components</h2>
+            <p className="text-[10px] text-text-secondary mt-1">Click to add to canvas</p>
           </div>
 
           <div className="flex gap-1 p-2 border-b border-border-soft">
@@ -502,11 +474,7 @@ export default function CircuitSimulatorPage() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded-lg transition-all ${
-                  selectedCategory === cat.id
-                    ? "bg-primary/20 text-primary"
-                    : "text-text-secondary hover:bg-surface-high"
-                }`}
+                className={`flex-1 px-2 py-1.5 text-[10px] font-medium rounded-lg transition-all ${selectedCategory === cat.id ? "bg-primary/20 text-primary" : "text-text-secondary hover:bg-surface-high"}`}
               >
                 {cat.label}
               </button>
@@ -593,73 +561,56 @@ export default function CircuitSimulatorPage() {
               backgroundSize: `${(32 * zoom) / 100}px ${(32 * zoom) / 100}px`,
               backgroundPosition: `${pan.x}px ${pan.y}px`,
             }}
-            onMouseDown={handleCanvasMouseDown}
-            onMouseMove={handleCanvasMouseMove}
-            onMouseUp={handleCanvasMouseUp}
-            onMouseLeave={handleCanvasMouseUp}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             <div
-              className="relative"
+              className="relative w-[3000px] h-[3000px]"
               style={{
                 transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom / 100})`,
                 transformOrigin: "0 0",
               }}
             >
-              <svg className="absolute inset-0 w-[2000px] h-[2000px] pointer-events-none -translate-x-1/2 -translate-y-1/2">
-                {wires.map(renderWire)}
-                {renderWirePreview()}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+                <g className="overflow-visible">
+                  {wires.map(renderWire)}
+                  {renderWirePreview()}
+                </g>
               </svg>
 
               {components.map((comp) => {
                 const isSelected = selectedComponent === comp.id;
-                const borderColors: Record<string, string> = {
-                  primary: "border-primary",
-                  secondary: "border-secondary",
-                  tertiary: "border-tertiary-fixed-dim",
-                  error: "border-error",
-                  outline: "border-outline",
-                };
-                const glowColors: Record<string, string> = {
-                  primary: "shadow-[0_0_20px_rgba(172,163,255,0.3)]",
-                  secondary: "shadow-[0_0_20px_rgba(95,251,214,0.3)]",
-                  tertiary: "shadow-[0_0_20px_rgba(205,127,236,0.3)]",
-                  error: "shadow-[0_0_20px_rgba(255,110,132,0.3)]",
-                  outline: "",
-                };
+                const borderColor = borderColors[comp.borderColor] || borderColors.outline;
+                const connColor = connectorColors[comp.borderColor] || connectorColors.outline;
+                const isWireStartComp = wireStart?.componentId === comp.id;
 
                 return (
                   <div
                     key={comp.id}
-                    className={`absolute cursor-pointer transition-shadow ${
-                      isSelected ? "z-10" : "z-0"
-                    }`}
+                    className={`absolute cursor-pointer ${isSelected ? "z-20" : "z-10"}`}
                     style={{ left: comp.x, top: comp.y }}
-                    onMouseDown={(e) => handleComponentMouseDown(e, comp.id)}
+                    onMouseDown={(e) => handleComponentClick(e, comp.id)}
                   >
                     <div
-                      className={`relative w-[60px] h-[60px] bg-surface-high rounded-xl border-2 ${borderColors[comp.borderColor]} ${glowColors[comp.borderColor]} ${
-                        isSelected
-                          ? "ring-2 ring-primary/50 ring-offset-2 ring-offset-background"
-                          : ""
+                      className={`relative w-[64px] h-[64px] bg-surface-high rounded-xl border-2 ${borderColor} ${
+                        isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
                       }`}
                     >
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full cursor-crosshair ${borderColors[comp.borderColor].replace("border-", "bg-")} ring-2 ring-background transition-transform hover:scale-150 ${
-                          tool === "wire" ? "hover:scale-150" : ""
-                        }`}
-                        style={{ left: -6 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleConnectionClick(comp.id, "left");
-                        }}
+                        className={`absolute top-1/2 -translate-y-1/2 w-[14px] h-[14px] rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
+                          tool === "wire" ? "hover:scale-125" : ""
+                        } ${isWireStartComp && wireStart?.point === "left" ? "ring-2 ring-white scale-125" : ""}`}
+                        style={{ left: -8 }}
+                        onClick={(e) => handleConnectorClick(e, comp.id, "left")}
                       />
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full cursor-crosshair ${borderColors[comp.borderColor].replace("border-", "bg-")} ring-2 ring-background transition-transform hover:scale-150`}
-                        style={{ right: -6 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleConnectionClick(comp.id, "right");
-                        }}
+                        className={`absolute top-1/2 -translate-y-1/2 w-[14px] h-[14px] rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
+                          tool === "wire" ? "hover:scale-125" : ""
+                        } ${isWireStartComp && wireStart?.point === "right" ? "ring-2 ring-white scale-125" : ""}`}
+                        style={{ right: -8 }}
+                        onClick={(e) => handleConnectorClick(e, comp.id, "right")}
                       />
 
                       <div className="w-full h-full flex items-center justify-center">
@@ -670,10 +621,14 @@ export default function CircuitSimulatorPage() {
                           {componentTemplates.find((t) => t.type === comp.type)?.icon}
                         </span>
                       </div>
+
+                      {isSimulating && comp.type === "led" && (
+                        <div className="absolute inset-0 bg-error/30 rounded-xl animate-pulse" />
+                      )}
                     </div>
 
                     <div className="mt-1 text-center">
-                      <span className="text-[9px] font-bold text-text-secondary tracking-wide bg-surface-low px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-text-secondary tracking-wide bg-surface-low px-1.5 py-0.5 rounded whitespace-nowrap">
                         {comp.name}: {formatValue(comp.value)}
                         {comp.unit}
                       </span>
@@ -709,7 +664,7 @@ export default function CircuitSimulatorPage() {
               <button
                 onClick={() => setTool("pan")}
                 className={`p-1.5 rounded-lg transition-all ${tool === "pan" ? "bg-primary/20 text-primary" : "text-text-secondary hover:bg-surface-high"}`}
-                title="Pan (Middle Mouse)"
+                title="Pan"
               >
                 <span className="material-symbols-outlined text-base">pan_tool</span>
               </button>
@@ -734,7 +689,7 @@ export default function CircuitSimulatorPage() {
             <button
               onClick={() => {
                 setZoom(100);
-                setPan({ x: 0, y: 0 });
+                setPan({ x: 100, y: 100 });
               }}
               className="p-1.5 hover:bg-surface-high rounded-lg transition-all text-text-secondary"
               title="Reset View"
@@ -742,6 +697,12 @@ export default function CircuitSimulatorPage() {
               <span className="material-symbols-outlined text-base">center_focus_strong</span>
             </button>
           </div>
+
+          {tool === "wire" && (
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-primary/20 text-primary px-4 py-2 rounded-full text-xs font-medium border border-primary/30">
+              Click on connection dots to draw wires
+            </div>
+          )}
 
           {components.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -757,17 +718,6 @@ export default function CircuitSimulatorPage() {
           )}
         </main>
       </div>
-
-      <style jsx>{`
-        @keyframes dash {
-          to {
-            stroke-dashoffset: -24;
-          }
-        }
-        .animate-dash {
-          animation: dash 0.5s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
