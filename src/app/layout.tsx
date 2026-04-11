@@ -1,7 +1,7 @@
 import "./globals.css";
 import React from "react";
-import { ApiProvider } from "@/src/infra/api/api.context";
-import { AuthProvider } from "@/src/infra/auth/auth.context";
+import { AppProviders } from "@/src/context/app-providers";
+import { Fontdiner_Swanky } from "next/dist/compiled/@next/font/dist/google";
 
 export default function RootLayout({
   children,
@@ -12,11 +12,17 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>New Horizon</title>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swaps"
+        />
       </head>
-      <body data-theme="dark">
-        <ApiProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </ApiProvider>
+      <body className="dark">
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

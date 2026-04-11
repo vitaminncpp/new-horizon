@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>LearnSphere - Advanced UI/UX Design Mastery</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#e192ff",
+            "primary-fixed-dim": "#8f83ff",
+            "on-tertiary-container": "#41005a",
+            "on-surface-variant": "#a3aac4",
+            "surface-tint": "#aca3ff",
+            "inverse-on-surface": "#4d556b",
+            "surface-container": "#0f1930",
+            "inverse-primary": "#5948d3",
+            "surface": "#060e20",
+            "error": "#ff6e84",
+            "primary-fixed": "#9e93ff",
+            "on-primary-container": "#1d007a",
+            "surface-variant": "#192540",
+            "secondary-fixed": "#5ffbd6",
+            "surface-dim": "#060e20",
+            "surface-container-low": "#091328",
+            "on-primary-fixed-variant": "#250094",
+            "on-error": "#490013",
+            "on-background": "#dee5ff",
+            "surface-bright": "#1f2b49",
+            "on-primary": "#27009a",
+            "on-secondary-fixed-variant": "#006855",
+            "tertiary-fixed": "#e192ff",
+            "outline": "#6d758c",
+            "on-tertiary-fixed-variant": "#5d0d7d",
+            "error-container": "#a70138",
+            "surface-container-highest": "#192540",
+            "on-primary-fixed": "#000000",
+            "secondary-dim": "#4decc9",
+            "surface-container-high": "#141f38",
+            "on-tertiary-fixed": "#2c003f",
+            "tertiary-container": "#d384f2",
+            "on-secondary-container": "#defff3",
+            "tertiary-dim": "#cd7fec",
+            "primary": "#aca3ff",
+            "primary-dim": "#6f5fea",
+            "background": "#060e20",
+            "secondary-fixed-dim": "#4decc9",
+            "surface-container-lowest": "#000000",
+            "on-secondary-fixed": "#00483b",
+            "outline-variant": "#40485d",
+            "on-error-container": "#ffb2b9",
+            "error-dim": "#d73357",
+            "on-secondary": "#005d4c",
+            "on-tertiary": "#520071",
+            "on-surface": "#dee5ff",
+            "inverse-surface": "#faf8ff",
+            "primary-container": "#9e93ff",
+            "secondary-container": "#006b58",
+            "tertiary-fixed-dim": "#d384f2",
+            "secondary": "#5ffbd6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .bg-academic-gradient {
+      background: linear-gradient(135deg, #6C5CE7 0%, #8E44AD 100%);
+    }
+
+    .bg-momentum-gradient {
+      background: linear-gradient(135deg, #00C9A7 0%, #4D96FF 100%);
+    }
+
+    .glass-panel {
+      background-color: rgba(6, 14, 32, 0.8);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+<!-- SideNavBar (Shared Component) -->
+<aside
+  class="fixed left-0 top-0 h-screen w-[260px] bg-slate-950/80 backdrop-blur-xl flex flex-col p-6 shadow-2xl shadow-indigo-500/10 font-['Inter'] antialiased z-50">
+  <div class="mb-10">
+    <h1 class="text-2xl font-bold tracking-tight text-white">LearnSphere</h1>
+    <p class="text-slate-400 text-xs">Academic Curator</p>
+  </div>
+  <nav class="flex-1 flex flex-col gap-1">
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>Dashboard</span>
+    </a>
+    <!-- Active State: My Courses (as we are viewing a course detail) -->
+    <a
+      class="flex items-center gap-3 px-4 py-3 bg-[#6C5CE7]/10 text-[#6C5CE7] rounded-xl font-semibold hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">school</span>
+      <span>My Courses</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">explore</span>
+      <span>Explore</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">route</span>
+      <span>Learning Path</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">assignment</span>
+      <span>Assignments</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">quiz</span>
+      <span>Quizzes</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">trending_up</span>
+      <span>Progress</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 transition-all duration-300 active:scale-95"
+      href="#">
+      <span class="material-symbols-outlined">mail</span>
+      <span>Messages</span>
+    </a>
+    <a
+      class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors hover:bg-white/5 duration-300 active:scale-95 mt-auto"
+      href="#">
+      <span class="material-symbols-outlined">settings</span>
+      <span>Settings</span>
+    </a>
+  </nav>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen relative">
+  <!-- TopNavBar (Shared Component) -->
+  <header
+    class="sticky top-0 z-40 w-full h-[72px] bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-8 bg-gradient-to-b from-transparent to-white/5">
+    <div class="flex items-center flex-1 max-w-xl">
+      <div class="w-full relative group">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+        <input
+          class="w-full bg-surface-container-lowest border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-[#6C5CE7]/50 transition-all"
+          placeholder="Search courses, modules, help..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="hover:bg-white/5 rounded-full p-2 transition-all">
+        <span class="material-symbols-outlined text-slate-400" data-icon="notifications">notifications</span>
+      </button>
+      <button class="hover:bg-white/5 rounded-full p-2 transition-all">
+        <span class="material-symbols-outlined text-slate-400" data-icon="mail">mail</span>
+      </button>
+      <button class="hover:bg-white/5 rounded-full p-2 transition-all">
+        <span class="material-symbols-outlined text-slate-400" data-icon="contrast">contrast</span>
+      </button>
+      <div class="h-8 w-8 rounded-full overflow-hidden ml-2 ring-2 ring-[#6C5CE7]/20">
+        <img alt="User Profile" class="w-full h-full object-cover"
+             data-alt="professional headshot of a creative professional with a friendly expression in a modern studio setting"
+             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWVihoDjDa5STy8PZVI2syFhq6JT5nssbkwL4seSJRbA7KR7MLdfweh82150kdMk6dekd2FMsYNwLKc5aQPbkjRg00CzgDz-UoYvmXE0h_ifROaUCgS78iOL7avLYy_EHgoYvhotsaysD5u3Aust-J0tJrXTkyUO3RLTGeb-yA3hR9VgIwl1Es4QvBvjZ5I1RSKvfpVl_5I0MnpIFDQRtUD7sMTSJab8U9WXFncrMaDqTcn0gRjl9fRPx1WbeI7Jhfaxn-sRPxX7_q"/>
+      </div>
+    </div>
+  </header>
+  <div class="p-8 max-w-350 mx-auto">
+    <!-- Course Header & Video Preview -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+      <div class="lg:col-span-8 flex flex-col justify-center">
+        <nav class="flex gap-2 mb-6">
+          <span class="text-xs font-bold tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full uppercase">Design Strategy</span>
+          <span
+            class="text-xs font-bold tracking-widest text-secondary bg-secondary/10 px-3 py-1 rounded-full uppercase">Mastery</span>
+        </nav>
+        <h1 class="text-5xl font-bold tracking-tight mb-4 leading-tight">Advanced UI/UX Design: <br/><span
+          class="text-transparent bg-clip-text bg-academic-gradient">The Digital Curator Approach</span></h1>
+        <p class="text-on-surface-variant text-lg max-w-2xl mb-8 leading-relaxed">Master the art of high-end editorial
+          interfaces. Learn to break the grid, utilize tonal depth, and create museum-grade digital experiences that
+          captivate users.</p>
+        <!-- Stats Bar -->
+        <div class="flex gap-12 items-center">
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Students</span>
+            <span class="text-2xl font-bold">12.4k</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Rating</span>
+            <div class="flex items-center gap-1">
+              <span class="text-2xl font-bold">4.9</span>
+              <span class="material-symbols-outlined text-yellow-500 scale-75"
+                    style="font-variation-settings: 'FILL' 1;">star</span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Duration</span>
+            <span class="text-2xl font-bold">24h 45m</span>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-4">
+        <div
+          class="relative group aspect-video rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-2xl cursor-pointer">
+          <img alt="Video Preview"
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+               data-alt="a stylized workstation with high-end monitor showing abstract colorful ui elements in a moody dim room"
+               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZimO2Qzbg6cgS7K-MHabOc6NAPuOrqkmGUQC_IO5tAQVR2yBJGTinzjoDhO-wKES73nlwxAkof_FsmE6Oq9Jor56PC6xUmc8bWb0pkBbhn0W1vRwqCSyqYY482DdFYVAQowhGD-rz79F6VQZnDy9hi2VEbVfsqG8hSWEZ0nQOZ22AnvsLkuRRN9LrotVy_r7c_cRxiXtJhMqfZ2NNPdwTbBRNmR1mlQiR1R-3hPmsmAPKu6GR2hkr2j-ckw2ey1lS899rn0nH5bo6"/>
+          <div
+            class="absolute inset-0 bg-slate-950/40 flex items-center justify-center transition-opacity group-hover:bg-slate-950/20">
+            <div
+              class="w-20 h-20 rounded-full bg-academic-gradient flex items-center justify-center shadow-2xl scale-100 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-white text-4xl ml-1"
+                    style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+            </div>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4 glass-panel p-4 rounded-xl">
+            <p class="text-xs font-semibold text-white/80">Preview: "Breaking the Grid" (02:45)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <!-- Course Content (Left Column) -->
+      <div class="lg:col-span-8 space-y-12">
+        <!-- Instructor Info -->
+        <section class="bg-surface-container-low p-8 rounded-xl ring-1 ring-outline-variant/10">
+          <div class="flex items-center gap-6 mb-6">
+            <div class="w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-primary/20">
+              <img alt="Instructor Avatar" class="w-full h-full object-cover"
+                   data-alt="close-up portrait of a middle-aged creative director with glasses and a thoughtful expression in a workspace"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU-ZmmF_AmkacFSbSTfvQPs9SAA0_xz_LDzZKb9yJiyGQBXWrBxjfrfXZM1E4mnxpsavML6at7Hd8rTHrA_tFoSPZU-x4KUIMdRX4VG0IGznK7g9-aLoZTrVwUKbtJGChcpHPiWipha--GPk3Nr_J-6KPRj0QxTJUQFrvf452kb5_VTiU4PJEyVMJF9_ky1mGUaG58_qc4QC-V5c6UxxPe79rPxIdbdICc9uB8EWuObCN8y63OimGRu8AmC_DcBnTjHmgxRfW-YzMD"/>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold">Julian Sterling</h3>
+              <p class="text-primary-dim font-medium">Principal Design Curator at Museum-Labs</p>
+              <div class="flex gap-4 mt-2">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">verified</span> Top Instructor
+                                    </span>
+                <span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">language</span> English, French
+                                    </span>
+              </div>
+            </div>
+          </div>
+          <p class="text-on-surface-variant leading-relaxed">
+            Julian has spent over 15 years crafting digital experiences for premium brands. In this course, he breaks
+            down the methodology of "The Digital Curator"—a philosophy that prioritizes intentional whitespace, tonal
+            depth, and editorial-grade typography.
+          </p>
+        </section>
+        <!-- Course Overview Bento Grid -->
+        <section>
+          <h2 class="text-2xl font-bold mb-8">What you'll master</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-surface-container p-6 rounded-xl space-y-4">
+              <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">architecture</span>
+              </div>
+              <h4 class="font-bold">Asymmetric Grid Systems</h4>
+              <p class="text-sm text-on-surface-variant">Learn to break standard bootstrap grids without losing
+                functional balance.</p>
+            </div>
+            <div class="bg-surface-container p-6 rounded-xl space-y-4">
+              <div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+                <span class="material-symbols-outlined">palette</span>
+              </div>
+              <h4 class="font-bold">Tonal Color Theory</h4>
+              <p class="text-sm text-on-surface-variant">Master dark mode layouts using surface-container tiers instead
+                of lines.</p>
+            </div>
+            <div class="bg-surface-container p-6 rounded-xl space-y-4">
+              <div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+                <span class="material-symbols-outlined">history_edu</span>
+              </div>
+              <h4 class="font-bold">Editorial Typography</h4>
+              <p class="text-sm text-on-surface-variant">Achieve high-end contrast using massive headline-body scale
+                differences.</p>
+            </div>
+          </div>
+        </section>
+        <!-- Module List (Accordion Style) -->
+        <section>
+          <div class="flex justify-between items-end mb-8">
+            <h2 class="text-2xl font-bold">Course Curriculum</h2>
+            <span class="text-sm text-slate-500">6 Modules • 48 Lessons</span>
+          </div>
+          <div class="space-y-4">
+            <!-- Module 1 -->
+            <div class="bg-surface-container-low rounded-xl overflow-hidden ring-1 ring-outline-variant/15">
+              <div
+                class="p-5 flex items-center justify-between cursor-pointer hover:bg-surface-container transition-colors">
+                <div class="flex items-center gap-4">
+                  <span class="text-xl font-black text-slate-700">01</span>
+                  <div>
+                    <h4 class="font-bold">The Curator's Philosophy</h4>
+                    <p class="text-xs text-on-surface-variant">4 Lessons • 1h 20m</p>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-500">expand_more</span>
+              </div>
+              <div class="px-5 pb-5 divide-y divide-outline-variant/10">
+                <div class="py-3 flex items-center justify-between group">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                    <span class="text-sm group-hover:text-primary transition-colors">Defining the Museum-Grade Experience</span>
+                  </div>
+                  <span class="text-xs text-slate-500">15:00</span>
+                </div>
+                <div class="py-3 flex items-center justify-between group">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-slate-500">lock</span>
+                    <span class="text-sm text-slate-400">Psychology of Tonal Depth</span>
+                  </div>
+                  <span class="text-xs text-slate-500">24:45</span>
+                </div>
+              </div>
+            </div>
+            <!-- Module 2 (Active/Expanded) -->
+            <div class="bg-surface-container rounded-xl overflow-hidden ring-2 ring-[#6C5CE7]/30">
+              <div class="p-5 flex items-center justify-between bg-surface-container-high cursor-pointer">
+                <div class="flex items-center gap-4">
+                  <span class="text-xl font-black text-[#6C5CE7]">02</span>
+                  <div>
+                    <h4 class="font-bold">Breaking the Modern Grid</h4>
+                    <p class="text-xs text-on-surface-variant">8 Lessons • 3h 45m</p>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-[#6C5CE7]">expand_less</span>
+              </div>
+              <div class="px-5 pb-5 divide-y divide-outline-variant/10 bg-surface-container">
+                <div class="py-4 flex items-center justify-between group">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                    <span class="text-sm font-medium">Asymmetry as a Functional Choice</span>
+                  </div>
+                  <span class="text-xs text-slate-500">12:30</span>
+                </div>
+                <div class="py-4 flex items-center justify-between group">
+                  <div class="flex items-center gap-3 text-secondary">
+                    <span class="material-symbols-outlined">description</span>
+                    <span class="text-sm font-medium">Resource: Layout Templates</span>
+                  </div>
+                  <span class="text-xs text-slate-500">PDF</span>
+                </div>
+                <div class="py-4 flex items-center justify-between group">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-slate-500">play_circle</span>
+                    <span class="text-sm text-on-surface">The White-Space Anchor Technique</span>
+                  </div>
+                  <span class="text-xs text-slate-500">32:15</span>
+                </div>
+              </div>
+            </div>
+            <!-- Module 3 -->
+            <div class="bg-surface-container-low rounded-xl overflow-hidden ring-1 ring-outline-variant/15">
+              <div
+                class="p-5 flex items-center justify-between cursor-pointer hover:bg-surface-container transition-colors">
+                <div class="flex items-center gap-4">
+                  <span class="text-xl font-black text-slate-700">03</span>
+                  <div>
+                    <h4 class="font-bold">Color Topography</h4>
+                    <p class="text-xs text-on-surface-variant">6 Lessons • 2h 10m</p>
+                  </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-500">expand_more</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Enrollment Sticky Sidebar (Right Column) -->
+      <div class="lg:col-span-4">
+        <div class="sticky top-28 space-y-6">
+          <div class="glass-panel p-8 rounded-2xl ring-1 ring-white/10 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
+            <div class="flex items-baseline gap-2 mb-6">
+              <span class="text-4xl font-bold">$129.00</span>
+              <span class="text-slate-500 line-through text-lg">$249.00</span>
+              <span class="text-secondary font-bold text-sm ml-auto bg-secondary/10 px-2 py-1 rounded">50% OFF</span>
+            </div>
+            <div class="space-y-4 mb-8">
+              <button
+                class="w-full py-4 bg-academic-gradient rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-indigo-500/30">
+                Enroll in Course
+              </button>
+              <button
+                class="w-full py-4 bg-surface-bright ring-1 ring-outline-variant/30 rounded-xl font-bold hover:bg-white/10 transition-all">
+                Add to Wishlist
+              </button>
+            </div>
+            <div class="space-y-4 border-t border-outline-variant/15 pt-6">
+              <p class="text-sm font-bold uppercase tracking-wider text-slate-500">This course includes:</p>
+              <ul class="space-y-3">
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">all_inclusive</span>
+                  Full lifetime access
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">devices</span>
+                  Access on mobile and TV
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">military_tech</span>
+                  Certificate of completion
+                </li>
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">download</span>
+                  12 downloadable resources
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Secondary Widget: Upcoming Live Q&A -->
+          <div
+            class="bg-surface-container-high p-6 rounded-2xl ring-1 ring-outline-variant/20 relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span class="text-xs font-bold text-white tracking-widest uppercase">Live Q&amp;A Session</span>
+              </div>
+              <h4 class="font-bold mb-1">Advanced Grid Critiques</h4>
+              <p class="text-xs text-on-surface-variant mb-4">Tomorrow, 10:00 AM (PDT)</p>
+              <button class="text-sm font-bold text-secondary flex items-center gap-2 group">
+                Set Reminder <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </button>
+            </div>
+            <span
+              class="material-symbols-outlined absolute -bottom-4 -right-4 text-8xl text-white/5 pointer-events-none">live_tv</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Spacer for Bottom -->
+  <div class="h-24"></div>
+</main>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnSphere Player - Course Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-dim": "#762d96",
+                      "on-primary-fixed": "#000000",
+                      "on-primary-fixed-variant": "#250094",
+                      "tertiary-fixed-dim": "#d384f2",
+                      "on-surface": "#2c2f31",
+                      "secondary-fixed": "#5ffbd6",
+                      "primary-dim": "#4935c3",
+                      "tertiary": "#843aa3",
+                      "surface-container-highest": "#d9dde0",
+                      "secondary-dim": "#005b4a",
+                      "on-secondary-fixed": "#00483b",
+                      "surface-variant": "#d9dde0",
+                      "secondary-fixed-dim": "#4decc9",
+                      "inverse-on-surface": "#9a9d9f",
+                      "primary": "#5543cf",
+                      "on-tertiary": "#ffedff",
+                      "secondary": "#006855",
+                      "on-tertiary-fixed": "#2c003f",
+                      "surface-container-high": "#dfe3e6",
+                      "outline-variant": "#abadaf",
+                      "outline": "#747779",
+                      "on-error-container": "#510017",
+                      "on-tertiary-container": "#520071",
+                      "background": "#f5f7f9",
+                      "error": "#b41340",
+                      "tertiary-fixed": "#e192ff",
+                      "primary-container": "#9e93ff",
+                      "on-secondary": "#c4ffec",
+                      "surface-container": "#e5e9eb",
+                      "error-container": "#f74b6d",
+                      "surface-container-low": "#eef1f3",
+                      "primary-fixed": "#9e93ff",
+                      "inverse-primary": "#8c7fff",
+                      "tertiary-container": "#e192ff",
+                      "surface": "#f5f7f9",
+                      "on-secondary-container": "#005d4c",
+                      "on-primary-container": "#1d007a",
+                      "on-error": "#ffefef",
+                      "surface-dim": "#d0d5d8",
+                      "on-secondary-fixed-variant": "#006855",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#5d0d7d",
+                      "error-dim": "#a70138",
+                      "inverse-surface": "#0b0f10",
+                      "on-primary": "#f5f0ff",
+                      "secondary-container": "#5ffbd6",
+                      "primary-fixed-dim": "#8f83ff",
+                      "on-surface-variant": "#595c5e",
+                      "surface-tint": "#5543cf",
+                      "surface-bright": "#f5f7f9",
+                      "on-background": "#2c2f31"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Inter"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift { background-color: #eef1f3; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d9dde0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen overflow-hidden">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-[260px] border-r border-slate-100 bg-white flex flex-col p-6 overflow-y-auto z-50">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">school</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#5543cf]">LearnSphere</h1>
+<p class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant font-semibold">Academic Curator</p>
+</div>
+</div>
+<nav class="flex flex-col space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">dashboard</span>
+<span class="font-medium text-sm tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-[#5543cf]/10 text-[#5543cf] font-semibold rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl">school</span>
+<span class="font-medium text-sm tracking-tight">My Courses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">explore</span>
+<span class="font-medium text-sm tracking-tight">Explore</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">route</span>
+<span class="font-medium text-sm tracking-tight">Learning Path</span>
+</a>
+<div class="my-4 border-t border-slate-100/50"></div>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">trending_up</span>
+<span class="font-medium text-sm tracking-tight">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">mail</span>
+<span class="font-medium text-sm tracking-tight">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-colors duration-200 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-[#5543cf]">settings</span>
+<span class="font-medium text-sm tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6">
+<div class="bg-surface-container-low p-4 rounded-xl">
+<p class="text-xs font-bold text-on-surface-variant mb-2">PRO PLAN</p>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-3">Unlock advanced analytics and certificates.</p>
+<button class="w-full bg-primary text-white py-2 rounded-lg text-xs font-bold shadow-sm">Upgrade Now</button>
+</div>
+</div>
+</aside>
+<!-- Main Player Layout -->
+<main class="ml-[260px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Navigation -->
+<header class="sticky top-0 w-full h-[72px] z-40 bg-white/80 backdrop-blur-xl flex justify-between items-center px-8 shadow-[0px_20px_40px_rgba(15,23,42,0.06)]">
+<div class="flex items-center gap-4 w-1/3">
+<div class="relative w-full max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50 placeholder-slate-400" placeholder="Search lessons..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary">emoji_events</span>
+<span class="text-xs font-bold text-on-surface">1,240 XP</span>
+</div>
+<div class="flex gap-4">
+<button class="text-slate-500 hover:text-primary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-all">
+<span class="material-symbols-outlined">contrast</span>
+</button>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" data-alt="professional headshot of a creative entrepreneur with a warm smile in a modern bright studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1JHCbCxg9F59syrYIp7SWTYP1xgdRpyIoMAuHybkYX2N2G6DHV0c7GVBSTstvU0H52tigXIZqxITIe28erUhx_4NFyCNQ2tdzhHNI0iCCVGmw6ufjgkdcJ3PZ-9Oi3wloIPQp_tgLivwITO333ISH4s764LJKK9nrBuLdmmDPd6TVFTohYTbhti5GVz37vzPE913Gopf285xzF4BXJOQzHciktg7H23ZDD5eQgVdnzXVCJcFfD3UMwvTW3wpcVC69AVYzg9oMYHdq"/>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Column 1: Course Content -->
+<section class="w-80 bg-surface-container-low border-r border-slate-100 flex flex-col overflow-hidden">
+<div class="p-6 bg-white/50 backdrop-blur-sm border-b border-slate-100">
+<h2 class="text-sm font-bold text-on-surface mb-1">Course Content</h2>
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-secondary-container w-[45%]"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">45%</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+<!-- Module 1 -->
+<div>
+<div class="flex items-center justify-between px-2 mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Module 01: Basics</span>
+<span class="text-[10px] font-medium text-on-surface-variant">4/8</span>
+</div>
+<div class="space-y-1">
+<button class="w-full flex items-start gap-3 p-3 rounded-xl bg-white shadow-sm text-left">
+<span class="material-symbols-outlined text-secondary text-sm mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex-1">
+<p class="text-xs font-semibold text-on-surface leading-snug">01. Introduction to the Platform</p>
+<p class="text-[10px] text-slate-400 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[12px]">schedule</span> 04:20</p>
+</div>
+</button>
+<button class="w-full flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20 text-left">
+<div class="w-4 h-4 rounded-full border-2 border-primary/40 mt-0.5 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold text-primary leading-snug">02. Course Overview &amp; Learning Outcomes</p>
+<p class="text-[10px] text-primary/70 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[12px]">play_circle</span> 12:45</p>
+</div>
+</button>
+<button class="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-white transition-colors text-left group">
+<span class="material-symbols-outlined text-slate-300 text-sm mt-0.5 group-hover:text-primary">circle</span>
+<div class="flex-1">
+<p class="text-xs font-medium text-on-surface-variant leading-snug">03. Setting up your Workspace</p>
+<p class="text-[10px] text-slate-400 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[12px]">schedule</span> 08:15</p>
+</div>
+</button>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="pt-2">
+<div class="flex items-center justify-between px-2 mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Module 02: Core Strategy</span>
+<span class="text-[10px] font-medium text-on-surface-variant">0/12</span>
+</div>
+<div class="space-y-1">
+<button class="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-white transition-colors text-left group">
+<span class="material-symbols-outlined text-slate-300 text-sm mt-0.5 group-hover:text-primary">circle</span>
+<div class="flex-1">
+<p class="text-xs font-medium text-on-surface-variant leading-snug">04. Understanding Market Needs</p>
+<p class="text-[10px] text-slate-400 flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-[12px]">lock</span> 15:00</p>
+</div>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Column 2: Video Player & Content -->
+<section class="flex-1 flex flex-col overflow-y-auto custom-scrollbar bg-white">
+<div class="aspect-video w-full relative bg-black group overflow-hidden">
+<img alt="Video Placeholder" class="w-full h-full object-cover opacity-80" data-alt="clean minimal cinematic video frame showing an overhead view of a designer sketching on a white paper in a sunlit studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUpfTXfNFPEoaCiR3yEznwjpKoc8ATHXjGPrFMF7AWZjauvCgJ9mjtTwWJ_pVcWeLLtjYqDt9BKeeKdv7oaNi4-it8Rtpml62895RR3a4deZWmPzsZlcW6G9INuBEFdaO7IOYgujO24_F0VYFh1Wj3itTasc574MzvdS4Awitg1AO4gD_J6M_D28zwPCKINNS0awtSDCfXj5H4Yp2aP81fgnbNuwvBEzWrSX0S1k3xiNX6fVntDvKCx9X3DPNXPkE4L9DYTBXZubnZ"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-20 h-20 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-2xl hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-5xl ml-1" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<!-- Video Controls Overlays (Simplified for UI) -->
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-4 text-white">
+<span class="material-symbols-outlined">play_arrow</span>
+<span class="material-symbols-outlined">volume_up</span>
+<span class="text-xs font-medium">12:45 / 24:00</span>
+</div>
+<div class="flex items-center gap-4 text-white">
+<span class="material-symbols-outlined">settings</span>
+<span class="material-symbols-outlined">fullscreen</span>
+</div>
+</div>
+</div>
+<div class="p-10 max-w-4xl mx-auto w-full">
+<div class="flex justify-between items-start mb-8">
+<div>
+<span class="inline-flex px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider mb-3">Currently Viewing</span>
+<h1 class="text-3xl font-extrabold tracking-tight text-on-surface mb-2 leading-none">Course Overview &amp; Learning Outcomes</h1>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<img class="w-6 h-6 rounded-full" data-alt="portrait of a senior professor in a library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJhDNZ1UgmBuw8N2ZXhgw-6ohJLaSPhp5k8pnrFDsCuT8Lc4WsIvmK__10HKzez7wucxwJHkC7XUXmRufiEMpbNP54QvKcrNIjv4V8ZfoBBk5rkohbQfz0t4vPmmbkhgqo6wl_49UlZ_mmJjuSJKDDJMT5o2caIbQ9HdDpxGaHSftqOsXm8IfGhK9rPGMdhuUEclqFMu0wnn7L4fmjIN-b-mrAdypHlY6f5boUZdNBc9EPgXhObKBa76srYn8jQ4QmFJGbd5-aaVaU"/>
+<span class="text-xs font-medium text-on-surface-variant">Dr. Aris Thorne</span>
+</div>
+<div class="w-1 h-1 bg-slate-300 rounded-full"></div>
+<span class="text-xs text-on-surface-variant">Last updated Oct 2023</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 text-slate-500 transition-colors">
+<span class="material-symbols-outlined text-xl">bookmark</span>
+</button>
+<button class="p-2.5 rounded-xl border border-slate-100 hover:bg-slate-50 text-slate-500 transition-colors">
+<span class="material-symbols-outlined text-xl">share</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-5 gap-10">
+<div class="col-span-3 space-y-10">
+<div>
+<h3 class="text-lg font-bold text-on-surface mb-4">What you'll learn</h3>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex gap-3 p-4 rounded-2xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<p class="text-sm text-on-surface-variant leading-relaxed">Establish a clear roadmap for your learning journey and define key performance indicators for success.</p>
+</div>
+<div class="flex gap-3 p-4 rounded-2xl bg-surface-container-low/50">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<p class="text-sm text-on-surface-variant leading-relaxed">Understand the foundational principles of the Digital Curator philosophy in modern pedagogy.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-2 space-y-8">
+<div>
+<h3 class="text-lg font-bold text-on-surface mb-4">Resources</h3>
+<div class="space-y-2">
+<a class="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+<div>
+<p class="text-xs font-bold text-on-surface">Course Syllabus.pdf</p>
+<p class="text-[10px] text-on-surface-variant">PDF • 2.4 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">download</span>
+</a>
+<a class="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">link</span>
+<div>
+<p class="text-xs font-bold text-on-surface">Reading List</p>
+<p class="text-[10px] text-on-surface-variant">External Link</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Column 3: Notes & Discussion -->
+<section class="w-96 bg-white border-l border-slate-100 flex flex-col overflow-hidden">
+<div class="flex border-b border-slate-100">
+<button class="flex-1 py-4 text-sm font-bold text-primary border-b-2 border-primary">Notes</button>
+<button class="flex-1 py-4 text-sm font-semibold text-slate-400 hover:text-on-surface transition-colors">Discussion</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+<div class="flex justify-between items-center">
+<h4 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Timestamped Notes</h4>
+<button class="text-xs font-bold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">add</span> Add Note
+                        </button>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-2xl bg-surface-container-low border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<span class="px-2 py-0.5 rounded bg-primary text-[10px] font-bold text-white">04:20</span>
+<span class="material-symbols-outlined text-slate-300 text-sm group-hover:text-primary">edit</span>
+</div>
+<p class="text-sm text-on-surface leading-relaxed">Key takeaway: The "No-Line" rule applies to UI separation. Use tonal shifts instead of 1px borders.</p>
+</div>
+<div class="p-4 rounded-2xl bg-surface-container-low border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<span class="px-2 py-0.5 rounded bg-primary text-[10px] font-bold text-white">10:15</span>
+<span class="material-symbols-outlined text-slate-300 text-sm group-hover:text-primary">edit</span>
+</div>
+<p class="text-sm text-on-surface leading-relaxed">Dr. Thorne mentions the hierarchy of backgrounds: Surface Level 0 through 2.</p>
+</div>
+<!-- Empty State Illustration/Placeholder -->
+<div class="pt-10 flex flex-col items-center text-center px-4">
+<div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-slate-300 text-3xl">edit_note</span>
+</div>
+<p class="text-xs font-semibold text-on-surface mb-1">Stay Organized</p>
+<p class="text-[11px] text-slate-400 leading-relaxed">Your private notes are only visible to you. Use them to bookmark key insights from the lecture.</p>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-slate-100 bg-surface-container-lowest">
+<div class="relative">
+<textarea class="w-full bg-surface-container-low border-none rounded-xl text-sm p-4 h-24 focus:ring-2 focus:ring-primary/50 resize-none placeholder-slate-400" placeholder="Write a note at 12:45..."></textarea>
+<div class="absolute bottom-3 right-3 flex gap-2">
+<button class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

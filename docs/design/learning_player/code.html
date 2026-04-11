@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LearnSphere Player - Interactive Learning Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#e192ff",
+                        "primary-fixed-dim": "#8f83ff",
+                        "on-tertiary-container": "#41005a",
+                        "on-surface-variant": "#a3aac4",
+                        "surface-tint": "#aca3ff",
+                        "inverse-on-surface": "#4d556b",
+                        "surface-container": "#0f1930",
+                        "inverse-primary": "#5948d3",
+                        "surface": "#060e20",
+                        "error": "#ff6e84",
+                        "primary-fixed": "#9e93ff",
+                        "on-primary-container": "#1d007a",
+                        "surface-variant": "#192540",
+                        "secondary-fixed": "#5ffbd6",
+                        "surface-dim": "#060e20",
+                        "surface-container-low": "#091328",
+                        "on-primary-fixed-variant": "#250094",
+                        "on-error": "#490013",
+                        "on-background": "#dee5ff",
+                        "surface-bright": "#1f2b49",
+                        "on-primary": "#27009a",
+                        "on-secondary-fixed-variant": "#006855",
+                        "tertiary-fixed": "#e192ff",
+                        "outline": "#6d758c",
+                        "on-tertiary-fixed-variant": "#5d0d7d",
+                        "error-container": "#a70138",
+                        "surface-container-highest": "#192540",
+                        "on-primary-fixed": "#000000",
+                        "secondary-dim": "#4decc9",
+                        "surface-container-high": "#141f38",
+                        "on-tertiary-fixed": "#2c003f",
+                        "tertiary-container": "#d384f2",
+                        "on-secondary-container": "#defff3",
+                        "tertiary-dim": "#cd7fec",
+                        "primary": "#aca3ff",
+                        "primary-dim": "#6f5fea",
+                        "background": "#060e20",
+                        "secondary-fixed-dim": "#4decc9",
+                        "surface-container-lowest": "#000000",
+                        "on-secondary-fixed": "#00483b",
+                        "outline-variant": "#40485d",
+                        "on-error-container": "#ffb2b9",
+                        "error-dim": "#d73357",
+                        "on-secondary": "#005d4c",
+                        "on-tertiary": "#520071",
+                        "on-surface": "#dee5ff",
+                        "inverse-surface": "#faf8ff",
+                        "primary-container": "#9e93ff",
+                        "secondary-container": "#006b58",
+                        "tertiary-fixed-dim": "#d384f2",
+                        "secondary": "#5ffbd6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(6, 14, 32, 0.8);
+            backdrop-filter: blur(20px);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #6C5CE7, #8E44AD);
+        }
+        .momentum-gradient {
+            background: linear-gradient(135deg, #00C9A7, #4D96FF);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #192540;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex overflow-hidden">
+<!-- Sidebar (As per JSON: SideNavBar) -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-slate-950/80 backdrop-blur-xl flex flex-col p-6 z-50 shadow-2xl shadow-indigo-500/10 border-r border-white/5">
+<div class="flex items-center gap-3 mb-10">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6C5CE7] to-[#8E44AD] flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">school</span>
+</div>
+<span class="text-2xl font-bold tracking-tight text-white">LearnSphere</span>
+</div>
+<nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<!-- My Courses (ACTIVE based on Page 4 context) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-[#6C5CE7]/10 text-[#6C5CE7] rounded-xl font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-medium">My Courses</span>
+</a>
+<!-- Explore -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-medium">Explore</span>
+</a>
+<!-- Learning Path -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+<span class="font-medium">Learning Path</span>
+</a>
+<!-- Assignments -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-medium">Assignments</span>
+</a>
+<!-- Quizzes -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="font-medium">Quizzes</span>
+</a>
+<!-- Progress -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-medium">Progress</span>
+</a>
+<!-- Messages -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="font-medium">Messages</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5">
+<div class="flex items-center gap-3">
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-[#6C5CE7]/20" data-alt="portrait of a professional man in a minimalist workspace with soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9DeAYnhvgO7JCSOPw5ydljXbVobqb09c50vDB2uli4YfyCPQb51Zx_1Z7iwXwuo6uRiX0eZOqcNmP23trTE6xP3mVe4DsKMsPLebccOsg-6b7B55U41oHPKlO1915tmcusTBGjgaohhEdlaYOAkoHAINpTtuN5iAPgk5RJlP0A7ilEF4Xp_uuNgBBkSZvjnC_hm9hdEZoanKkptym0XXidDa18CutGSiFpUCtb4P-JqQlWC49O0HJevsI4dajuIXg1WaH6DURuwK_"/>
+<div>
+<p class="text-sm font-semibold text-white">Alex Chen</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Academic Curator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 ml-[260px] flex flex-col h-screen relative bg-surface-container-low">
+<!-- Top Bar (As per JSON: TopNavBar) -->
+<header class="sticky top-0 z-40 w-full h-[72px] bg-slate-950/80 backdrop-blur-xl flex justify-between items-center px-8">
+<div class="flex items-center gap-6">
+<div class="flex items-center bg-surface-container-lowest rounded-full px-4 py-2 border border-outline-variant/15 w-80 focus-within:ring-2 focus-within:ring-[#6C5CE7]/50 transition-all">
+<span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-on-surface placeholder:text-slate-500" placeholder="Search lessons..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-white/5 rounded-full p-2 transition-all relative">
+<span class="material-symbols-outlined text-slate-400" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:bg-white/5 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-slate-400" data-icon="mail">mail</span>
+</button>
+<button class="hover:bg-white/5 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-slate-400" data-icon="contrast">contrast</span>
+</button>
+</div>
+</header>
+<!-- Learning Workspace Grid -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Sidebar: Module List (25%) -->
+<section class="w-80 border-r border-outline-variant/10 flex flex-col bg-surface-container-low">
+<div class="p-6">
+<h3 class="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">Course Content</h3>
+<div class="flex items-center justify-between bg-surface-container-high p-4 rounded-xl mb-6">
+<div>
+<p class="text-xs text-slate-500 mb-1">Total Progress</p>
+<p class="text-lg font-bold">64% Complete</p>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary flex items-center justify-center text-[10px] font-bold">
+                            64%
+                        </div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar px-2">
+<!-- Module 1 -->
+<div class="mb-4">
+<button class="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 rounded-xl transition-all group">
+<span class="font-semibold text-sm">1. Introduction to Digital Ethics</span>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary">expand_more</span>
+</button>
+<div class="mt-1 space-y-1 px-2">
+<div class="flex items-center gap-3 p-3 bg-primary/5 rounded-xl border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<div class="flex-1">
+<p class="text-xs font-medium text-white">Course Overview</p>
+<p class="text-[10px] text-slate-500">12:45</p>
+</div>
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+</div>
+<div class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl transition-all cursor-pointer">
+<span class="material-symbols-outlined text-slate-500 text-lg">play_circle</span>
+<div class="flex-1">
+<p class="text-xs font-medium text-slate-400">Historical Foundations</p>
+<p class="text-[10px] text-slate-500">24:10</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="mb-4">
+<button class="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 rounded-xl transition-all">
+<span class="font-semibold text-sm">2. Algorithmic Bias</span>
+<span class="material-symbols-outlined text-slate-500">chevron_right</span>
+</button>
+</div>
+<!-- Module 3 -->
+<div class="mb-4">
+<button class="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 rounded-xl transition-all">
+<span class="font-semibold text-sm">3. Data Privacy &amp; Sovereignty</span>
+<span class="material-symbols-outlined text-slate-500">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Center: Lesson Viewer (50%+) -->
+<section class="flex-1 flex flex-col bg-surface overflow-y-auto custom-scrollbar">
+<div class="p-8 max-w-5xl mx-auto w-full">
+<!-- Video Player Container -->
+<div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-black group mb-8">
+<img alt="Educational Video Content" class="w-full h-full object-cover opacity-60" data-alt="cinematic shot of abstract digital nodes and connections with blue and purple glowing lights in a dark void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCksPgAKnwpc5FcyfKzmANSE8cXSsC8q2mkAXv6z5yNIT0YpiTK2D_okrxddcA6EyW6Yio-02AwNnwp82j6EEmDxtmRRTV_x5SBCi9zrzhSbICVbSIS2h_9UZx3kqdlIf9dAJ7MqexANAy-h-CaI6CtZLewcp5mSGfe4Pj18BY9kOn-vGMt-6_YNHwTkftivp4ePQ-jU7jSBDIvRuWR9jsbvQiUl7g9lQIg8njKLXpoE_-8bh8WxR-ZtnuN0dVERA6fG48r0nLZgrwH"/>
+<!-- Video Controls Overlay (Simulation) -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-white/20 rounded-full mb-6 cursor-pointer relative">
+<div class="absolute left-0 top-0 h-full w-[45%] bg-primary rounded-full"></div>
+<div class="absolute left-[45%] top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-white cursor-pointer hover:text-primary">replay_10</span>
+<span class="material-symbols-outlined text-white text-4xl cursor-pointer hover:scale-110 transition-transform">play_arrow</span>
+<span class="material-symbols-outlined text-white cursor-pointer hover:text-primary">forward_10</span>
+<div class="flex items-center gap-2 ml-4">
+<span class="material-symbols-outlined text-white text-sm">volume_up</span>
+<div class="w-16 h-1 bg-white/30 rounded-full">
+<div class="w-[70%] h-full bg-white rounded-full"></div>
+</div>
+</div>
+<span class="text-xs text-white font-medium">05:22 / 12:45</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-white cursor-pointer hover:text-primary">closed_caption</span>
+<span class="material-symbols-outlined text-white cursor-pointer hover:text-primary">settings</span>
+<span class="material-symbols-outlined text-white cursor-pointer hover:text-primary">fullscreen</span>
+</div>
+</div>
+</div>
+<!-- Center Play Button (Visible when not playing) -->
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-20 h-20 rounded-full primary-gradient flex items-center justify-center shadow-xl hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+</div>
+<!-- Lesson Info -->
+<div class="flex justify-between items-start mb-12">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded uppercase tracking-wider">Module 1.1</span>
+<span class="text-slate-500 text-sm">Published Oct 24, 2023</span>
+</div>
+<h1 class="text-3xl font-bold text-white mb-4">Course Overview &amp; Learning Outcomes</h1>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-2">
+<img alt="Student" class="w-6 h-6 rounded-full border border-surface" data-alt="close up headshot of a student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDcf3zbGsR7QtOIduXj9AxAJi-hcg3Lyg3kbm_N-Fo8zCXcXQXwSu6lhYb49M_LwO1k8uikx5RDQ_ivezihJCj6WwvwRg4FS8zpMfCGoGKxk4t9nwkxyQCMXtrLhQbvZQm7sAohKRch-HmhpF-zUaQGudpKHBDhuwQOes8fFzOp3olYxaBzbghEa34eqUYLlyqYtjoroimRrKqw4m_S62nOtNWoeLjfJvTz0Wc9OQLGgB9kBcuI5WS2pEL3Ur2vKaG3pFBebd5xV_v"/>
+<img alt="Student" class="w-6 h-6 rounded-full border border-surface" data-alt="close up headshot of a smiling young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMA7OuA5bg7lZ3ql09ysk1K_3ayCr2EIkxYILbwY7foDsNksrQ6DzfYQA9c97htqluO-9YvKaiAZVUkLRG5Rx1Z2WB_viq70vHJLWtfACCy2D_JCkyAgoZ8PrO4H-R75QNio2xQ6TrfPG2vVb2DZ5NAeZ_G4-6GHQGVY3bX5Dai8L9Vii0lqxCjyz_o6W_wgudWncnj3BOw_M6zkVA8D2FB4Y1pUnr8GEoFKuJi4FyaWQSSKll8IoKHVTTRs3d_7RzF-MckKsr2gih"/>
+<div class="w-6 h-6 rounded-full bg-surface-container-highest border border-surface flex items-center justify-center text-[8px] font-bold text-slate-400">+12k</div>
+</div>
+<span class="text-xs text-slate-400">Students have completed this lesson</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-bright transition-all border border-outline-variant/15">
+<span class="material-symbols-outlined text-sm">bookmark</span>
+<span class="text-sm font-medium">Bookmark</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container-high hover:bg-surface-bright transition-all border border-outline-variant/15">
+<span class="material-symbols-outlined text-sm">share</span>
+<span class="text-sm font-medium">Share</span>
+</button>
+</div>
+</div>
+<!-- Bento Content Area -->
+<div class="grid grid-cols-2 gap-6 pb-20">
+<div class="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/5">
+<h4 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">What you'll learn</h4>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 text-sm text-slate-300">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                                    Understand the ethical implications of AI development.
+                                </li>
+<li class="flex items-start gap-3 text-sm text-slate-300">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                                    Identify common types of algorithmic bias.
+                                </li>
+<li class="flex items-start gap-3 text-sm text-slate-300">
+<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
+                                    Analyze real-world case studies of digital privacy breaches.
+                                </li>
+</ul>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/5">
+<h4 class="text-sm font-bold uppercase tracking-widest text-primary mb-4">Resources</h4>
+<div class="space-y-3">
+<a class="flex items-center justify-between p-3 rounded-xl bg-surface-container-high hover:bg-surface-bright transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">picture_as_pdf</span>
+<span class="text-sm font-medium">Ethics_Framework.pdf</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-500 group-hover:text-primary">download</span>
+</a>
+<a class="flex items-center justify-between p-3 rounded-xl bg-surface-container-high hover:bg-surface-bright transition-all group" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">link</span>
+<span class="text-sm font-medium">Recommended Readings</span>
+</div>
+<span class="material-symbols-outlined text-xs text-slate-500 group-hover:text-primary">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Notes/Discussion (25%) -->
+<section class="w-80 border-l border-outline-variant/10 flex flex-col bg-surface-container-low">
+<div class="flex border-b border-outline-variant/10">
+<button class="flex-1 py-4 text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary">Notes</button>
+<button class="flex-1 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-on-surface transition-colors">Discussion</button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6">
+<div class="flex justify-between items-center mb-6">
+<span class="text-xs text-slate-500">2 Notes in this lesson</span>
+<button class="text-xs font-bold text-primary hover:underline">+ Add Note</button>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-high p-4 rounded-xl border-l-2 border-primary/40">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">02:45</span>
+<span class="material-symbols-outlined text-xs text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed italic">"Digital ethics is not just about compliance, but about human dignity in the age of data."</p>
+</div>
+<div class="bg-surface-container-high p-4 rounded-xl border-l-2 border-outline-variant/40">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-slate-500 px-2 py-0.5 bg-white/5 rounded">08:12</span>
+<span class="material-symbols-outlined text-xs text-slate-500 cursor-pointer">more_horiz</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">Review the concept of 'Sovereignty' as it pertains to localized data storage.</p>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-outline-variant/10">
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant/15 rounded-xl p-3 text-xs focus:ring-1 focus:ring-primary min-h-[100px] resize-none" placeholder="Take a quick note..."></textarea>
+<button class="absolute bottom-3 right-3 p-2 bg-primary rounded-lg text-on-primary hover:scale-105 transition-transform shadow-lg">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom: Navigation & Progress -->
+<footer class="h-20 bg-slate-950 border-t border-white/5 flex items-center px-8 justify-between z-50">
+<div class="flex items-center gap-8 flex-1 max-w-4xl">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center hover:bg-surface-bright transition-all text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="hidden sm:block">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Previous</p>
+<p class="text-xs font-semibold text-slate-400">Course Intro</p>
+</div>
+</div>
+<!-- Global Progress Bar -->
+<div class="flex-1 px-4">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Overall Completion</span>
+<span class="text-[10px] font-bold text-primary">64%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full momentum-gradient" style="width: 64%"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right hidden sm:block">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Next Up</p>
+<p class="text-xs font-semibold text-white">Historical Foundations</p>
+</div>
+<button class="h-10 px-6 rounded-xl primary-gradient text-white text-xs font-bold flex items-center gap-2 hover:shadow-lg hover:shadow-indigo-500/20 transition-all">
+<span>Continue</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Contextual FAB (Suppressed on this focused Player page as per shell visibility rules, but replaced with 'Mark Complete' secondary action) -->
+<button class="ml-8 flex items-center gap-2 text-secondary hover:text-secondary-fixed transition-colors">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+<span class="text-xs font-bold uppercase tracking-widest">Mark as Complete</span>
+</button>
+</footer>
+</main>
+</body></html>

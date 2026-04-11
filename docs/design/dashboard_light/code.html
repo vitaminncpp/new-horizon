@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-dim": "#762d96",
+                    "on-primary-fixed": "#000000",
+                    "on-primary-fixed-variant": "#250094",
+                    "tertiary-fixed-dim": "#d384f2",
+                    "on-surface": "#2c2f31",
+                    "secondary-fixed": "#5ffbd6",
+                    "primary-dim": "#4935c3",
+                    "tertiary": "#843aa3",
+                    "surface-container-highest": "#d9dde0",
+                    "secondary-dim": "#005b4a",
+                    "on-secondary-fixed": "#00483b",
+                    "surface-variant": "#d9dde0",
+                    "secondary-fixed-dim": "#4decc9",
+                    "inverse-on-surface": "#9a9d9f",
+                    "primary": "#5543cf",
+                    "on-tertiary": "#ffedff",
+                    "secondary": "#006855",
+                    "on-tertiary-fixed": "#2c003f",
+                    "surface-container-high": "#dfe3e6",
+                    "outline-variant": "#abadaf",
+                    "outline": "#747779",
+                    "on-error-container": "#510017",
+                    "on-tertiary-container": "#520071",
+                    "background": "#f5f7f9",
+                    "error": "#b41340",
+                    "tertiary-fixed": "#e192ff",
+                    "primary-container": "#9e93ff",
+                    "on-secondary": "#c4ffec",
+                    "surface-container": "#e5e9eb",
+                    "error-container": "#f74b6d",
+                    "surface-container-low": "#eef1f3",
+                    "primary-fixed": "#9e93ff",
+                    "inverse-primary": "#8c7fff",
+                    "tertiary-container": "#e192ff",
+                    "surface": "#f5f7f9",
+                    "on-secondary-container": "#005d4c",
+                    "on-primary-container": "#1d007a",
+                    "on-error": "#ffefef",
+                    "surface-dim": "#d0d5d8",
+                    "on-secondary-fixed-variant": "#006855",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#5d0d7d",
+                    "error-dim": "#a70138",
+                    "inverse-surface": "#0b0f10",
+                    "on-primary": "#f5f0ff",
+                    "secondary-container": "#5ffbd6",
+                    "primary-fixed-dim": "#8f83ff",
+                    "on-surface-variant": "#595c5e",
+                    "surface-tint": "#5543cf",
+                    "surface-bright": "#f5f7f9",
+                    "on-background": "#2c2f31"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7f9;
+        }
+        .tonal-shift {
+            background-color: #eef1f3;
+        }
+        .asymmetric-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .asymmetric-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-[260px] border-r border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-screen p-6 overflow-y-auto z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-[#5543cf] dark:text-[#9e93ff]">LearnSphere</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-semibold">Academic Curator</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#5543cf]/10 text-[#5543cf] dark:bg-[#5543cf]/20 dark:text-[#9e93ff] font-semibold rounded-lg transition-transform scale-98 active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">My Courses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Explore</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">route</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Learning Path</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Assignments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Quizzes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Progress</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-[#5543cf] dark:hover:text-[#9e93ff] hover:bg-slate-50 dark:hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Inter'] font-medium text-sm tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6">
+<div class="p-4 rounded-xl bg-primary/5 border border-primary/10">
+<p class="text-xs font-bold text-primary mb-1 uppercase tracking-wider">Pro Access</p>
+<p class="text-xs text-on-surface-variant mb-3">Unlock all certifications and mentors.</p>
+<button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-dim transition-colors">Upgrade Now</button>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[260px] min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 w-full h-[72px] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex justify-between items-center px-8 shadow-[0px_20px_40px_rgba(15,23,42,0.06)]">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-2.5 pl-12 pr-4 text-sm focus:ring-2 focus:ring-[#5543cf]/50 transition-all outline-none" placeholder="Search courses, mentors, or resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 border-r border-slate-100 pr-6">
+<button class="text-slate-500 hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">contrast</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Alex Mercer</p>
+<p class="text-[11px] text-on-surface-variant font-medium">Design Major</p>
+</div>
+<img class="w-10 h-10 rounded-xl object-cover ring-2 ring-primary/10" data-alt="Close-up portrait of a young professional male with a friendly expression in soft, natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF_Ue5fOrBy_tsk_QpuV8UElgHl66YSkaWzQ0x8tOQipC-h6Dx360cAQRlqQesPtraUT-EEXnr43yxZN-ElcsWSO1n0GGxEgmH87qCkt0TAQyuCKDIf96ZV4u9ti-qHdPyXEn6vcSot4d8NTzUyN-OW8FWWJb_96VjWr8OohXsoh30reH-Lq9J0YQIlveVRx8TATl6c1srr59_vMWqmtW4PTKELZNiBgztU5_35pz4qh7ourNjIG38s9kCWLxsbG1VFCLMrFHpuZ25"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 max-w-[1400px] mx-auto">
+<!-- Welcome Header -->
+<div class="mb-10">
+<h2 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Welcome Alex!</h2>
+<p class="text-on-surface-variant max-w-2xl text-lg">Your progress this week has been exceptional. You're in the top 5% of design students this month.</p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] group hover:scale-[1.02] transition-transform">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Courses Completed</p>
+<h3 class="text-3xl font-extrabold text-on-surface">12</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] group hover:scale-[1.02] transition-transform">
+<div class="w-12 h-12 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Hours Learned</p>
+<h3 class="text-3xl font-extrabold text-on-surface">148</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] group hover:scale-[1.02] transition-transform">
+<div class="w-12 h-12 bg-tertiary/10 text-tertiary rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Quiz Average</p>
+<h3 class="text-3xl font-extrabold text-on-surface">92%</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] group hover:scale-[1.02] transition-transform">
+<div class="w-12 h-12 bg-orange-500/10 text-orange-600 rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Learning Streak</p>
+<h3 class="text-3xl font-extrabold text-on-surface">14 Days</h3>
+</div>
+</div>
+<div class="asymmetric-layout">
+<!-- Main Content Column -->
+<div class="space-y-10">
+<!-- Continue Learning Hero -->
+<section>
+<div class="flex items-end justify-between mb-6">
+<h3 class="text-2xl font-bold tracking-tight">Continue Learning</h3>
+<a class="text-primary font-semibold text-sm hover:underline" href="#">View Roadmap</a>
+</div>
+<div class="relative overflow-hidden rounded-[1.5rem] bg-surface-container-lowest shadow-[0px_20px_40px_rgba(15,23,42,0.06)] p-8">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[200px] text-primary rotate-12">auto_awesome</span>
+</div>
+<div class="relative z-10">
+<span class="inline-block px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full mb-4">Current Path</span>
+<h4 class="text-3xl font-bold mb-2">UI/UX Fundamentals</h4>
+<p class="text-on-surface-variant mb-8 max-w-md">Next up: Master the principles of Gestalt theory and how they apply to modern digital interfaces.</p>
+<div class="mb-8">
+<div class="flex justify-between items-end mb-2">
+<span class="text-sm font-bold">Overall Progress</span>
+<span class="text-sm font-bold text-primary">68%</span>
+</div>
+<div class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container" style="width: 68%"></div>
+</div>
+</div>
+<button class="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-dim transition-all shadow-lg shadow-primary/20">Resume Lesson</button>
+</div>
+</div>
+</section>
+<!-- Recommended For You -->
+<section>
+<h3 class="text-2xl font-bold tracking-tight mb-6">Recommended for You</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_20px_40px_rgba(15,23,42,0.06)] hover:translate-y-[-4px] transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="High-quality close up of a professional Figma design workspace with vibrant UI components on a monitor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXcwWnnIOK6ka7ZRpYfcGLbi_b19LzSsjaTqzhXYAJ6KIwsURqcLeqH4UUtX9UEhEeh51a9dEzDA7Jk0MAJQJhRl7p3dkBRWl9wux4FNG1JNev0JDL2mBwxMo1yG52B6vcz19NmwVVCKeMlFElRgD5APmvj52Xg_irJ_YT95OLG3xQa5UKIJBfw9905Qqgp6wi-lMFDkSlKCjhBm1HXiLEH3y3VkCDjUgAjn6HKgvTgbs8Yi2wMd_0uIjPSqoErdRAyTYMW_zjV1xT"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+</div>
+<div class="p-5">
+<h5 class="font-bold text-lg mb-1">Advanced Figma Systems</h5>
+<p class="text-on-surface-variant text-sm mb-4 line-clamp-2">Master variables, auto-layout 5.0, and complex component architectures.</p>
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-primary px-2 py-1 bg-primary/5 rounded">Intermediate</span>
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Female instructor portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyQCUg75izeH0Qz5kmb2OLAntr595N3A6jxU7K95-FQmR0q-xkn7BQ4wRP1UonfKSPdkO4IQ4UKKylAuOwmRv1RLl9bY6Z5oj6FVp7ePHkKFKzBgowhsOLG9-DtJ4HCYVvOYTDFPQKyUR3RB_-2wvESDNC_XXslpjOVMwEoxiXMSe2WiE5KatmwEDWn2884eBsEAX-YUcJb2BBjI9nrO0dgyB9vT3v9WwOVIZaVoGpaU7luHQFnIWRy9ycy2EE0aQL6gBxCcyf8TtP"/>
+<span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold">+3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_20px_40px_rgba(15,23,42,0.06)] hover:translate-y-[-4px] transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover" data-alt="Vibrant abstract rendering of React logo and code snippets with glowing neon light effects" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvlME6fYbFtVTLtHG-qiL_pC7nNYxxV8KOn92n77WCTXLv5PEP_mlQ9e2B4Xn4lWexDDzUDQUSoyyGPS_erduy7Dcue-Rba4kk-M2JrniIKaD4esaM22QYKCP9-D19aiRcCoJkcHJPoe6wNX4gIFuy5NlPi1TwcSLi3LPQpDkgq7hJSGV-_s8cXki77y5xmj37ss91OdZoUsy0BdYPrmxFAAfsG2FP15IazNEnAalM86bNg1XsoSVecFkIQtz3ylVfBfs_l3JbXRff"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+</div>
+<div class="p-5">
+<h5 class="font-bold text-lg mb-1">React for Designers</h5>
+<p class="text-on-surface-variant text-sm mb-4 line-clamp-2">Bridge the gap between vision and production with functional prototypes.</p>
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-secondary px-2 py-1 bg-secondary/5 rounded">Expert</span>
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-white object-cover" data-alt="Male instructor portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-Q0bhxkEt6OAHks9aJjDzeb7fnbmP2TaXhZn1jukeUGiI3InC2f5B0_vi4DdYMwkFNr-4vbG1Gj9q5yO4aCG6bG3_XoIAPeP7PTQrhmLX0FzxvpFImCJrNcBeyBBXjyz905BRMAStYxXFtTaM3nW_VNIHwb07Ko8p2E6gDLEUCopNSSHrSiOBlTLSTQOiQdqyNdygtP857wUb--8AQeUK32hYy2HcZ7WO6XPCGxTBIahi5qHxUvZ9S4Ek5lgrjavBlrNnsDxSAntx"/>
+<span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold">+1</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar Content Column -->
+<div class="space-y-10">
+<!-- Upcoming Deadlines -->
+<section>
+<h3 class="text-xl font-bold tracking-tight mb-6">Upcoming Deadlines</h3>
+<div class="space-y-4">
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] flex gap-4">
+<div class="w-12 h-12 flex-shrink-0 bg-error/10 text-error rounded-lg flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold uppercase">Oct</span>
+<span class="text-lg font-bold leading-tight">24</span>
+</div>
+<div>
+<h6 class="font-bold text-sm">Wireframe Case Study</h6>
+<p class="text-xs text-on-surface-variant mb-1">UI/UX Fundamentals</p>
+<span class="text-[10px] px-2 py-0.5 bg-error/10 text-error font-bold rounded">High Priority</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0px_20px_40px_rgba(15,23,42,0.06)] flex gap-4">
+<div class="w-12 h-12 flex-shrink-0 bg-surface-container-low text-on-surface-variant rounded-lg flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold uppercase">Oct</span>
+<span class="text-lg font-bold leading-tight">27</span>
+</div>
+<div>
+<h6 class="font-bold text-sm">Visual Design Quiz</h6>
+<p class="text-xs text-on-surface-variant mb-1">Principles Module</p>
+<span class="text-[10px] px-2 py-0.5 bg-secondary/10 text-secondary font-bold rounded">Quiz</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Activity -->
+<section>
+<h3 class="text-xl font-bold tracking-tight mb-6">Recent Activity</h3>
+<div class="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white ring-4 ring-white">
+<span class="material-symbols-outlined text-xs">play_arrow</span>
+</div>
+<p class="text-sm font-bold">Watched "Auto-layout Basics"</p>
+<p class="text-xs text-on-surface-variant">2 hours ago</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-white ring-4 ring-white">
+<span class="material-symbols-outlined text-xs">check</span>
+</div>
+<p class="text-sm font-bold">Passed Typography Quiz (98%)</p>
+<p class="text-xs text-on-surface-variant">Yesterday</p>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-tertiary flex items-center justify-center text-white ring-4 ring-white">
+<span class="material-symbols-outlined text-xs">forum</span>
+</div>
+<p class="text-sm font-bold">Commented on "Project Alpha"</p>
+<p class="text-xs text-on-surface-variant">2 days ago</p>
+</div>
+</div>
+</section>
+<!-- Insight Ghost Component -->
+<div class="p-6 rounded-xl bg-white/70 backdrop-blur-xl border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-sm">lightbulb</span>
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Curator Insight</span>
+</div>
+<p class="text-sm italic text-on-surface-variant leading-relaxed">"Studies show students who practice Figma 30 minutes a day see a 40% faster proficiency gain. You're 12 minutes away from your daily goal!"</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

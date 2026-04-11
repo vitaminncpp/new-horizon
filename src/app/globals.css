@@ -1,32 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss";
 @import "./theme.css";
 
-* {
-  border-color: var(--border);
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background: var(--color-background);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-body), serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    outline: none;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-muted);
+  }
 }
 
-html {
-  background: var(--bg);
-  scroll-behavior: smooth;
+@utility glass-panel {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(24px);
 }
 
-body {
-  min-height: 100vh;
-  background: var(--gradient-page);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@utility page-shell {
+  background-color: var(--color-background);
 }
 
-/* Custom Utilities for Gradients */
-@utility gradient-page {
-  background-image: var(--gradient-page);
+@utility card-shadow {
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
 }
 
-@utility gradient-island {
-  background-image: var(--gradient-island);
+@utility card-shadow-dark {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
 }
 
-@utility gradient-surface {
-  background-image: var(--gradient-surface);
+@utility gradient-brand {
+  background-image: var(--gradient-brand);
 }
+
+@utility gradient-accent {
+  background-image: var(--gradient-accent);
+}
+
+@utility hidden-scrollbar {
+  scrollbar-width: none;
+}
+
+/*@utility hidden-scrollbar::-webkit-scrollbar {*/
+/*  display: none;*/
+/*}*/
+
+/*@utility custom-scrollbar::-webkit-scrollbar {*/
+/*  width: 4px;*/
+/*}*/
+
+/*@utility custom-scrollbar::-webkit-scrollbar-track {*/
+/*  background: transparent;*/
+/*}*/
+
+/*@utility custom-scrollbar::-webkit-scrollbar-thumb {*/
+/*  background: var(--color-scrollbar);*/
+/*  border-radius: 9999px;*/
+/*}*/

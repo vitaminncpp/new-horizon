@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { User } from "@/src/infra/models/user.model";
 import { AUTH_COOKIE } from "@/src/infra/auth/auth-cookie";
 import { Exception } from "@/src/infra/exception/app.exception";

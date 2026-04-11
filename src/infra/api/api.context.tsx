@@ -7,7 +7,7 @@ type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface RequestOptions {
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   params?: Record<string, string>;
 }
 
@@ -17,10 +17,10 @@ interface ApiContextType {
     params?: Record<string, string>,
     headers?: Record<string, string>,
   ) => Promise<T>;
-  post: <T>(endpoint: string, body: any, headers?: Record<string, string>) => Promise<T>;
-  put: <T>(endpoint: string, body: any, headers?: Record<string, string>) => Promise<T>;
+  post: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => Promise<T>;
+  put: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => Promise<T>;
   del: <T>(endpoint: string, headers?: Record<string, string>) => Promise<T>;
-  patch: <T>(endpoint: string, body: any, headers?: Record<string, string>) => Promise<T>;
+  patch: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => Promise<T>;
 }
 
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
