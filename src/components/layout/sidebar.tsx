@@ -8,17 +8,58 @@ import { Icon } from "@/src/components/common/icon";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
   { href: "/courses", label: "My Courses", icon: "school" },
-  { href: "/courses", label: "Explore", icon: "explore", match: "/courses" },
-  { href: "/profile", label: "Learning Path", icon: "route", match: "/profile" },
+  { href: "/courses", label: "Explore", icon: "explore" },
+  { href: "/profile", label: "Learning Path", icon: "route" },
   { href: "/dashboard", label: "Assignments", icon: "assignment", match: "/assignments" },
   { href: "/dashboard", label: "Quizzes", icon: "quiz", match: "/quizzes" },
   { href: "/profile", label: "Progress", icon: "trending_up" },
-  { href: "/profile", label: "Messages", icon: "mail", match: "/messages" },
-  { href: "/profile", label: "Settings", icon: "settings", match: "/settings" },
+  { href: "/profile", label: "Messages", icon: "mail" },
+  { href: "/profile", label: "Settings", icon: "settings" },
 ];
+
+function getActiveLabel(pathname: string) {
+  if (pathname.startsWith("/course/") || pathname.startsWith("/courses/")) {
+    return "My Courses";
+  }
+
+  if (pathname === "/courses") {
+    return "Explore";
+  }
+
+  if (pathname === "/dashboard") {
+    return "Dashboard";
+  }
+
+  if (pathname.startsWith("/assignments")) {
+    return "Assignments";
+  }
+
+  if (pathname.startsWith("/quizzes")) {
+    return "Quizzes";
+  }
+
+  if (pathname === "/profile") {
+    return "Learning Path";
+  }
+
+  if (pathname.startsWith("/messages")) {
+    return "Messages";
+  }
+
+  if (pathname.startsWith("/settings")) {
+    return "Settings";
+  }
+
+  if (pathname.startsWith("/progress")) {
+    return "Progress";
+  }
+
+  return "";
+}
 
 export function Sidebar() {
   const pathname = usePathname();
+  const activeLabel = getActiveLabel(pathname);
 
   return (
     <aside className="hidden h-screen w-[260px] flex-col border-r border-border-soft bg-sidebar px-6 py-6 backdrop-blur-xl lg:fixed lg:left-0 lg:top-0 lg:flex">
@@ -35,11 +76,7 @@ export function Sidebar() {
       </div>
       <nav className="flex-1 space-y-1">
         {navItems.map((item, index) => {
-          const active =
-            pathname === item.href ||
-            pathname.startsWith(item.match ?? `${item.href}/`) ||
-            (item.href === "/courses" && pathname.startsWith("/course/")) ||
-            (item.label === "My Courses" && pathname.startsWith("/courses/"));
+          const active = item.label === activeLabel;
 
           return (
             <Link
