@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, type PropsWithChildren 
 import * as courseService from "@/src/services/api/course.service";
 import * as lessonService from "@/src/services/api/lesson.service";
 import * as progressService from "@/src/services/api/progress.service";
+import { useAuth } from "@/src/context/auth.context";
 import type { Course, CourseLessons } from "@/src/services/mock/types";
 
 type LearningContextValue = {
@@ -23,6 +24,7 @@ type LearningContextValue = {
 const LearningContext = createContext<LearningContextValue | null>(null);
 
 export function LearningProvider({ children }: PropsWithChildren) {
+  const { user, isLoading: authLoading } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [progressSummary, setProgressSummary] =
     useState<LearningContextValue["progressSummary"]>(null);
@@ -30,16 +32,66 @@ export function LearningProvider({ children }: PropsWithChildren) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([courseService.listCourses(), progressService.getProgressSummary()])
-      .then(([courseList, summary]) => {
+    if (authLoading) {
+      return;
+    }
+
+    let active = true;
+    setIsLoading(true);
+    setError(null);
+
+    const load = async () => {
+      try {
+        const courseList = await courseService.listCourses();
+
+        if (!active) {
+          return;
+        }
+
         setCourses(courseList);
+
+        if (!user) {
+          setProgressSummary({
+            completedCourses: 0,
+            hoursLearned: 0,
+            quizAverage: 0,
+            streakDays: 0,
+          });
+          return;
+        }
+
+        const summary = await progressService.getProgressSummary();
+
+        if (!active) {
+          return;
+        }
+
         setProgressSummary(summary);
-      })
-      .catch((cause) => {
+      } catch (cause) {
+        if (!active) {
+          return;
+        }
+
+        setProgressSummary({
+          completedCourses: 0,
+          hoursLearned: 0,
+          quizAverage: 0,
+          streakDays: 0,
+        });
         setError(cause instanceof Error ? cause.message : "Unable to load learning data.");
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void load();
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, user]);
 
   return (
     <LearningContext.Provider

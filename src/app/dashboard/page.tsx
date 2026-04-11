@@ -15,7 +15,7 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const { user } = useAuth();
-  const { courses, progressSummary, isLoading } = useLearning();
+  const { courses, progressSummary, isLoading, error } = useLearning();
   const auth = useAuthRedirect("private");
 
   const featuredCourse = useMemo(
@@ -28,8 +28,51 @@ export default function DashboardPage() {
     [courses, search],
   );
 
-  if (auth.isLoading || isLoading || !progressSummary || !featuredCourse) {
+  if (auth.isLoading || isLoading) {
     return <Loader label="Loading dashboard" />;
+  }
+
+  if (!progressSummary) {
+    return (
+      <PageWrapper
+        searchPlaceholder="Search courses, mentors, or resources..."
+        onSearch={setSearch}
+      >
+        <div className="mx-auto max-w-[960px] p-8">
+          <div className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+            <h2 className="text-2xl font-bold text-text-primary">Dashboard unavailable</h2>
+            <p className="mt-3 text-sm text-text-secondary">
+              {error ?? "Learning data could not be loaded yet."}
+            </p>
+          </div>
+        </div>
+      </PageWrapper>
+    );
+  }
+
+  if (!featuredCourse) {
+    return (
+      <PageWrapper
+        searchPlaceholder="Search courses, mentors, or resources..."
+        onSearch={setSearch}
+      >
+        <div className="mx-auto max-w-[960px] p-8">
+          <div className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+            <h2 className="text-2xl font-bold text-text-primary">No courses available yet</h2>
+            <p className="mt-3 text-sm text-text-secondary">
+              {error ??
+                "The course catalog is empty. Seed the database or create published courses to populate the dashboard."}
+            </p>
+            <Link
+              href="/courses"
+              className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-[color:var(--color-text-on-primary)]"
+            >
+              Go to Courses
+            </Link>
+          </div>
+        </div>
+      </PageWrapper>
+    );
   }
 
   return (
