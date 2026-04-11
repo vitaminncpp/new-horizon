@@ -20,7 +20,7 @@ The color palette is grounded in professional cool tones, punctuated by vibrant,
 *   **Base Neutrals:** `surface` (#f5f7f9) | `surface_container_lowest` (#ffffff)
 
 ### Editorial Color Rules
-*   **The "No-Line" Rule:** Explicitly prohibit the use of 1px solid borders for sectioning or layout containment. Boundaries must be defined through background shifts. Transition from `surface` to `surface_container_low` to define a sidebar or header. 
+*   **The "No-Line" Rule:** Explicitly prohibit the use of 1px solid borders for sectioning or layout containment. Boundaries must be defined through background shifts. Transition from `surface` to `surface_container_low` to define a sidebar or header.
 *   **Surface Hierarchy & Nesting:** Treat the UI as a series of stacked sheets.
     *   *Level 0:* `background` (#f5f7f9) - The base canvas.
     *   *Level 1:* `surface_container_low` (#eef1f3) - Inset content areas.

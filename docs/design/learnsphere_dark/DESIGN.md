@@ -52,6 +52,7 @@ Traditional drop shadows are forbidden. We use **Ambient Lighting**.
 ---
 
 ## 5. Components & Modular Widgets
+The system now embraces a more spacious aesthetic, enhancing readability and content prioritization.
 
 ### Buttons: The "Tactile" Interaction
 *   **Primary:** Uses the **Primary Academic Gradient**. Corner radius: `12px` (`md`).

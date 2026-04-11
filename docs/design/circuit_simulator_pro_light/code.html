@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#747779",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-dim": "#005b4a",
+                    "secondary-container": "#5ffbd6",
+                    "on-tertiary-fixed-variant": "#5d0d7d",
+                    "error-container": "#f74b6d",
+                    "on-primary-container": "#1d007a",
+                    "surface-container": "#e5e9eb",
+                    "tertiary-dim": "#762d96",
+                    "on-secondary-fixed-variant": "#006855",
+                    "on-error": "#ffefef",
+                    "tertiary": "#843aa3",
+                    "surface-bright": "#f5f7f9",
+                    "secondary-fixed-dim": "#4decc9",
+                    "secondary-fixed": "#5ffbd6",
+                    "primary-dim": "#4935c3",
+                    "surface-container-low": "#eef1f3",
+                    "surface": "#f5f7f9",
+                    "error": "#b41340",
+                    "on-tertiary-fixed": "#2c003f",
+                    "tertiary-fixed-dim": "#d384f2",
+                    "primary": "#5543cf",
+                    "on-tertiary": "#ffedff",
+                    "on-secondary-fixed": "#00483b",
+                    "surface-dim": "#d0d5d8",
+                    "on-surface-variant": "#595c5e",
+                    "on-primary": "#f5f0ff",
+                    "primary-container": "#9e93ff",
+                    "primary-fixed": "#9e93ff",
+                    "on-primary-fixed": "#000000",
+                    "surface-tint": "#5543cf",
+                    "on-error-container": "#510017",
+                    "surface-container-high": "#dfe3e6",
+                    "tertiary-container": "#e192ff",
+                    "on-surface": "#2c2f31",
+                    "primary-fixed-dim": "#8f83ff",
+                    "inverse-primary": "#8c7fff",
+                    "on-primary-fixed-variant": "#250094",
+                    "outline-variant": "#abadaf",
+                    "surface-container-highest": "#d9dde0",
+                    "secondary": "#006855",
+                    "on-background": "#2c2f31",
+                    "on-secondary-container": "#005d4c",
+                    "surface-variant": "#d9dde0",
+                    "inverse-on-surface": "#9a9d9f",
+                    "on-secondary": "#c4ffec",
+                    "tertiary-fixed": "#e192ff",
+                    "on-tertiary-container": "#520071",
+                    "background": "#f5f7f9",
+                    "inverse-surface": "#0b0f10",
+                    "error-dim": "#a70138"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .circuit-grid {
+            background-color: #f5f7f9;
+            background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="bg-white/80 backdrop-blur-xl w-full top-0 z-50 shadow-sm border-b border-surface-container flex justify-between items-center px-8 py-3 w-full font-['Inter'] tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-primary">CircuitAtelier</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary font-semibold border-b-2 border-primary" href="#">Schematics</a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Library</a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Simulations</a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Collaboration</a>
+</nav>
+</div>
+<!-- Simulation Controls -->
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-1.5 rounded-xl">
+<button class="p-1.5 text-secondary hover:bg-white rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:bg-white rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="pause">pause</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:bg-white rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="step_over">step_over</span>
+</button>
+<button class="p-1.5 text-error hover:bg-white rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="stop">stop</span>
+</button>
+<div class="w-px h-6 bg-outline-variant/30 mx-2"></div>
+<button class="bg-gradient-to-br from-primary to-primary-dim text-white px-5 py-1.5 rounded-lg text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-95">
+            Run Simulation
+        </button>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Main Canvas Area (Now mostly full-screen) -->
+<main class="flex-1 relative overflow-hidden flex flex-col">
+<!-- Grid Area -->
+<div class="flex-1 circuit-grid relative">
+<!-- Floating Component Toolbox (Left Side) -->
+<div class="absolute left-6 top-6 z-40 flex flex-col gap-4">
+<div class="glass-panel p-2 rounded-2xl shadow-2xl border border-white/50 flex flex-col gap-2 w-14 items-center">
+<button class="p-3 bg-primary text-white rounded-xl shadow-lg transition-all active:scale-95 group relative">
+<span class="material-symbols-outlined" data-icon="resistor">thermometer_minus</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-on-surface text-surface text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">Passive</span>
+</button>
+<button class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all group relative">
+<span class="material-symbols-outlined" data-icon="transistor">thermostat</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-on-surface text-surface text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">Active</span>
+</button>
+<button class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all group relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-on-surface text-surface text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">Sensors</span>
+</button>
+<button class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all group relative">
+<span class="material-symbols-outlined" data-icon="battery_full">battery_full</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-on-surface text-surface text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">Power</span>
+</button>
+<div class="w-8 h-px bg-outline-variant/20 my-1"></div>
+<button class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-all group relative">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="absolute left-full ml-4 px-2 py-1 bg-on-surface text-surface text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">New</span>
+</button>
+</div>
+<!-- Secondary Toolbox (Expanded Components) -->
+<div class="glass-panel p-4 rounded-2xl shadow-xl border border-white/50 w-48 space-y-4">
+<h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">Common Parts</h2>
+<div class="grid grid-cols-2 gap-2">
+<div class="aspect-square bg-surface-container-low rounded-xl flex flex-col items-center justify-center gap-1 border border-transparent hover:border-primary/20 transition-all cursor-grab active:cursor-grabbing group">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="resistor">thermometer_minus</span>
+<span class="text-[9px] uppercase font-bold tracking-tighter">Resistor</span>
+</div>
+<div class="aspect-square bg-surface-container-low rounded-xl flex flex-col items-center justify-center gap-1 border border-transparent hover:border-primary/20 transition-all cursor-grab active:cursor-grabbing group">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="mode_fan">mode_fan</span>
+<span class="text-[9px] uppercase font-bold tracking-tighter">Capacitor</span>
+</div>
+<div class="aspect-square bg-surface-container-low rounded-xl flex flex-col items-center justify-center gap-1 border border-transparent hover:border-primary/20 transition-all cursor-grab active:cursor-grabbing group">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="electric_bolt">electric_bolt</span>
+<span class="text-[9px] uppercase font-bold tracking-tighter">Voltage</span>
+</div>
+<div class="aspect-square bg-surface-container-low rounded-xl flex flex-col items-center justify-center gap-1 border border-transparent hover:border-primary/20 transition-all cursor-grab active:cursor-grabbing group">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="grounding">foundation</span>
+<span class="text-[9px] uppercase font-bold tracking-tighter">Ground</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Example Placed Component -->
+<div class="absolute top-[200px] left-[350px] p-4 bg-white/70 backdrop-blur-md rounded-xl shadow-lg border-2 border-primary ring-4 ring-primary/10">
+<div class="flex flex-col items-center">
+<div class="h-0.5 w-12 bg-on-surface-variant absolute -left-12 top-1/2"></div>
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="resistor">thermometer_minus</span>
+<div class="h-0.5 w-12 bg-on-surface-variant absolute -right-12 top-1/2"></div>
+<span class="text-[10px] font-bold mt-1 text-primary">R1: 10kΩ</span>
+</div>
+</div>
+<div class="absolute top-[150px] left-[150px] p-4 bg-white/30 backdrop-blur-sm rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant/40" data-icon="battery_full">battery_full</span>
+<span class="absolute -top-6 left-0 text-[10px] font-mono text-on-surface-variant/60">VCC: 5.0V</span>
+</div>
+<!-- Floating Bottom Bar (Canvas Controls) -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-full shadow-2xl flex gap-6 items-center border border-white/60 z-50">
+<div class="flex items-center gap-2 pr-4 border-r border-outline-variant/20">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="zoom_out">zoom_out</span>
+</button>
+<span class="text-xs font-bold uppercase w-12 text-center">100%</span>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="zoom_in">zoom_in</span>
+</button>
+</div>
+<div class="flex gap-4 pr-4 border-r border-outline-variant/20">
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Undo">
+<span class="material-symbols-outlined" data-icon="undo">undo</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Redo">
+<span class="material-symbols-outlined" data-icon="redo">redo</span>
+</button>
+</div>
+<div class="flex gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Pan Tool">
+<span class="material-symbols-outlined" data-icon="pan_tool">pan_tool</span>
+</button>
+<button class="text-primary hover:text-primary-dim transition-colors" title="Grid On">
+<span class="material-symbols-outlined" data-icon="grid_on">grid_on</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Layers">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Analysis Panel -->
+<div class="h-48 bg-surface-container-low border-t border-surface-container p-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Live Waveform Analysis</h3>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded bg-secondary/10 text-secondary text-[10px] font-bold">Node A: 3.42V</span>
+<span class="px-2 py-0.5 rounded bg-tertiary/10 text-tertiary text-[10px] font-bold">Node B: 1.18V</span>
+</div>
+</div>
+<div class="w-full h-24 bg-surface-container-lowest rounded-xl overflow-hidden relative">
+<div class="absolute inset-0 opacity-20">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 100">
+<path d="M0,50 Q125,10 250,50 T500,50 T750,50 T1000,50" fill="none" stroke="#5543cf" stroke-width="2"></path>
+<path d="M0,70 Q125,30 250,70 T500,70 T750,70 T1000,70" fill="none" stroke="#006855" stroke-width="1.5"></path>
+</svg>
+</div>
+<div class="absolute left-4 top-2 text-[10px] text-on-surface-variant opacity-40 font-mono">Real-time sampling: 44.1kHz</div>
+</div>
+</div>
+</main>
+<!-- Right Properties Panel (Maintained) -->
+<aside class="w-80 bg-surface-container-lowest border-l border-surface-container p-6 overflow-y-auto z-40">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="tune">tune</span>
+</div>
+<div>
+<h2 class="text-sm font-bold uppercase tracking-tight">Properties</h2>
+<p class="text-xs text-on-surface-variant">Editing R1: Resistor</p>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-4">
+<label class="block">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 block">Component Label</span>
+<input class="w-full bg-surface-container-low border-transparent rounded-lg text-sm focus:ring-primary/20 focus:border-primary transition-all" type="text" value="R1"/>
+</label>
+<label class="block">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 block">Resistance (Ω)</span>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-low border-transparent rounded-lg text-sm focus:ring-primary/20 focus:border-primary" type="number" value="10"/>
+<select class="bg-surface-container-low border-transparent rounded-lg text-sm focus:ring-primary/20">
+<option>kΩ</option>
+<option>Ω</option>
+<option>MΩ</option>
+</select>
+</div>
+</label>
+<label class="block">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 block">Tolerance</span>
+<div class="grid grid-cols-4 gap-1">
+<button class="py-1 text-[10px] font-bold rounded bg-primary text-white">1%</button>
+<button class="py-1 text-[10px] font-bold rounded bg-surface-container-high hover:bg-surface-container-highest">5%</button>
+<button class="py-1 text-[10px] font-bold rounded bg-surface-container-high hover:bg-surface-container-highest">10%</button>
+<button class="py-1 text-[10px] font-bold rounded bg-surface-container-high hover:bg-surface-container-highest">20%</button>
+</div>
+</label>
+</div>
+<div class="h-px bg-surface-container mx-2"></div>
+<div class="space-y-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 block">Simulation Behavior</span>
+<div class="flex items-center justify-between">
+<span class="text-xs">Ideal Component</span>
+<div class="w-10 h-5 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 h-3 w-3 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs">Show Voltage Label</span>
+<div class="w-10 h-5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1 top-1 h-3 w-3 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<div class="rounded-xl overflow-hidden mb-4 border border-surface-container">
+<img alt="Electronic Component Close-up" class="w-full h-32 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4fx1vp-djI8oLqNwt6wxz3XB2tgRL1O7sgtW-r9AlOxgY-FNTNUuYLlzya081C94-sUa915TTlU9W6gulbgZqbMCs461NRaomTEolY5skmJMx2_6DxIg7j0DNsKM9f-oH7ZnxQsFP4qeq4nGskYs-BN6iOvsc8oRnGP-Nuuymvi9rCcNsyKT9RZXyFNqwhWWedn9B7xoK3ASUEhTIkUt705-eKIgiFcQz5gtIJB7P7XBg15e30cWhN5dh098x2J_C9bSSOru75nJX"/>
+</div>
+<button class="w-full py-3 bg-gradient-to-br from-primary to-primary-dim text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
+                    Apply Changes
+                </button>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

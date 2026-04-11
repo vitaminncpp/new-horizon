@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CircuitArchitect | Professional Simulation Canvas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#4d556b",
+                    "tertiary-fixed": "#e192ff",
+                    "on-secondary": "#005d4c",
+                    "surface-variant": "#192540",
+                    "error-dim": "#d73357",
+                    "inverse-surface": "#faf8ff",
+                    "on-tertiary-container": "#41005a",
+                    "background": "#060e20",
+                    "outline-variant": "#40485d",
+                    "on-primary-fixed-variant": "#250094",
+                    "surface-container-highest": "#192540",
+                    "primary-fixed-dim": "#8f83ff",
+                    "inverse-primary": "#5948d3",
+                    "on-secondary-container": "#defff3",
+                    "secondary": "#5ffbd6",
+                    "on-background": "#dee5ff",
+                    "on-error-container": "#ffb2b9",
+                    "tertiary-container": "#d384f2",
+                    "surface-container-high": "#141f38",
+                    "on-surface": "#dee5ff",
+                    "primary-container": "#9e93ff",
+                    "surface-tint": "#aca3ff",
+                    "primary-fixed": "#9e93ff",
+                    "on-primary-fixed": "#000000",
+                    "primary": "#aca3ff",
+                    "on-tertiary": "#520071",
+                    "on-secondary-fixed": "#00483b",
+                    "on-tertiary-fixed": "#2c003f",
+                    "tertiary-fixed-dim": "#d384f2",
+                    "on-primary": "#27009a",
+                    "surface-dim": "#060e20",
+                    "on-surface-variant": "#a3aac4",
+                    "secondary-fixed": "#5ffbd6",
+                    "surface-bright": "#1f2b49",
+                    "secondary-fixed-dim": "#4decc9",
+                    "surface": "#060e20",
+                    "error": "#ff6e84",
+                    "primary-dim": "#6f5fea",
+                    "surface-container-low": "#091328",
+                    "surface-container": "#0f1930",
+                    "tertiary": "#e192ff",
+                    "on-error": "#490013",
+                    "tertiary-dim": "#cd7fec",
+                    "on-secondary-fixed-variant": "#006855",
+                    "secondary-dim": "#4decc9",
+                    "outline": "#6d758c",
+                    "surface-container-lowest": "#000000",
+                    "error-container": "#a70138",
+                    "on-primary-container": "#1d007a",
+                    "secondary-container": "#006b58",
+                    "on-tertiary-fixed-variant": "#5d0d7d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .canvas-grid {
+            background-image: radial-gradient(circle, rgba(109, 117, 140, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            background-color: rgba(15, 25, 48, 0.7);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060e20;
+            color: #dee5ff;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="dark selection:bg-primary-container selection:text-on-primary-container">
+<header class="w-full top-0 sticky bg-slate-950/80 backdrop-blur-xl bg-slate-900/50 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 h-16 w-full z-50 border-b border-white/5">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight bg-gradient-to-r from-[#6C5CE7] to-[#8E44AD] bg-clip-text text-transparent">CircuitArchitect</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-indigo-400 border-b-2 border-indigo-500 pb-1 font-medium" href="#">Projects</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors font-medium" href="#">Components</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors font-medium" href="#">Simulate</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors font-medium" href="#">Export</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded-lg border border-white/5">
+<button class="p-1.5 hover:bg-slate-800/50 rounded-md transition-all active:scale-95 text-slate-400 hover:text-secondary">
+<span class="material-symbols-outlined text-[20px]">play_arrow</span>
+</button>
+<button class="p-1.5 hover:bg-slate-800/50 rounded-md transition-all active:scale-95 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">pause</span>
+</button>
+<button class="p-1.5 hover:bg-slate-800/50 rounded-md transition-all active:scale-95 text-slate-400 hover:text-error">
+<span class="material-symbols-outlined text-[20px]">stop</span>
+</button>
+</div>
+<button class="px-5 py-2 bg-gradient-to-r from-[#6C5CE7] to-[#8E44AD] text-white rounded-xl font-semibold shadow-lg active:scale-95 transition-all text-sm">
+            Run Simulation
+        </button>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:bg-slate-800/50 rounded-full transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden ml-2 ring-2 ring-indigo-500/30">
+<img alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAq3j_abw3JevS3AB_fcFVAmNTNiX0oFgbLI7Q-wSX3X8Jawa0K6rAcPy3nEDv8rGpkxkuJaV2k0_zIrSW_OsXaVJfkVknpai3JTV764eI6VuunVJQF4iFv5kVNiuIxQIZ2XJK7e7lLALuhQsprTz9cb7uok_YvIOG-rVvTMLSsKmj_i9okBGbgE938h6n3Ydo9OxZO12cSQsX4L3rlyAFI4bfvEKLuqFgCA-QFl6vZAg3-132bKVc5vpHSvvsl45RCJjroJrcXxzO"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex h-[calc(100vh-64px)] overflow-hidden relative">
+<!-- Floating Left Toolbox -->
+<div class="absolute left-6 top-6 z-40 flex flex-col gap-4">
+<div class="glass-panel p-2 rounded-2xl border border-white/10 shadow-2xl flex flex-col gap-2">
+<button class="p-3 bg-primary/20 text-primary rounded-xl transition-all shadow-inner" title="Resistors">
+<span class="material-symbols-outlined text-[24px]">rebase_edit</span>
+</button>
+<button class="p-3 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-all" title="Capacitors">
+<span class="material-symbols-outlined text-[24px]">battery_full</span>
+</button>
+<button class="p-3 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-all" title="Transistors">
+<span class="material-symbols-outlined text-[24px]">developer_board</span>
+</button>
+<button class="p-3 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-all" title="Logic Gates">
+<span class="material-symbols-outlined text-[24px]">settings_input_component</span>
+</button>
+<button class="p-3 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl transition-all" title="Sensors">
+<span class="material-symbols-outlined text-[24px]">sensors</span>
+</button>
+<div class="h-[1px] bg-white/10 mx-2 my-1"></div>
+<button class="p-3 hover:bg-white/5 text-emerald-400 rounded-xl transition-all" title="Add Custom">
+<span class="material-symbols-outlined text-[24px]">add_circle</span>
+</button>
+</div>
+<!-- Quick Access Components -->
+<div class="glass-panel p-3 rounded-2xl border border-white/10 shadow-2xl space-y-3 w-[72px]">
+<div class="w-12 h-12 flex flex-col items-center justify-center rounded-xl bg-slate-900/50 hover:bg-slate-800 transition-all cursor-grab active:cursor-grabbing border border-transparent hover:border-emerald-500/30 group">
+<span class="material-symbols-outlined text-emerald-400 text-sm">memory</span>
+</div>
+<div class="w-12 h-12 flex flex-col items-center justify-center rounded-xl bg-slate-900/50 hover:bg-slate-800 transition-all cursor-grab active:cursor-grabbing border border-transparent hover:border-emerald-500/30 group">
+<span class="material-symbols-outlined text-emerald-400 text-sm">electric_bolt</span>
+</div>
+<div class="w-12 h-12 flex flex-col items-center justify-center rounded-xl bg-slate-900/50 hover:bg-slate-800 transition-all cursor-grab active:cursor-grabbing border border-transparent hover:border-emerald-500/30 group">
+<span class="material-symbols-outlined text-emerald-400 text-sm">switch_left</span>
+</div>
+</div>
+</div>
+<!-- Main Canvas Area (Full Screen) -->
+<section class="flex-1 relative bg-background canvas-grid overflow-hidden">
+<!-- Floating Canvas Controls (Bottom Bar) -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 glass-panel px-4 py-2.5 rounded-full border border-white/10 flex items-center gap-4 shadow-2xl z-30 min-w-[320px] justify-between">
+<div class="flex items-center gap-1">
+<button class="p-2 hover:bg-white/10 rounded-full transition-all text-on-surface-variant flex items-center justify-center" title="Zoom Out">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<div class="px-2 min-w-[50px] text-center text-xs font-bold text-on-surface select-none">100%</div>
+<button class="p-2 hover:bg-white/10 rounded-full transition-all text-on-surface-variant flex items-center justify-center" title="Zoom In">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<div class="w-[1px] h-6 bg-white/10 mx-1"></div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-white/10 rounded-xl transition-all text-on-surface-variant flex items-center justify-center" title="Pan Tool">
+<span class="material-symbols-outlined text-lg">pan_tool</span>
+</button>
+<button class="p-2 bg-primary/20 text-primary rounded-xl transition-all flex items-center justify-center" title="Select Tool">
+<span class="material-symbols-outlined text-lg">near_me</span>
+</button>
+</div>
+<div class="w-[1px] h-6 bg-white/10 mx-1"></div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-white/10 rounded-xl transition-all text-on-surface-variant flex items-center justify-center" title="Grid Settings">
+<span class="material-symbols-outlined text-lg">grid_on</span>
+</button>
+<button class="p-2 hover:bg-white/10 rounded-xl transition-all text-on-surface-variant flex items-center justify-center" title="Center View">
+<span class="material-symbols-outlined text-lg">center_focus_strong</span>
+</button>
+</div>
+</div>
+<!-- Canvas Elements -->
+<div class="absolute top-1/3 left-1/4 group cursor-pointer">
+<div class="relative p-6 bg-surface-container-high rounded-xl border-2 border-emerald-500 shadow-[0_0_20px_rgba(95,251,214,0.1)]">
+<div class="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div>
+<div class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div>
+<span class="material-symbols-outlined text-4xl text-emerald-400" style="font-variation-settings: 'FILL' 1;">developer_board</span>
+</div>
+<div class="mt-2 text-center">
+<span class="text-[10px] font-bold text-emerald-400/80 tracking-widest uppercase bg-emerald-500/10 px-2 py-0.5 rounded">IC-555 TIMER</span>
+</div>
+</div>
+<div class="absolute top-1/2 left-1/2 group cursor-pointer -translate-x-1/2 -translate-y-1/2">
+<div class="relative p-6 bg-surface-container-high rounded-xl border-2 border-primary shadow-[0_0_20px_rgba(172,163,255,0.1)]">
+<div class="absolute top-1/2 -left-1 w-2 h-2 rounded-full bg-primary -translate-y-1/2 ring-4 ring-primary/20"></div>
+<div class="absolute top-1/2 -right-1 w-2 h-2 rounded-full bg-primary -translate-y-1/2 ring-4 ring-primary/20"></div>
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">rebase_edit</span>
+</div>
+<div class="mt-2 text-center">
+<span class="text-[10px] font-bold text-primary/80 tracking-widest uppercase bg-primary/10 px-2 py-0.5 rounded">R1: 10K OHM</span>
+</div>
+</div>
+<div class="absolute top-[45%] right-[20%] group cursor-pointer">
+<div class="relative p-6 bg-surface-container-high rounded-xl border-2 border-tertiary-dim shadow-[0_0_20px_rgba(205,127,236,0.1)]">
+<div class="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-tertiary-dim ring-4 ring-tertiary-dim/20"></div>
+<div class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-tertiary-dim ring-4 ring-tertiary-dim/20"></div>
+<span class="material-symbols-outlined text-4xl text-tertiary-dim" style="font-variation-settings: 'FILL' 1;">battery_full</span>
+</div>
+<div class="mt-2 text-center">
+<span class="text-[10px] font-bold text-tertiary/80 tracking-widest uppercase bg-tertiary/10 px-2 py-0.5 rounded">C1: 100μF</span>
+</div>
+</div>
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40">
+<path d="M 320 280 L 480 280 M 640 280 L 800 280" fill="none" stroke="#aca3ff" stroke-dasharray="4" stroke-width="2"></path>
+<path d="M 560 360 L 560 480 L 720 480" fill="none" stroke="#5ffbd6" stroke-width="2"></path>
+</svg>
+</section>
+<!-- Right Properties Panel (Maintained) -->
+<aside class="w-80 h-full bg-surface-container-low border-l border-white/5 flex flex-col overflow-hidden z-40 relative shadow-[-10px_0_30px_rgba(0,0,0,0.3)]">
+<div class="p-6">
+<h3 class="text-lg font-semibold text-on-surface mb-1">Properties</h3>
+<p class="text-xs text-on-surface-variant font-medium">Selected: Resistor R1</p>
+</div>
+<div class="flex-1 overflow-y-auto px-6 space-y-8">
+<div class="p-8 bg-surface-container-highest rounded-2xl flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-gradient-to-br from-primary to-transparent"></div>
+<span class="material-symbols-outlined text-6xl text-primary z-10">rebase_edit</span>
+</div>
+<div class="space-y-4">
+<label class="block">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest block mb-2">Reference Tag</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl focus:ring-2 focus:ring-primary text-sm p-3 text-on-surface transition-all" type="text" value="R1"/>
+</label>
+<label class="block">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest block mb-2">Resistance Value</span>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-none rounded-xl focus:ring-2 focus:ring-primary text-sm p-3 pr-12 text-on-surface transition-all" type="number" value="10000"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-on-surface-variant">Ω</span>
+</div>
+</label>
+<label class="block">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest block mb-2">Tolerance</span>
+<select class="w-full bg-surface-container-lowest border-none rounded-xl focus:ring-2 focus:ring-primary text-sm p-3 text-on-surface transition-all">
+<option>1% (Brown)</option>
+<option selected="">5% (Gold)</option>
+<option>10% (Silver)</option>
+</select>
+</label>
+<div class="flex items-center justify-between p-4 bg-surface-container/50 rounded-xl">
+<span class="text-sm font-medium text-on-surface">Auto-calculate Wattage</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</div>
+</div>
+</div>
+<div class="space-y-4 pt-4">
+<h4 class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Real-time Metrics</h4>
+<div class="grid grid-cols-2 gap-3 pb-8">
+<div class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/10">
+<span class="block text-[10px] text-on-surface-variant mb-1">Voltage Drop</span>
+<span class="text-sm font-mono font-bold text-secondary">5.00V</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl border border-outline-variant/10">
+<span class="block text-[10px] text-on-surface-variant mb-1">Current Flow</span>
+<span class="text-sm font-mono font-bold text-primary">0.5mA</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 mt-auto border-t border-white/5 bg-surface-container-low">
+<button class="w-full py-4 bg-surface-variant hover:bg-surface-bright text-on-surface rounded-xl font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+                Delete Component
+            </button>
+</div>
+</aside>
+</main>
+</body></html>
