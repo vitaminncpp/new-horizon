@@ -24,3 +24,6 @@ export interface CourseResponseDto {
 export interface CourseLessonsResponseDto {
   item: CourseLessons;
 }
+
+export type CourseDto = Course;
+export type CourseLessonsDto = CourseLessons;

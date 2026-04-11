@@ -1,1 +1,15 @@
-export { getCourse, getCourseLessons, listCourses } from "@/src/services/catalog.service";
+export {
+  getAssessment,
+  getAssessmentAttempts,
+  getAssessmentQuestions,
+  getAssessmentsByCourse,
+  getCourse,
+  getCourseLessons,
+  getCourseSections,
+  getEnrollments,
+  getLesson,
+  getLessonCodingExercises,
+  getLessonContentBlocks,
+  getLessonProgress,
+  listCourses,
+} from "@/src/services/catalog.service";
