@@ -19,6 +19,11 @@ export interface AuthResponseDto {
   user: User;
 }
 
+export interface SessionResponseDto extends AuthResponseDto {
+  accessToken?: string;
+  refreshToken?: string;
+}
+
 export interface ErrorResponseDto {
   error: string;
   code?: string;

@@ -1,21 +1,13 @@
-import courses from "@/src/services/mock/courses.json";
 import type { Course } from "@/src/services/mock/types";
-
-function delay<T>(value: T, ms = 180) {
-  return new Promise<T>((resolve) => {
-    setTimeout(() => resolve(value), ms);
-  });
-}
+import type { CourseResponseDto, CoursesResponseDto } from "@/src/infra/dtos/course.dto";
+import { http } from "@/src/services/api/http.service";
 
 export async function listCourses() {
-  return delay(courses as Course[]);
+  const response = await http.get<CoursesResponseDto>("/api/courses");
+  return response.items;
 }
 
 export async function getCourse(id: string) {
-  const course = (courses as Course[]).find((item) => item.id === id || item.slug === id);
-  if (!course) {
-    throw new Error("Course not found.");
-  }
-
-  return delay(course);
+  const response = await http.get<CourseResponseDto>(`/api/courses/${id}`);
+  return response.item as Course;
 }

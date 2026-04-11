@@ -5,7 +5,7 @@ import {
   setAccessCookie,
   setRefreshCookie,
 } from "@/src/infra/auth/auth-cookie";
-import { getRouteUser, isRoleAllowed } from "@/src/infra/auth/auth.server";
+import { getRouteUser } from "@/src/infra/auth/auth.server";
 import { authRoutes, protectedRouteRules, publicRoutes } from "@/src/infra/config/routes.config";
 import * as authService from "@/src/services/auth.service";
 import { verifyRefreshClaims } from "@/src/services/token.service";
@@ -21,14 +21,14 @@ export default async function proxy(req: NextRequest) {
   const user = await getRouteUser(req);
 
   if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL("/workspace", req.nextUrl));
+    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
   if (!matchedRule) {
     return NextResponse.next();
   }
 
-  if (user && isRoleAllowed(user.role, matchedRule.allowedRoles)) {
+  if (user) {
     return NextResponse.next();
   }
 
@@ -38,12 +38,10 @@ export default async function proxy(req: NextRequest) {
     if (refreshClaims) {
       try {
         const session = await authService.refreshSession(refreshClaims);
-        if (isRoleAllowed(session.user.role, matchedRule.allowedRoles)) {
-          const response = NextResponse.next();
-          setAccessCookie(response, session.accessToken);
-          setRefreshCookie(response, session.refreshToken);
-          return response;
-        }
+        const response = NextResponse.next();
+        setAccessCookie(response, session.accessToken);
+        setRefreshCookie(response, session.refreshToken);
+        return response;
       } catch {
         const response = NextResponse.redirect(
           new URL(`/login?next=${encodeURIComponent(pathname)}`, req.nextUrl),

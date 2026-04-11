@@ -18,7 +18,7 @@ export function Topbar({
 }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const { toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const [value, setValue] = useState("");
 
   return (
@@ -60,8 +60,9 @@ export function Topbar({
             onClick={toggleTheme}
             className="rounded-full p-2 transition-colors hover:bg-surface-low hover:text-primary"
             aria-label="Toggle theme"
+            title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
           >
-            <Icon name="contrast" />
+            <Icon name={theme === "light" ? "dark_mode" : "light_mode"} />
           </button>
         </div>
         <div className="hidden h-8 w-px bg-border-soft sm:block" />

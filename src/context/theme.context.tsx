@@ -16,12 +16,17 @@ export function ThemeProvider({ children }: PropsWithChildren) {
       return "light";
     }
 
-    return (window.localStorage.getItem("new-horizon-theme") as ThemeMode | null) ?? "light";
+    const savedTheme = window.localStorage.getItem("new-horizon-theme") as ThemeMode | null;
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+    return savedTheme || systemTheme;
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    document.body.dataset.theme = theme;
+    document.body.classList.toggle("dark", theme === "dark");
+    // document.body.dataset.theme = theme;
     window.localStorage.setItem("new-horizon-theme", theme);
   }, [theme]);
 

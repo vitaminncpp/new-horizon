@@ -1,7 +1,6 @@
 import "./globals.css";
 import React from "react";
 import { AppProviders } from "@/src/context/app-providers";
-import { Fontdiner_Swanky } from "next/dist/compiled/@next/font/dist/google";
 
 export default function RootLayout({
   children,

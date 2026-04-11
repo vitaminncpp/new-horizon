@@ -20,6 +20,9 @@ export async function register(email: string, name: string, password: string) {
     name,
     password: pHash,
     role: "learner",
+    session_version: 1,
+    is_deleted: false,
+    deleted_at: null,
   } as User);
 }
 
@@ -99,7 +102,9 @@ function sanitizeUser(user: User): User {
     email: user.email,
     name: user.name,
     role: user.role,
+    session_version: user.session_version,
     created_at: user.created_at,
+    updated_at: user.updated_at,
     is_deleted: user.is_deleted,
     deleted_at: user.deleted_at,
   } as User;

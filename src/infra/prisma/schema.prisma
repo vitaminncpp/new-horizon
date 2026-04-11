@@ -6,15 +6,512 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  learner
+  instructor
+  admin
+}
+
+enum CourseStatus {
+  draft
+  published
+  archived
+}
+
+enum CourseLevel {
+  beginner
+  intermediate
+  advanced
+}
+
+enum EnrollmentStatus {
+  active
+  completed
+  paused
+  dropped
+}
+
+enum LessonType {
+  video
+  article
+  quiz
+  coding
+  live
+}
+
+enum LessonStatus {
+  draft
+  published
+  archived
+}
+
+enum LessonProgressStatus {
+  not_started
+  in_progress
+  completed
+}
+
+enum ContentBlockType {
+  markdown
+  rich_text
+  code
+  callout
+  embed
+  image
+  file
+  checklist
+}
+
+enum AssessmentType {
+  quiz
+  assignment
+  exam
+  practice
+}
+
+enum AssessmentQuestionType {
+  multiple_choice
+  multi_select
+  short_answer
+  coding
+  true_false
+}
+
+enum AttemptStatus {
+  in_progress
+  submitted
+  graded
+  abandoned
+}
+
+enum CodingSubmissionStatus {
+  draft
+  submitted
+  passed
+  failed
+  needs_review
+}
+
+enum NoteVisibility {
+  private
+  shared
+}
+
+enum CertificateStatus {
+  issued
+  revoked
+  expired
+}
+
 model user {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String @db.VarChar(255)
-  email    String @unique @db.VarChar(255)
-  password String @db.VarChar(255)
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String   @db.VarChar(255)
+  email           String   @unique @db.VarChar(255)
+  password        String   @db.VarChar(255)
+  role            UserRole @default(learner)
+  session_version Int      @default(1)
 
   created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @updatedAt @db.Timestamptz(6)
   deleted_at DateTime? @db.Timestamptz(6)
   is_deleted Boolean   @default(false) @db.Boolean
 
+  profile             user_profile?
+  created_courses     course[]              @relation("course_creator")
+  course_instructors  course_instructor[]
+  enrollments         enrollment[]
+  lesson_progress     lesson_progress[]
+  assessment_attempts assessment_attempt[]
+  coding_submissions  coding_submission[]
+  lesson_notes        lesson_note[]
+  course_reviews      course_review[]
+  certificates        certificate[]
+
+  @@index([role], map: "users_role_idx")
   @@map("users")
+}
+
+model user_profile {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String    @unique @db.Uuid
+  headline         String?   @db.VarChar(255)
+  bio              String?   @db.Text
+  avatar_url       String?   @db.Text
+  major            String?   @db.VarChar(120)
+  plan             String?   @db.VarChar(80)
+  timezone         String?   @db.VarChar(80)
+  locale           String?   @db.VarChar(20)
+  theme_preference String?   @db.VarChar(20)
+  preferences_json Json?
+  last_active_at   DateTime? @db.Timestamptz(6)
+  created_at       DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime  @updatedAt @db.Timestamptz(6)
+
+  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model course {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug              String       @unique @db.VarChar(160)
+  title             String       @db.VarChar(255)
+  summary           String?      @db.VarChar(500)
+  description       String?      @db.Text
+  category          String?      @db.VarChar(120)
+  level             CourseLevel  @default(beginner)
+  status            CourseStatus @default(draft)
+  language          String?      @db.VarChar(60)
+  thumbnail_url     String?      @db.Text
+  hero_image_url    String?      @db.Text
+  accent_gradient   String?      @db.VarChar(120)
+  estimated_hours   Int?
+  estimated_minutes Int?
+  passing_score     Int?
+  is_featured       Boolean      @default(false)
+  is_free           Boolean      @default(true)
+  price_cents       Int?
+  created_by_id     String       @db.Uuid
+  published_at      DateTime?    @db.Timestamptz(6)
+  archived_at       DateTime?    @db.Timestamptz(6)
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime     @updatedAt @db.Timestamptz(6)
+
+  creator      user                @relation("course_creator", fields: [created_by_id], references: [id], onDelete: Restrict)
+  instructors  course_instructor[]
+  enrollments  enrollment[]
+  sections     section[]
+  assessments  assessment[]
+  reviews      course_review[]
+  certificates certificate[]
+  lesson_notes lesson_note[]
+
+  @@index([created_by_id], map: "courses_created_by_idx")
+  @@index([status, level], map: "courses_status_level_idx")
+  @@index([category], map: "courses_category_idx")
+  @@map("courses")
+}
+
+model course_instructor {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id     String   @db.Uuid
+  instructor_id String   @db.Uuid
+  title         String?  @db.VarChar(120)
+  is_primary    Boolean  @default(false)
+  sort_order    Int      @default(0)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+
+  course     course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  instructor user   @relation(fields: [instructor_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, instructor_id], map: "course_instructors_course_instructor_key")
+  @@index([instructor_id], map: "course_instructors_instructor_idx")
+  @@map("course_instructors")
+}
+
+model enrollment {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id        String           @db.Uuid
+  user_id          String           @db.Uuid
+  status           EnrollmentStatus @default(active)
+  progress_percent Int              @default(0)
+  enrolled_at      DateTime         @default(now()) @db.Timestamptz(6)
+  started_at       DateTime?        @db.Timestamptz(6)
+  completed_at     DateTime?        @db.Timestamptz(6)
+  last_accessed_at DateTime?        @db.Timestamptz(6)
+
+  course course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, user_id], map: "enrollments_course_user_key")
+  @@index([user_id, status], map: "enrollments_user_status_idx")
+  @@index([course_id, status], map: "enrollments_course_status_idx")
+  @@map("enrollments")
+}
+
+model section {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id         String   @db.Uuid
+  title             String   @db.VarChar(255)
+  slug              String?  @db.VarChar(160)
+  description       String?  @db.Text
+  position          Int
+  estimated_minutes Int?
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime @updatedAt @db.Timestamptz(6)
+
+  course      course       @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  lessons     lesson[]
+  assessments assessment[]
+
+  @@unique([course_id, position], map: "sections_course_position_key")
+  @@index([course_id], map: "sections_course_idx")
+  @@map("sections")
+}
+
+model lesson {
+  id                    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section_id            String       @db.Uuid
+  slug                  String?      @db.VarChar(160)
+  title                 String       @db.VarChar(255)
+  summary               String?      @db.VarChar(500)
+  lesson_type           LessonType   @default(video)
+  status                LessonStatus @default(draft)
+  position              Int
+  estimated_minutes     Int?
+  is_preview            Boolean      @default(false)
+  video_url             String?      @db.Text
+  cover_image_url       String?      @db.Text
+  transcript            String?      @db.Text
+  resources_json        Json?
+  created_at            DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime     @updatedAt @db.Timestamptz(6)
+
+  section          section           @relation(fields: [section_id], references: [id], onDelete: Cascade)
+  content_blocks   content_block[]
+  progress_records lesson_progress[]
+  assessments      assessment[]
+  coding_exercises coding_exercise[]
+  notes            lesson_note[]
+
+  @@unique([section_id, position], map: "lessons_section_position_key")
+  @@index([section_id, status], map: "lessons_section_status_idx")
+  @@map("lessons")
+}
+
+model content_block {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lesson_id        String           @db.Uuid
+  block_type       ContentBlockType
+  title            String?          @db.VarChar(255)
+  position         Int
+  markdown_content String?          @db.Text
+  rich_text_json   Json?
+  code_language    String?          @db.VarChar(60)
+  code_content     String?          @db.Text
+  asset_url        String?          @db.Text
+  metadata_json    Json?
+  created_at       DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime         @updatedAt @db.Timestamptz(6)
+
+  lesson lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+
+  @@unique([lesson_id, position], map: "content_blocks_lesson_position_key")
+  @@index([lesson_id], map: "content_blocks_lesson_idx")
+  @@map("content_blocks")
+}
+
+model lesson_progress {
+  id                     String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lesson_id              String               @db.Uuid
+  user_id                String               @db.Uuid
+  status                 LessonProgressStatus @default(not_started)
+  progress_percent       Int                  @default(0)
+  watch_position_seconds Int                  @default(0)
+  started_at             DateTime?            @db.Timestamptz(6)
+  completed_at           DateTime?            @db.Timestamptz(6)
+  last_viewed_at         DateTime?            @db.Timestamptz(6)
+  created_at             DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime             @updatedAt @db.Timestamptz(6)
+
+  lesson lesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([lesson_id, user_id], map: "lesson_progress_lesson_user_key")
+  @@index([user_id, status], map: "lesson_progress_user_status_idx")
+  @@map("lesson_progress")
+}
+
+model assessment {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id       String         @db.Uuid
+  section_id      String?        @db.Uuid
+  lesson_id       String?        @db.Uuid
+  title           String         @db.VarChar(255)
+  description     String?        @db.Text
+  assessment_type AssessmentType @default(quiz)
+  position        Int            @default(0)
+  passing_score   Int            @default(0)
+  max_attempts    Int?
+  is_published    Boolean        @default(false)
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime       @updatedAt @db.Timestamptz(6)
+
+  course    course                @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  section   section?              @relation(fields: [section_id], references: [id], onDelete: SetNull)
+  lesson    lesson?               @relation(fields: [lesson_id], references: [id], onDelete: SetNull)
+  questions assessment_question[]
+  attempts  assessment_attempt[]
+
+  @@index([course_id, assessment_type], map: "assessments_course_type_idx")
+  @@index([lesson_id], map: "assessments_lesson_idx")
+  @@map("assessments")
+}
+
+model assessment_question {
+  id                  String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assessment_id       String                 @db.Uuid
+  prompt              String                 @db.Text
+  explanation         String?                @db.Text
+  question_type       AssessmentQuestionType
+  position            Int
+  points              Int                    @default(1)
+  options_json        Json?
+  correct_answer_json Json?
+  created_at          DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime               @updatedAt @db.Timestamptz(6)
+
+  assessment assessment           @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  answers    assessment_answer[]
+
+  @@unique([assessment_id, position], map: "assessment_questions_assessment_position_key")
+  @@map("assessment_questions")
+}
+
+model assessment_attempt {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assessment_id String        @db.Uuid
+  user_id       String        @db.Uuid
+  status        AttemptStatus @default(in_progress)
+  score         Int?
+  max_score     Int?
+  started_at    DateTime      @default(now()) @db.Timestamptz(6)
+  submitted_at  DateTime?     @db.Timestamptz(6)
+  graded_at     DateTime?     @db.Timestamptz(6)
+  feedback      String?       @db.Text
+  answers_json  Json?
+  created_at    DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime      @updatedAt @db.Timestamptz(6)
+
+  assessment assessment           @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  user       user                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  answers    assessment_answer[]
+
+  @@index([assessment_id, user_id], map: "assessment_attempts_assessment_user_idx")
+  @@index([user_id, status], map: "assessment_attempts_user_status_idx")
+  @@map("assessment_attempts")
+}
+
+model assessment_answer {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  attempt_id     String   @db.Uuid
+  question_id    String   @db.Uuid
+  answer_json    Json?
+  text_answer    String?  @db.Text
+  is_correct     Boolean?
+  points_awarded Int?
+  feedback       String?  @db.Text
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime @updatedAt @db.Timestamptz(6)
+
+  attempt  assessment_attempt  @relation(fields: [attempt_id], references: [id], onDelete: Cascade)
+  question assessment_question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+
+  @@unique([attempt_id, question_id], map: "assessment_answers_attempt_question_key")
+  @@map("assessment_answers")
+}
+
+model coding_exercise {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lesson_id         String?  @db.Uuid
+  title             String   @db.VarChar(255)
+  slug              String?  @db.VarChar(160)
+  instructions      String   @db.Text
+  language          String   @db.VarChar(60)
+  difficulty        String?  @db.VarChar(40)
+  position          Int      @default(0)
+  starter_code      String?  @db.Text
+  solution_code     String?  @db.Text
+  test_cases_json   Json?
+  evaluation_config Json?
+  created_at        DateTime @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime @updatedAt @db.Timestamptz(6)
+
+  lesson      lesson?              @relation(fields: [lesson_id], references: [id], onDelete: SetNull)
+  submissions coding_submission[]
+
+  @@index([lesson_id], map: "coding_exercises_lesson_idx")
+  @@map("coding_exercises")
+}
+
+model coding_submission {
+  id                String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  exercise_id       String                 @db.Uuid
+  user_id           String                 @db.Uuid
+  status            CodingSubmissionStatus @default(draft)
+  source_code       String                 @db.Text
+  language          String                 @db.VarChar(60)
+  stdout            String?                @db.Text
+  stderr            String?                @db.Text
+  score             Int?
+  execution_time_ms Int?
+  memory_kb         Int?
+  submitted_at      DateTime?              @db.Timestamptz(6)
+  created_at        DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime               @updatedAt @db.Timestamptz(6)
+
+  exercise coding_exercise @relation(fields: [exercise_id], references: [id], onDelete: Cascade)
+  user     user            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([exercise_id, user_id], map: "coding_submissions_exercise_user_idx")
+  @@index([user_id, status], map: "coding_submissions_user_status_idx")
+  @@map("coding_submissions")
+}
+
+model lesson_note {
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String         @db.Uuid
+  course_id        String?        @db.Uuid
+  lesson_id        String?        @db.Uuid
+  title            String?        @db.VarChar(255)
+  content          String         @db.Text
+  visibility       NoteVisibility @default(private)
+  timecode_seconds Int?
+  created_at       DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime       @updatedAt @db.Timestamptz(6)
+
+  user   user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  course course? @relation(fields: [course_id], references: [id], onDelete: SetNull)
+  lesson lesson? @relation(fields: [lesson_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id, lesson_id], map: "lesson_notes_user_lesson_idx")
+  @@map("lesson_notes")
+}
+
+model course_review {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id  String   @db.Uuid
+  user_id    String   @db.Uuid
+  rating     Int
+  review     String?  @db.Text
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+
+  course course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, user_id], map: "course_reviews_course_user_key")
+  @@index([course_id, rating], map: "course_reviews_course_rating_idx")
+  @@map("course_reviews")
+}
+
+model certificate {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id       String            @db.Uuid
+  user_id         String            @db.Uuid
+  status          CertificateStatus @default(issued)
+  serial_number   String            @unique @db.VarChar(120)
+  certificate_url String?           @db.Text
+  issued_at       DateTime          @default(now()) @db.Timestamptz(6)
+  expires_at      DateTime?         @db.Timestamptz(6)
+  revoked_at      DateTime?         @db.Timestamptz(6)
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime          @updatedAt @db.Timestamptz(6)
+
+  course course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, user_id], map: "certificates_course_user_key")
+  @@index([user_id, status], map: "certificates_user_status_idx")
+  @@map("certificates")
 }

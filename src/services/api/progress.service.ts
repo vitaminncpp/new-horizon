@@ -1,19 +1,13 @@
-type ProgressRecord = {
-  completedCourses: number;
-  hoursLearned: number;
-  quizAverage: number;
-  streakDays: number;
-};
+import type { ProgressSummaryDto } from "@/src/infra/dtos/course.dto";
+import { http } from "@/src/services/api/http.service";
 
-const progress: ProgressRecord = {
-  completedCourses: 12,
-  hoursLearned: 148,
-  quizAverage: 92,
-  streakDays: 14,
+type ProgressRecord = ProgressSummaryDto;
+
+type ProgressResponseDto = {
+  item: ProgressRecord;
 };
 
 export async function getProgressSummary() {
-  return new Promise<ProgressRecord>((resolve) => {
-    setTimeout(() => resolve(progress), 140);
-  });
+  const response = await http.get<ProgressResponseDto>("/api/progress/summary");
+  return response.item;
 }

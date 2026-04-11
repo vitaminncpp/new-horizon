@@ -2,6 +2,7 @@ import { User } from "@/src/infra/models/user.model";
 import { prisma } from "@/src/infra/prisma/prisma.client";
 import { Exception } from "@/src/infra/exception/app.exception";
 import ErrorCode from "@/src/infra/exception/error.enum";
+import { Prisma } from "@prisma/client";
 
 const publicUserSelect = {
   id: true,
@@ -9,6 +10,7 @@ const publicUserSelect = {
   name: true,
   role: true,
   created_at: true,
+  updated_at: true,
   is_deleted: true,
   deleted_at: true,
 };
@@ -26,6 +28,12 @@ export async function createUser(user: User): Promise<User> {
       data: user as never,
     });
   } catch (error: unknown) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      throw new Exception(ErrorCode.DB_USER_DUPLICATE, "User already exists", {
+        email: user.email,
+      });
+    }
+
     throw new Exception(
       ErrorCode.DB_INTERNAL_ERROR,
       (error as Error).message || "Error inserting user record in the database",

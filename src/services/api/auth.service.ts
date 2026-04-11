@@ -1,86 +1,48 @@
-import users from "@/src/services/mock/users.json";
 import type { AppUser } from "@/src/services/mock/types";
+import { http } from "@/src/services/api/http.service";
 
-const STORAGE_KEY = "new-horizon-auth-user";
+type AuthPayload = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    created_at: string;
+  };
+};
 
-function delay<T>(value: T, ms = 220) {
-  return new Promise<T>((resolve) => {
-    setTimeout(() => resolve(value), ms);
-  });
-}
-
-function getStoredUsers() {
-  if (typeof window === "undefined") {
-    return users as AppUser[];
-  }
-
-  const raw = window.localStorage.getItem("new-horizon-users");
-  if (!raw) {
-    window.localStorage.setItem("new-horizon-users", JSON.stringify(users));
-    return users as AppUser[];
-  }
-
-  return JSON.parse(raw) as AppUser[];
-}
-
-function setStoredUsers(nextUsers: AppUser[]) {
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem("new-horizon-users", JSON.stringify(nextUsers));
-  }
+function mapUser(payload: AuthPayload["user"]): AppUser {
+  return {
+    id: payload.id,
+    name: payload.name,
+    email: payload.email,
+    password: "",
+    major: "Design Major",
+    plan: "Premium Student",
+    role: "learner",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+  };
 }
 
 export async function getCurrentUser() {
-  if (typeof window === "undefined") {
-    return delay<AppUser | null>(null, 0);
+  try {
+    const response = await http.get<AuthPayload>("/api/auth/me");
+    return mapUser(response.user);
+  } catch {
+    return null;
   }
-
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  return delay(raw ? (JSON.parse(raw) as AppUser) : null);
 }
 
 export async function login(email: string, password: string) {
-  const user = getStoredUsers().find((item) => item.email === email && item.password === password);
-  if (!user) {
-    throw new Error("Invalid email or password.");
-  }
-
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  }
-
-  return delay(user);
+  const response = await http.post<AuthPayload>("/api/auth/login", { email, password });
+  return mapUser(response.user);
 }
 
 export async function register(payload: Pick<AppUser, "name" | "email" | "password">) {
-  const currentUsers = getStoredUsers();
-  if (currentUsers.some((item) => item.email === payload.email)) {
-    throw new Error("An account with this email already exists.");
-  }
-
-  const nextUser: AppUser = {
-    id: `user-${currentUsers.length + 1}`,
-    role: "learner",
-    major: "Independent Learner",
-    plan: "Premium Student",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-    ...payload,
-  };
-
-  const nextUsers = [...currentUsers, nextUser];
-  setStoredUsers(nextUsers);
-
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
-  }
-
-  return delay(nextUser);
+  const response = await http.post<AuthPayload>("/api/auth/register", payload);
+  return mapUser(response.user);
 }
 
 export async function logout() {
-  if (typeof window !== "undefined") {
-    window.localStorage.removeItem(STORAGE_KEY);
-  }
-
-  return delay(undefined);
+  await http.post("/api/auth/logout", {});
 }
