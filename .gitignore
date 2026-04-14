@@ -118,3 +118,5 @@ Testing/
 .gemini
 .swp
 .codex
+
+yarn.lock
