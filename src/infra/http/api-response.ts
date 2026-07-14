@@ -50,10 +50,10 @@ function mapErrorCodeToStatus(code: ErrorCode, fallbackStatus: number) {
     case ErrorCode.INVALID_TOKEN:
       return 400;
     case ErrorCode.UNAUTHORIZED:
+    case ErrorCode.DB_USER_NOT_FOUND:
       return 401;
     case ErrorCode.FORBIDDEN:
       return 403;
-    case ErrorCode.DB_USER_NOT_FOUND:
     case ErrorCode.RESOURCE_NOT_FOUND:
       return 404;
     case ErrorCode.DB_USER_DUPLICATE:

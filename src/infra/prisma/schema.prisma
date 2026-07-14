@@ -117,7 +117,7 @@ model user {
   is_deleted Boolean   @default(false) @db.Boolean
 
   profile             user_profile?
-  created_courses     course[]              @relation("course_creator")
+  created_courses     course[]             @relation("course_creator")
   course_instructors  course_instructor[]
   enrollments         enrollment[]
   lesson_progress     lesson_progress[]
@@ -250,22 +250,22 @@ model section {
 }
 
 model lesson {
-  id                    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  section_id            String       @db.Uuid
-  slug                  String?      @db.VarChar(160)
-  title                 String       @db.VarChar(255)
-  summary               String?      @db.VarChar(500)
-  lesson_type           LessonType   @default(video)
-  status                LessonStatus @default(draft)
-  position              Int
-  estimated_minutes     Int?
-  is_preview            Boolean      @default(false)
-  video_url             String?      @db.Text
-  cover_image_url       String?      @db.Text
-  transcript            String?      @db.Text
-  resources_json        Json?
-  created_at            DateTime     @default(now()) @db.Timestamptz(6)
-  updated_at            DateTime     @updatedAt @db.Timestamptz(6)
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  section_id        String       @db.Uuid
+  slug              String?      @db.VarChar(160)
+  title             String       @db.VarChar(255)
+  summary           String?      @db.VarChar(500)
+  lesson_type       LessonType   @default(video)
+  status            LessonStatus @default(draft)
+  position          Int
+  estimated_minutes Int?
+  is_preview        Boolean      @default(false)
+  video_url         String?      @db.Text
+  cover_image_url   String?      @db.Text
+  transcript        String?      @db.Text
+  resources_json    Json?
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime     @updatedAt @db.Timestamptz(6)
 
   section          section           @relation(fields: [section_id], references: [id], onDelete: Cascade)
   content_blocks   content_block[]
@@ -361,7 +361,7 @@ model assessment_question {
   created_at          DateTime               @default(now()) @db.Timestamptz(6)
   updated_at          DateTime               @updatedAt @db.Timestamptz(6)
 
-  assessment assessment           @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  assessment assessment          @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
   answers    assessment_answer[]
 
   @@unique([assessment_id, position], map: "assessment_questions_assessment_position_key")
@@ -383,8 +383,8 @@ model assessment_attempt {
   created_at    DateTime      @default(now()) @db.Timestamptz(6)
   updated_at    DateTime      @updatedAt @db.Timestamptz(6)
 
-  assessment assessment           @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
-  user       user                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  assessment assessment          @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  user       user                @relation(fields: [user_id], references: [id], onDelete: Cascade)
   answers    assessment_answer[]
 
   @@index([assessment_id, user_id], map: "assessment_attempts_assessment_user_idx")
@@ -427,7 +427,7 @@ model coding_exercise {
   created_at        DateTime @default(now()) @db.Timestamptz(6)
   updated_at        DateTime @updatedAt @db.Timestamptz(6)
 
-  lesson      lesson?              @relation(fields: [lesson_id], references: [id], onDelete: SetNull)
+  lesson      lesson?             @relation(fields: [lesson_id], references: [id], onDelete: SetNull)
   submissions coding_submission[]
 
   @@index([lesson_id], map: "coding_exercises_lesson_idx")

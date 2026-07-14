@@ -6,44 +6,43 @@
         "id": "module-01",
         "title": "Introduction to Curatorial UX",
         "completed": 4,
-        "total": 8,
+        "total": 3,
         "items": [
-          {
-            "id": "lesson-01",
-            "title": "Introduction to the Platform",
-            "duration": "04:20",
-            "status": "complete",
-            "type": "video"
-          },
-          {
-            "id": "lesson-02",
-            "title": "Course Overview & Learning Outcomes",
-            "duration": "12:45",
-            "status": "current",
-            "type": "video"
-          },
-          {
-            "id": "lesson-03",
-            "title": "Setting up your Workspace",
-            "duration": "08:15",
-            "status": "locked",
-            "type": "video"
-          }
+          { "id": "lesson-01", "title": "Introduction to the Platform", "duration": "04:20", "status": "complete", "type": "video" },
+          { "id": "lesson-02", "title": "Course Overview & Learning Outcomes", "duration": "12:45", "status": "current", "type": "video" },
+          { "id": "lesson-03", "title": "Setting up your Workspace", "duration": "08:15", "status": "locked", "type": "article" }
         ]
       },
       {
         "id": "module-02",
         "title": "Core Strategy",
         "completed": 0,
-        "total": 12,
+        "total": 4,
         "items": [
-          {
-            "id": "lesson-04",
-            "title": "Understanding Market Needs",
-            "duration": "15:00",
-            "status": "locked",
-            "type": "video"
-          }
+          { "id": "lesson-04", "title": "Understanding Market Needs", "duration": "15:00", "status": "locked", "type": "video" },
+          { "id": "lesson-05", "title": "Gestalt Principles in Practice", "duration": "18:30", "status": "locked", "type": "video" },
+          { "id": "lesson-06", "title": "Quiz: Design Principles", "duration": "10:00", "status": "locked", "type": "quiz" },
+          { "id": "lesson-07", "title": "Coding Exercise: CSS Layout", "duration": "25:00", "status": "locked", "type": "coding" }
+        ]
+      },
+      {
+        "id": "module-03",
+        "title": "Visual Design Mastery",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-08", "title": "Tonal Depth Theory", "duration": "14:20", "status": "locked", "type": "video" },
+          { "id": "lesson-09", "title": "Editorial Typography", "duration": "16:45", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-04",
+        "title": "Portfolio & Critique",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-10", "title": "Building Your Portfolio Piece", "duration": "20:00", "status": "locked", "type": "article" },
+          { "id": "lesson-11", "title": "Peer Review Workshop", "duration": "12:30", "status": "locked", "type": "video" }
         ]
       }
     ]
@@ -55,22 +54,180 @@
         "id": "module-py-01",
         "title": "Python Basics",
         "completed": 3,
-        "total": 7,
+        "total": 5,
         "items": [
-          {
-            "id": "lesson-py-01",
-            "title": "Variables and Data Types",
-            "duration": "10:10",
-            "status": "complete",
-            "type": "video"
-          },
-          {
-            "id": "lesson-py-02",
-            "title": "Control Flow Foundations",
-            "duration": "14:05",
-            "status": "current",
-            "type": "video"
-          }
+          { "id": "lesson-py-01", "title": "Variables and Data Types", "duration": "10:10", "status": "complete", "type": "video" },
+          { "id": "lesson-py-02", "title": "Control Flow Foundations", "duration": "14:05", "status": "current", "type": "video" },
+          { "id": "lesson-py-03", "title": "Functions and Scope", "duration": "12:30", "status": "locked", "type": "video" },
+          { "id": "lesson-py-04", "title": "Quiz: Python Fundamentals", "duration": "08:00", "status": "locked", "type": "quiz" },
+          { "id": "lesson-py-05", "title": "Coding Exercise: FizzBuzz", "duration": "20:00", "status": "locked", "type": "coding" }
+        ]
+      },
+      {
+        "id": "module-py-02",
+        "title": "Data Structures",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-py-06", "title": "Lists and Tuples", "duration": "11:15", "status": "locked", "type": "video" },
+          { "id": "lesson-py-07", "title": "Dictionaries and Sets", "duration": "13:40", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-py-03",
+        "title": "File I/O and Automation",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-py-08", "title": "Working with Files", "duration": "09:50", "status": "locked", "type": "article" },
+          { "id": "lesson-py-09", "title": "Mini Project: Log Analyzer", "duration": "30:00", "status": "locked", "type": "coding" }
+        ]
+      }
+    ]
+  },
+  {
+    "courseId": "growth-marketing-systems",
+    "modules": [
+      {
+        "id": "module-mkt-01",
+        "title": "Funnel Architecture",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-mkt-01", "title": "The Modern Marketing Funnel", "duration": "15:20", "status": "locked", "type": "video" },
+          { "id": "lesson-mkt-02", "title": "Conversion Rate Optimization", "duration": "18:45", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-mkt-02",
+        "title": "Experimentation Systems",
+        "completed": 0,
+        "total": 1,
+        "items": [
+          { "id": "lesson-mkt-03", "title": "A/B Testing Methodology", "duration": "22:10", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-mkt-03",
+        "title": "Lifecycle Marketing",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-mkt-04", "title": "Email Automation Sequences", "duration": "12:30", "status": "locked", "type": "article" },
+          { "id": "lesson-mkt-05", "title": "Retention & Advocacy", "duration": "16:50", "status": "locked", "type": "video" }
+        ]
+      }
+    ]
+  },
+  {
+    "courseId": "product-strategy-basics",
+    "modules": [
+      {
+        "id": "module-str-01",
+        "title": "Strategic Foundations",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-str-01", "title": "What is Product Strategy?", "duration": "14:30", "status": "locked", "type": "video" },
+          { "id": "lesson-str-02", "title": "Market Analysis", "duration": "17:15", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-str-02",
+        "title": "Discovery & Validation",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-str-03", "title": "User Research Methods", "duration": "11:40", "status": "locked", "type": "article" },
+          { "id": "lesson-str-04", "title": "Prioritization Frameworks", "duration": "19:20", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-str-03",
+        "title": "Execution & Communication",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-str-05", "title": "Roadmapping", "duration": "13:50", "status": "locked", "type": "video" },
+          { "id": "lesson-str-06", "title": "Stakeholder Communication", "duration": "10:25", "status": "locked", "type": "article" }
+        ]
+      }
+    ]
+  },
+  {
+    "courseId": "react-typescript-deep-dive",
+    "modules": [
+      {
+        "id": "module-ts-01",
+        "title": "TypeScript Foundations for React",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-ts-01", "title": "Generics and Utility Types", "duration": "16:40", "status": "locked", "type": "video" },
+          { "id": "lesson-ts-02", "title": "Type-Safe Props and Events", "duration": "13:20", "status": "locked", "type": "article" }
+        ]
+      },
+      {
+        "id": "module-ts-02",
+        "title": "React 19 Features",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-ts-03", "title": "Actions and useActionState", "duration": "18:15", "status": "locked", "type": "video" },
+          { "id": "lesson-ts-04", "title": "Server Components and Streaming", "duration": "21:30", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-ts-03",
+        "title": "State Management Patterns",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-ts-05", "title": "Zustand and Context", "duration": "15:50", "status": "locked", "type": "video" },
+          { "id": "lesson-ts-06", "title": "Coding Exercise: Custom Hook Library", "duration": "35:00", "status": "locked", "type": "coding" }
+        ]
+      },
+      {
+        "id": "module-ts-04",
+        "title": "Performance Optimization",
+        "completed": 0,
+        "total": 1,
+        "items": [
+          { "id": "lesson-ts-07", "title": "Memoization and Re-renders", "duration": "20:10", "status": "locked", "type": "video" }
+        ]
+      }
+    ]
+  },
+  {
+    "courseId": "data-science-python",
+    "modules": [
+      {
+        "id": "module-ds-01",
+        "title": "Data Wrangling",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-ds-01", "title": "Pandas Fundamentals", "duration": "19:30", "status": "locked", "type": "video" },
+          { "id": "lesson-ds-02", "title": "Data Cleaning Techniques", "duration": "16:45", "status": "locked", "type": "video" }
+        ]
+      },
+      {
+        "id": "module-ds-02",
+        "title": "Visualization",
+        "completed": 0,
+        "total": 2,
+        "items": [
+          { "id": "lesson-ds-03", "title": "Matplotlib & Seaborn", "duration": "22:10", "status": "locked", "type": "video" },
+          { "id": "lesson-ds-04", "title": "Interactive Dashboards with Plotly", "duration": "14:20", "status": "locked", "type": "article" }
+        ]
+      },
+      {
+        "id": "module-ds-03",
+        "title": "Machine Learning",
+        "completed": 0,
+        "total": 1,
+        "items": [
+          { "id": "lesson-ds-05", "title": "Supervised Learning", "duration": "28:40", "status": "locked", "type": "video" }
         ]
       }
     ]

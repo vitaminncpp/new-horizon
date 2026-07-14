@@ -23,7 +23,7 @@ export async function register(email: string, name: string, password: string) {
     session_version: 1,
     is_deleted: false,
     deleted_at: null,
-  } as User);
+  } as never);
 }
 
 export async function login(email: string, password: string) {
@@ -99,8 +99,8 @@ function issueSession(user: User) {
 function sanitizeUser(user: User): User {
   return {
     id: user.id,
-    email: user.email,
     name: user.name,
+    email: user.email,
     role: user.role,
     session_version: user.session_version,
     created_at: user.created_at,

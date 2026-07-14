@@ -23,7 +23,7 @@ export function setAccessCookie(response: NextResponse, token: string) {
 export function setRefreshCookie(response: NextResponse, token: string) {
   response.cookies.set(AUTH_COOKIE.REFRESH, token, {
     ...baseCookieOptions,
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: env.COOKIE_AGE ?? 60 * 60 * 24 * 30,
   });
 }
 

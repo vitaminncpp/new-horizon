@@ -3,6 +3,8 @@ import { loginRequestSchema } from "@/src/infra/dtos/auth.dto";
 import { apiError, apiSuccess } from "@/src/infra/http/api-response";
 import { setAccessCookie, setRefreshCookie } from "@/src/infra/auth/auth-cookie";
 import * as authService from "@/src/services/auth.service";
+import ErrorCode from "@/src/infra/exception/error.enum";
+import { Exception } from "@/src/infra/exception/app.exception";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,6 +17,12 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error) {
+    if (
+      error instanceof Exception &&
+      (error.code === ErrorCode.DB_USER_NOT_FOUND || error.code === ErrorCode.INVALID_PASSWORD)
+    ) {
+      return apiError(new Exception(ErrorCode.UNAUTHORIZED, "Invalid credentials"), 401);
+    }
     return apiError(error, 400);
   }
 }

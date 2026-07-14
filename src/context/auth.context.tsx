@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type PropsWithChildren } from "react";
+import { useRouter } from "next/navigation";
 import type { AppUser } from "@/src/services/mock/types";
 import * as authService from "@/src/services/api/auth.service";
 
@@ -27,51 +28,75 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function getRedirectTarget(): string {
+  if (typeof window === "undefined") return "/dashboard";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("next") || "/dashboard";
+}
+
 export function AuthProvider({ children }: PropsWithChildren) {
+  const router = useRouter();
   const [user, setUser] = useState<AppUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
     void authService
       .getCurrentUser()
-      .then(setUser)
-      .finally(() => setIsLoading(false));
+      .then((u) => {
+        if (active) setUser(u);
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const login = async (values: LoginInput) => {
-    setError(null);
-    try {
-      const nextUser = await authService.login(values.email, values.password);
-      setUser(nextUser);
-      return true;
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Unable to login.");
-      return false;
-    }
-  };
+  const login = useCallback(
+    async (values: LoginInput) => {
+      setError(null);
+      try {
+        const nextUser = await authService.login(values.email, values.password);
+        setUser(nextUser);
+        router.push(getRedirectTarget());
+        return true;
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : "Unable to login.");
+        return false;
+      }
+    },
+    [router],
+  );
 
-  const register = async (values: RegisterInput) => {
-    if (values.password !== values.confirmPassword) {
-      setError("Passwords do not match.");
-      return false;
-    }
+  const register = useCallback(
+    async (values: RegisterInput) => {
+      if (values.password !== values.confirmPassword) {
+        setError("Passwords do not match.");
+        return false;
+      }
 
-    setError(null);
-    try {
-      const nextUser = await authService.register(values);
-      setUser(nextUser);
-      return true;
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Unable to register.");
-      return false;
-    }
-  };
+      setError(null);
+      try {
+        const nextUser = await authService.register(values);
+        setUser(nextUser);
+        router.push(getRedirectTarget());
+        return true;
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : "Unable to register.");
+        return false;
+      }
+    },
+    [router],
+  );
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await authService.logout();
     setUser(null);
-  };
+    router.push("/login");
+  }, [router]);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, error, login, register, logout }}>

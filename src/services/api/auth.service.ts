@@ -1,48 +1,52 @@
 import type { AppUser } from "@/src/services/mock/types";
 import { http } from "@/src/services/api/http.service";
+import { API_ENDPOINTS } from "@/src/infra/config/api.config";
 
-type AuthPayload = {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    created_at: string;
-  };
+type ServerUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: "learner" | "instructor" | "admin";
 };
 
-function mapUser(payload: AuthPayload["user"]): AppUser {
+type AuthPayload = {
+  user: ServerUser;
+};
+
+function mapUser(serverUser: ServerUser): AppUser {
   return {
-    id: payload.id,
-    name: payload.name,
-    email: payload.email,
+    id: serverUser.id,
+    name: serverUser.name,
+    email: serverUser.email,
     password: "",
-    major: "Design Major",
-    plan: "Premium Student",
-    role: "learner",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    role: serverUser.role,
+    major: "",
+    plan: "",
+    avatar: "",
   };
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<AppUser | null> {
   try {
-    const response = await http.get<AuthPayload>("/api/auth/me");
+    const response = await http.get<AuthPayload>(API_ENDPOINTS.AUTH.ME);
     return mapUser(response.user);
   } catch {
     return null;
   }
 }
 
-export async function login(email: string, password: string) {
-  const response = await http.post<AuthPayload>("/api/auth/login", { email, password });
+export async function login(email: string, password: string): Promise<AppUser> {
+  const response = await http.post<AuthPayload>(API_ENDPOINTS.AUTH.LOGIN, { email, password });
   return mapUser(response.user);
 }
 
-export async function register(payload: Pick<AppUser, "name" | "email" | "password">) {
-  const response = await http.post<AuthPayload>("/api/auth/register", payload);
+export async function register(
+  payload: Pick<AppUser, "name" | "email" | "password">,
+): Promise<AppUser> {
+  const response = await http.post<AuthPayload>(API_ENDPOINTS.AUTH.REGISTER, payload);
   return mapUser(response.user);
 }
 
-export async function logout() {
-  await http.post("/api/auth/logout", {});
+export async function logout(): Promise<void> {
+  await http.post(API_ENDPOINTS.AUTH.LOGOUT, {});
 }

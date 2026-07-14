@@ -11,4 +11,5 @@ export const protectedRouteRules: RouteAccessRule[] = [
   { prefix: "/courses" },
   { prefix: "/course" },
   { prefix: "/profile" },
+  { prefix: "/simulator" },
 ];

@@ -30,28 +30,28 @@
     "jsonwebtoken": "^9.0.3",
     "monaco-editor": "^0.55.1",
     "monaco-themes": "^0.4.8",
-    "next": "16.2.6",
+    "next": "16.2.10",
     "pg": "^8.20.0",
     "primereact": "^10.9.7",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.8.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
-    "@types/node": "^25.5.2",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "9.x.x",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.2.10",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.1",
     "prisma": "^7.7.0",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
-    "typescript": "6.0.3"
+    "typescript": "5.8.3"
   }
 }
