@@ -50,7 +50,7 @@ export function AuthCard({ mode }: AuthCardProps) {
   return (
     <div className="grid min-h-screen lg:grid-cols-[420px_1fr]">
       <section className="flex items-center justify-center border-b border-border-soft bg-surface-low px-6 py-16 lg:border-b-0 lg:border-r">
-        <div className="w-full max-w-sm rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+        <div className="w-full max-w-sm rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
           <div className="mb-8">
             <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
               LearnSphere Access

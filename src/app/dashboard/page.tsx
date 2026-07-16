@@ -15,18 +15,23 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const { user } = useAuth();
-  const { courses, progressSummary, isLoading, error } = useLearning();
+  const {
+    progressSummary,
+    featuredCourse,
+    enrolledCourses,
+    focusMetrics,
+    upcomingItems,
+    isLoading,
+    error,
+  } = useLearning();
   const auth = useAuthRedirect("private");
 
-  const featuredCourse = useMemo(
-    () => courses.find((course) => course.featured) ?? courses[0],
-    [courses],
-  );
-
   const filteredCourses = useMemo(
-    () => courses.filter((course) => course.title.toLowerCase().includes(search.toLowerCase())),
-    [courses, search],
+    () =>
+      enrolledCourses.filter((course) => course.title.toLowerCase().includes(search.toLowerCase())),
+    [enrolledCourses, search],
   );
+  const firstName = user?.name.split(" ")[0] ?? "there";
 
   if (auth.isLoading || isLoading) {
     return <Loader label="Loading dashboard" />;
@@ -38,8 +43,8 @@ export default function DashboardPage() {
         searchPlaceholder="Search courses, mentors, or resources..."
         onSearch={setSearch}
       >
-        <div className="mx-auto max-w-[960px] p-8">
-          <div className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+        <div className="mx-auto max-w-240 p-8">
+          <div className="rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
             <h2 className="text-2xl font-bold text-text-primary">Dashboard unavailable</h2>
             <p className="mt-3 text-sm text-text-secondary">
               {error ?? "Learning data could not be loaded yet."}
@@ -56,8 +61,8 @@ export default function DashboardPage() {
         searchPlaceholder="Search courses, mentors, or resources..."
         onSearch={setSearch}
       >
-        <div className="mx-auto max-w-[960px] p-8">
-          <div className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+        <div className="mx-auto max-w-240 p-8">
+          <div className="rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
             <h2 className="text-2xl font-bold text-text-primary">No courses available yet</h2>
             <p className="mt-3 text-sm text-text-secondary">
               {error ??
@@ -65,7 +70,7 @@ export default function DashboardPage() {
             </p>
             <Link
               href="/courses"
-              className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-[color:var(--color-text-on-primary)]"
+              className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 text-sm font-bold text-text-on-primary"
             >
               Go to Courses
             </Link>
@@ -77,14 +82,14 @@ export default function DashboardPage() {
 
   return (
     <PageWrapper searchPlaceholder="Search courses, mentors, or resources..." onSearch={setSearch}>
-      <div className="mx-auto max-w-[1400px] p-8">
+      <div className="mx-auto max-w-350 p-8">
         <div className="mb-10">
           <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-text-primary">
-            Welcome {user?.name.split(" ")[0]}!
+            Welcome {firstName}!
           </h2>
           <p className="max-w-2xl text-lg text-text-secondary">
-            Your progress this week has been exceptional. You&apos;re in the top 5% of design
-            students this month.
+            Pick up from your current path, review upcoming lessons, and keep your weekly progress
+            moving.
           </p>
         </div>
         <DashboardStats summary={progressSummary} />
@@ -103,7 +108,7 @@ export default function DashboardPage() {
                   View Roadmap
                 </button>
               </div>
-              <div className="relative overflow-hidden rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+              <div className="relative overflow-hidden rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
                 <div className="absolute right-0 top-0 h-full w-1/3 opacity-10">
                   <span className="material-symbols-outlined rotate-12 text-[200px] text-primary">
                     auto_awesome
@@ -128,7 +133,7 @@ export default function DashboardPage() {
                   </div>
                   <Link
                     href={`/course/${featuredCourse.id}`}
-                    className="rounded-xl bg-primary px-8 py-3 text-sm font-bold text-[color:var(--color-text-on-primary)] shadow-[0_20px_40px_rgba(85,67,207,0.2)] transition-colors hover:bg-primary-dim"
+                    className="rounded-xl bg-primary px-8 py-3 text-sm font-bold text-text-on-primary shadow-[0_20px_40px_rgba(85,67,207,0.2)] transition-colors hover:bg-primary-dim"
                   >
                     Resume Lesson
                   </Link>
@@ -148,59 +153,82 @@ export default function DashboardPage() {
                 </Link>
               </div>
               <div className="grid gap-6 md:grid-cols-2">
-                {filteredCourses
-                  .filter((course) => course.enrolled)
-                  .map((course) => (
-                    <div
-                      key={course.id}
-                      className="rounded-[1.5rem] bg-surface-lowest p-6 card-shadow dark:card-shadow-dark"
-                    >
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-secondary">
-                        {course.category}
-                      </p>
-                      <h4 className="mt-3 text-xl font-bold text-text-primary">{course.title}</h4>
-                      <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                        {course.description}
-                      </p>
-                      <div className="mt-5">
-                        <ProgressBar value={course.progress} tone="secondary" />
-                      </div>
+                {filteredCourses.map((course) => (
+                  <Link
+                    key={course.id}
+                    href={`/course/${course.id}`}
+                    className="rounded-3xl bg-surface-lowest p-6 transition-transform hover:-translate-y-1 card-shadow dark:card-shadow-dark"
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-secondary">
+                      {course.category}
+                    </p>
+                    <h4 className="mt-3 text-xl font-bold text-text-primary">{course.title}</h4>
+                    <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                      {course.description}
+                    </p>
+                    <div className="mt-5">
+                      <ProgressBar value={course.progress} tone="secondary" />
                     </div>
-                  ))}
+                  </Link>
+                ))}
+                {filteredCourses.length === 0 ? (
+                  <div className="rounded-3xl bg-surface-lowest p-6 card-shadow dark:card-shadow-dark md:col-span-2">
+                    <h4 className="text-xl font-bold text-text-primary">No enrolled paths found</h4>
+                    <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                      {search
+                        ? "No enrolled course matches your search."
+                        : "Enroll in a course to populate this section."}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </section>
           </div>
           <div className="space-y-10">
-            <section className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+            <section className="rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
               <h3 className="text-2xl font-bold tracking-tight text-text-primary">Focus Metrics</h3>
               <div className="mt-6 space-y-6">
                 <div>
                   <div className="mb-2 flex justify-between">
                     <span className="text-sm font-semibold text-text-secondary">Weekly Goal</span>
-                    <span className="text-sm font-bold text-primary">80%</span>
+                    <span className="text-sm font-bold text-primary">
+                      {focusMetrics.weeklyGoalPercent}%
+                    </span>
                   </div>
-                  <ProgressBar value={80} tone="secondary" />
+                  <ProgressBar value={focusMetrics.weeklyGoalPercent} tone="secondary" />
                 </div>
                 <div>
                   <div className="mb-2 flex justify-between">
                     <span className="text-sm font-semibold text-text-secondary">Assignments</span>
-                    <span className="text-sm font-bold text-primary">60%</span>
+                    <span className="text-sm font-bold text-primary">
+                      {focusMetrics.assignmentsPercent}%
+                    </span>
                   </div>
-                  <ProgressBar value={60} />
+                  <ProgressBar value={focusMetrics.assignmentsPercent} />
                 </div>
               </div>
             </section>
-            <section className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+            <section className="rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
               <h3 className="text-2xl font-bold tracking-tight text-text-primary">Upcoming</h3>
               <div className="mt-6 space-y-4">
-                {["Gestalt Theory Review", "Interactive Quiz Panel", "Portfolio Critique"].map(
-                  (item) => (
-                    <div key={item} className="rounded-xl bg-surface-low p-4">
-                      <p className="text-sm font-semibold text-text-primary">{item}</p>
-                      <p className="mt-1 text-xs text-text-secondary">Due in 2 days</p>
-                    </div>
-                  ),
-                )}
+                {upcomingItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className="block rounded-xl bg-surface-low p-4 transition-colors hover:bg-surface-container"
+                  >
+                    <p className="text-sm font-semibold text-text-primary">{item.title}</p>
+                    <p className="mt-1 text-xs text-text-secondary">{item.subtitle}</p>
+                  </Link>
+                ))}
+                {upcomingItems.length === 0 ? (
+                  <div className="rounded-xl bg-surface-low p-4">
+                    <p className="text-sm font-semibold text-text-primary">No upcoming lessons</p>
+                    <p className="mt-1 text-xs text-text-secondary">
+                      Enrolled course lessons will appear here.
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </section>
           </div>
@@ -208,8 +236,8 @@ export default function DashboardPage() {
       </div>
       <Modal open={openModal} title="Learning Roadmap" onClose={() => setOpenModal(false)}>
         <p className="text-sm leading-relaxed text-text-secondary">
-          Tonal depth, editorial typography, glass interfaces, and structured critique remain your
-          next roadmap milestones.
+          Your roadmap is built from enrolled course progress. Continue the next lesson, complete
+          assessments, and finished paths will update these metrics automatically.
         </p>
       </Modal>
     </PageWrapper>

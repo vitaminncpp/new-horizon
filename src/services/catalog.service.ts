@@ -22,6 +22,20 @@ import ErrorCode from "@/src/infra/exception/error.enum";
 
 type Viewer = { id: string } | null;
 
+export type CourseSort = "popular" | "latest" | "rating";
+
+export type CourseDurationFilter = "0-2" | "3-6" | "7-plus";
+
+export type ListCoursesFilters = {
+  search?: string;
+  categories?: string[];
+  difficulty?: CourseDto["difficulty"];
+  duration?: CourseDurationFilter;
+  sort?: CourseSort;
+  page?: number;
+  pageSize?: number;
+};
+
 const courseInclude = Prisma.validator<Prisma.courseInclude>()({
   creator: true,
   instructors: {
@@ -105,14 +119,113 @@ function mapCourse(course: DbCourse, viewerId?: string): CourseDto {
   };
 }
 
-export async function listCourses(viewer: Viewer = null) {
+export async function listCourses(viewer: Viewer = null, filters: ListCoursesFilters = {}) {
   const items = await prisma.course.findMany({
-    where: { status: "published" },
+    where: buildCourseWhere(filters),
     include: courseInclude,
     orderBy: [{ is_featured: "desc" }, { created_at: "desc" }],
   });
 
-  return items.map((item) => mapCourse(item, viewer?.id));
+  const filteredItems = items
+    .map((item) => mapCourse(item, viewer?.id))
+    .filter((course) => matchesDuration(course, filters.duration))
+    .sort((a, b) => sortCourses(a, b, filters.sort));
+
+  if (!filters.page || !filters.pageSize) {
+    return filteredItems;
+  }
+
+  const page = Math.max(1, filters.page);
+  const pageSize = Math.max(1, filters.pageSize);
+  const start = (page - 1) * pageSize;
+
+  return filteredItems.slice(start, start + pageSize);
+}
+
+export async function listCoursesWithMeta(viewer: Viewer = null, filters: ListCoursesFilters = {}) {
+  const page = Math.max(1, filters.page ?? 1);
+  const pageSize = Math.max(1, filters.pageSize ?? 6);
+  const items = await listCourses(viewer, { ...filters, page: undefined, pageSize: undefined });
+  const totalItems = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * pageSize;
+
+  return {
+    items: items.slice(start, start + pageSize),
+    meta: {
+      page: currentPage,
+      pageSize,
+      totalItems,
+      totalPages,
+    },
+  };
+}
+
+function buildCourseWhere(filters: ListCoursesFilters): Prisma.courseWhereInput {
+  const where: Prisma.courseWhereInput = { status: "published" };
+  const search = filters.search?.trim();
+  const categories = filters.categories?.filter((category) => category !== "All");
+
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      { summary: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+      {
+        creator: {
+          name: { contains: search, mode: "insensitive" },
+        },
+      },
+      {
+        instructors: {
+          some: {
+            instructor: {
+              name: { contains: search, mode: "insensitive" },
+            },
+          },
+        },
+      },
+    ];
+  }
+
+  if (categories && categories.length > 0) {
+    where.category = { in: categories };
+  }
+
+  if (filters.difficulty) {
+    where.level = filters.difficulty.toLowerCase() as Prisma.EnumCourseLevelFilter["equals"];
+  }
+
+  return where;
+}
+
+function matchesDuration(course: CourseDto, duration?: CourseDurationFilter) {
+  if (!duration) {
+    return true;
+  }
+
+  if (duration === "0-2") {
+    return course.durationHours <= 2;
+  }
+
+  if (duration === "3-6") {
+    return course.durationHours >= 3 && course.durationHours <= 6;
+  }
+
+  return course.durationHours >= 7;
+}
+
+function sortCourses(a: CourseDto, b: CourseDto, sort: CourseSort = "popular") {
+  if (sort === "latest") {
+    return 0;
+  }
+
+  if (sort === "rating") {
+    return b.rating - a.rating || b.reviews - a.reviews;
+  }
+
+  return Number(b.featured) - Number(a.featured) || b.reviews - a.reviews || b.rating - a.rating;
 }
 
 export async function getCourse(courseId: string, viewer: Viewer = null) {
@@ -522,13 +635,73 @@ export async function getDashboardData(viewer: { id: string }): Promise<Dashboar
     getProgressSummary(viewer.id),
   ]);
   const enrolledCourses = courses.filter((course) => course.enrolled);
+  const upcomingItems =
+    enrolledCourses.length > 0
+      ? await getUpcomingDashboardItems(
+          viewer.id,
+          enrolledCourses.map((course) => course.id),
+        )
+      : [];
+  const activeCourses = enrolledCourses.filter((course) => course.progress < 100);
+  const weeklyGoalPercent =
+    activeCourses.length === 0
+      ? progressSummary.completedCourses > 0
+        ? 100
+        : 0
+      : Math.round(
+          activeCourses.reduce((sum, course) => sum + course.progress, 0) / activeCourses.length,
+        );
 
   return {
+    courses,
     progressSummary,
     featuredCourse:
       enrolledCourses.find((course) => course.featured) ??
       courses.find((course) => course.featured) ??
       null,
     enrolledCourses,
+    focusMetrics: {
+      weeklyGoalPercent,
+      assignmentsPercent: progressSummary.quizAverage,
+    },
+    upcomingItems,
   };
+}
+
+async function getUpcomingDashboardItems(userId: string, courseIds: string[]) {
+  const sections = await prisma.section.findMany({
+    where: {
+      course_id: { in: courseIds },
+    },
+    include: {
+      course: true,
+      lessons: {
+        where: { status: "published" },
+        include: {
+          progress_records: {
+            where: { user_id: userId },
+          },
+        },
+        orderBy: { position: "asc" },
+      },
+    },
+    orderBy: [{ course_id: "asc" }, { position: "asc" }],
+  });
+
+  return sections
+    .flatMap((section) =>
+      section.lessons.map((lesson) => ({
+        id: lesson.id,
+        title: lesson.title,
+        subtitle: `${section.course.title} - ${lesson.estimated_minutes ?? 5} min`,
+        href: `/course/${section.course_id}?lesson=${lesson.id}`,
+        progressStatus: lesson.progress_records[0]?.status ?? "not_started",
+        sectionPosition: section.position,
+        lessonPosition: lesson.position,
+      })),
+    )
+    .filter((lesson) => lesson.progressStatus !== "completed")
+    .sort((a, b) => a.sectionPosition - b.sectionPosition || a.lessonPosition - b.lessonPosition)
+    .slice(0, 3)
+    .map(({ id, title, subtitle, href }) => ({ id, title, subtitle, href }));
 }

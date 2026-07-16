@@ -2,19 +2,19 @@
 
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react";
 import * as courseService from "@/src/services/api/course.service";
+import * as dashboardService from "@/src/services/api/dashboard.service";
 import * as lessonService from "@/src/services/api/lesson.service";
-import * as progressService from "@/src/services/api/progress.service";
 import { useAuth } from "@/src/context/auth.context";
+import type { DashboardResponseDto, ProgressSummaryDto } from "@/src/infra/dtos/course.dto";
 import type { Course, CourseLessons } from "@/src/services/mock/types";
 
 type LearningContextValue = {
   courses: Course[];
-  progressSummary: {
-    completedCourses: number;
-    hoursLearned: number;
-    quizAverage: number;
-    streakDays: number;
-  } | null;
+  progressSummary: ProgressSummaryDto | null;
+  featuredCourse: Course | null;
+  enrolledCourses: Course[];
+  focusMetrics: DashboardResponseDto["focusMetrics"];
+  upcomingItems: DashboardResponseDto["upcomingItems"];
   isLoading: boolean;
   error: string | null;
   getCourse: (courseId: string) => Promise<Course>;
@@ -28,6 +28,13 @@ export function LearningProvider({ children }: PropsWithChildren) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [progressSummary, setProgressSummary] =
     useState<LearningContextValue["progressSummary"]>(null);
+  const [featuredCourse, setFeaturedCourse] = useState<Course | null>(null);
+  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
+  const [focusMetrics, setFocusMetrics] = useState<DashboardResponseDto["focusMetrics"]>({
+    weeklyGoalPercent: 0,
+    assignmentsPercent: 0,
+  });
+  const [upcomingItems, setUpcomingItems] = useState<DashboardResponseDto["upcomingItems"]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +49,22 @@ export function LearningProvider({ children }: PropsWithChildren) {
 
     const load = async () => {
       try {
+        if (user) {
+          const dashboard = await dashboardService.getDashboardData();
+
+          if (!active) {
+            return;
+          }
+
+          setCourses(dashboard.courses);
+          setProgressSummary(dashboard.progressSummary);
+          setFeaturedCourse(dashboard.featuredCourse);
+          setEnrolledCourses(dashboard.enrolledCourses);
+          setFocusMetrics(dashboard.focusMetrics);
+          setUpcomingItems(dashboard.upcomingItems);
+          return;
+        }
+
         const courseList = await courseService.listCourses();
 
         if (!active) {
@@ -49,24 +72,16 @@ export function LearningProvider({ children }: PropsWithChildren) {
         }
 
         setCourses(courseList);
-
-        if (!user) {
-          setProgressSummary({
-            completedCourses: 0,
-            hoursLearned: 0,
-            quizAverage: 0,
-            streakDays: 0,
-          });
-          return;
-        }
-
-        const summary = await progressService.getProgressSummary();
-
-        if (!active) {
-          return;
-        }
-
-        setProgressSummary(summary);
+        setProgressSummary({
+          completedCourses: 0,
+          hoursLearned: 0,
+          quizAverage: 0,
+          streakDays: 0,
+        });
+        setFeaturedCourse(courseList.find((course) => course.featured) ?? courseList[0] ?? null);
+        setEnrolledCourses([]);
+        setFocusMetrics({ weeklyGoalPercent: 0, assignmentsPercent: 0 });
+        setUpcomingItems([]);
       } catch (cause) {
         if (!active) {
           return;
@@ -78,6 +93,10 @@ export function LearningProvider({ children }: PropsWithChildren) {
           quizAverage: 0,
           streakDays: 0,
         });
+        setFeaturedCourse(null);
+        setEnrolledCourses([]);
+        setFocusMetrics({ weeklyGoalPercent: 0, assignmentsPercent: 0 });
+        setUpcomingItems([]);
         setError(cause instanceof Error ? cause.message : "Unable to load learning data.");
       } finally {
         if (active) {
@@ -98,6 +117,10 @@ export function LearningProvider({ children }: PropsWithChildren) {
       value={{
         courses,
         progressSummary,
+        featuredCourse,
+        enrolledCourses,
+        focusMetrics,
+        upcomingItems,
         isLoading,
         error,
         getCourse: courseService.getCourse,

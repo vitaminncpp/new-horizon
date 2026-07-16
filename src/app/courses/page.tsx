@@ -1,48 +1,106 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CourseCard } from "@/src/components/features/course-card";
 import { Loader } from "@/src/components/common/loader";
 import { Dropdown } from "@/src/components/common/dropdown";
 import { PageWrapper } from "@/src/components/layout/page-wrapper";
-import { useLearning } from "@/src/context/learning.context";
 import { useAuthRedirect } from "@/src/hooks/use-auth-redirect";
+import * as courseService from "@/src/services/api/course.service";
+import type { Course } from "@/src/services/mock/types";
 
 const categories = ["All", "Design", "Development", "Business", "Marketing"];
 const difficulties = ["All", "Beginner", "Intermediate", "Advanced"];
 const durations = ["All", "0-2 Hours", "3-6 Hours", "7+ Hours"];
+const pageSize = 6;
+
+const durationValues: Record<string, string | undefined> = {
+  All: undefined,
+  "0-2 Hours": "0-2",
+  "3-6 Hours": "3-6",
+  "7+ Hours": "7-plus",
+};
+
+const sortValues: Record<string, string> = {
+  Popular: "popular",
+  Latest: "latest",
+  Rating: "rating",
+};
 
 export default function CoursesPage() {
   const auth = useAuthRedirect("private");
-  const { courses, isLoading } = useLearning();
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("Popular");
-  const [selectedCategories, setSelectedCategories] = useState(["Design"]);
-  const [difficulty, setDifficulty] = useState("Intermediate");
-  const [duration, setDuration] = useState("3-6 Hours");
+  const [selectedCategories, setSelectedCategories] = useState(["All"]);
+  const [difficulty, setDifficulty] = useState("All");
+  const [duration, setDuration] = useState("All");
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const filteredCourses = useMemo(() => {
-    const next = courses.filter((course) => {
-      const categoryMatch =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes("All") ||
-        selectedCategories.includes(course.category);
-      const difficultyMatch = difficulty === "All" || course.difficulty === difficulty;
-      const durationMatch =
-        duration === "All" ||
-        (duration === "0-2 Hours" && course.durationHours <= 2) ||
-        (duration === "3-6 Hours" && course.durationHours >= 3 && course.durationHours <= 6) ||
-        (duration === "7+ Hours" && course.durationHours >= 7);
-      const searchMatch = course.title.toLowerCase().includes(search.toLowerCase());
+  const visiblePages = useMemo(
+    () => Array.from({ length: totalPages }, (_, index) => index + 1),
+    [totalPages],
+  );
 
-      return categoryMatch && difficultyMatch && durationMatch && searchMatch;
-    });
+  useEffect(() => {
+    if (auth.isLoading) {
+      return;
+    }
 
-    return sort === "Latest" ? [...next].reverse() : next;
-  }, [courses, difficulty, duration, search, selectedCategories, sort]);
+    let active = true;
+    setIsLoading(true);
+    setError(null);
 
-  const pagedCourses = filteredCourses.slice((page - 1) * 2, page * 2);
+    void courseService
+      .listCoursesPage({
+        search,
+        categories: selectedCategories,
+        difficulty,
+        duration: durationValues[duration],
+        sort: sortValues[sort],
+        page,
+        pageSize,
+      })
+      .then((response) => {
+        if (!active) {
+          return;
+        }
+
+        setCourses(response.items);
+        setTotalPages(response.meta?.totalPages ?? 1);
+        setTotalItems(response.meta?.totalItems ?? response.items.length);
+        if (response.meta?.page && response.meta.page !== page) {
+          setPage(response.meta.page);
+        }
+      })
+      .catch((cause) => {
+        if (!active) {
+          return;
+        }
+
+        setCourses([]);
+        setTotalPages(1);
+        setTotalItems(0);
+        setError(cause instanceof Error ? cause.message : "Unable to load courses.");
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [auth.isLoading, difficulty, duration, page, search, selectedCategories, sort]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [difficulty, duration, search, selectedCategories, sort]);
 
   if (auth.isLoading || isLoading) {
     return <Loader label="Loading courses" />;
@@ -58,13 +116,7 @@ export default function CoursesPage() {
                 key={item}
                 checked={selectedCategories.includes(item)}
                 label={item}
-                onChange={() =>
-                  setSelectedCategories((current) =>
-                    current.includes(item)
-                      ? current.filter((value) => value !== item)
-                      : [...current, item],
-                  )
-                }
+                onChange={() => setSelectedCategories((current) => toggleCategory(current, item))}
               />
             ))}
           </FilterGroup>
@@ -96,36 +148,74 @@ export default function CoursesPage() {
                 Explore Courses
               </h2>
               <p className="font-medium text-text-secondary">
-                Curated learning paths for the modern professional.
+                {totalItems} curated learning {totalItems === 1 ? "path" : "paths"} available.
               </p>
             </div>
-            <Dropdown label="Sort" items={["Popular", "Latest"]} value={sort} onChange={setSort} />
+            <Dropdown
+              label="Sort"
+              items={["Popular", "Latest", "Rating"]}
+              value={sort}
+              onChange={setSort}
+            />
           </div>
           <div className="grid gap-8 xl:grid-cols-1">
-            {pagedCourses.map((course) => (
+            {courses.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}
+            {courses.length === 0 ? (
+              <div className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+                <h3 className="text-xl font-bold text-text-primary">No courses found</h3>
+                <p className="mt-3 text-sm text-text-secondary">
+                  {error ?? "Adjust your filters or search query to see more courses."}
+                </p>
+              </div>
+            ) : null}
           </div>
-          <div className="mt-10 flex items-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => setPage(1)}
-              className={`rounded-lg px-4 py-2 text-sm font-bold ${page === 1 ? "bg-primary text-[color:var(--color-text-on-primary)]" : "bg-surface-low text-text-secondary"}`}
+              disabled={page === 1}
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              className="rounded-lg bg-surface-low px-4 py-2 text-sm font-bold text-text-secondary disabled:cursor-not-allowed disabled:opacity-50"
             >
-              1
+              Previous
             </button>
+            {visiblePages.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setPage(item)}
+                className={`rounded-lg px-4 py-2 text-sm font-bold ${page === item ? "bg-primary text-[color:var(--color-text-on-primary)]" : "bg-surface-low text-text-secondary"}`}
+              >
+                {item}
+              </button>
+            ))}
             <button
               type="button"
-              onClick={() => setPage(2)}
-              className={`rounded-lg px-4 py-2 text-sm font-bold ${page === 2 ? "bg-primary text-[color:var(--color-text-on-primary)]" : "bg-surface-low text-text-secondary"}`}
+              disabled={page === totalPages}
+              onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+              className="rounded-lg bg-surface-low px-4 py-2 text-sm font-bold text-text-secondary disabled:cursor-not-allowed disabled:opacity-50"
             >
-              2
+              Next
             </button>
           </div>
         </section>
       </div>
     </PageWrapper>
   );
+}
+
+function toggleCategory(current: string[], item: string) {
+  if (item === "All") {
+    return ["All"];
+  }
+
+  const withoutAll = current.filter((value) => value !== "All");
+  const next = withoutAll.includes(item)
+    ? withoutAll.filter((value) => value !== item)
+    : [...withoutAll, item];
+
+  return next.length > 0 ? next : ["All"];
 }
 
 function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {

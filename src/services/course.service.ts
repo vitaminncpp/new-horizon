@@ -12,4 +12,5 @@ export {
   getLessonContentBlocks,
   getLessonProgress,
   listCourses,
+  listCoursesWithMeta,
 } from "@/src/services/catalog.service";

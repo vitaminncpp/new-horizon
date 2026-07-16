@@ -414,7 +414,7 @@ export default function CircuitSimulatorPage() {
             <Icon name="arrow_back" className="text-lg" />
             <span className="text-xs font-medium">Back</span>
           </Link>
-          <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">
+          <span className="text-lg font-bold tracking-tight bg-linear-to-r from-primary to-tertiary bg-clip-text text-transparent">
             CircuitArchitect
           </span>
           <div className="flex items-center gap-1 bg-surface-lowest/50 px-2 py-1 rounded-lg border border-border-soft">
@@ -455,7 +455,7 @@ export default function CircuitSimulatorPage() {
           </button>
           <button
             onClick={() => setIsSimulating(!isSimulating)}
-            className="px-4 py-1.5 bg-gradient-to-r from-primary to-tertiary text-white rounded-lg font-semibold shadow-lg active:scale-95 transition-all text-xs"
+            className="px-4 py-1.5 bg-linear-to-r from-primary to-tertiary text-white rounded-lg font-semibold shadow-lg active:scale-95 transition-all text-xs"
           >
             {isSimulating ? "Stop" : "Run Simulation"}
           </button>
@@ -594,19 +594,19 @@ export default function CircuitSimulatorPage() {
                     onMouseDown={(e) => handleComponentClick(e, comp.id)}
                   >
                     <div
-                      className={`relative w-[64px] h-[64px] bg-surface-high rounded-xl border-2 ${borderColor} ${
+                      className={`relative w-16 h-16 bg-surface-high rounded-xl border-2 ${borderColor} ${
                         isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
                       }`}
                     >
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-[14px] h-[14px] rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
+                        className={`absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
                           tool === "wire" ? "hover:scale-125" : ""
                         } ${isWireStartComp && wireStart?.point === "left" ? "ring-2 ring-white scale-125" : ""}`}
                         style={{ left: -8 }}
                         onClick={(e) => handleConnectorClick(e, comp.id, "left")}
                       />
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-[14px] h-[14px] rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
+                        className={`absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full cursor-crosshair ${connColor} border-2 border-background transition-all hover:scale-125 hover:ring-2 hover:ring-white/30 z-10 ${
                           tool === "wire" ? "hover:scale-125" : ""
                         } ${isWireStartComp && wireStart?.point === "right" ? "ring-2 ring-white scale-125" : ""}`}
                         style={{ right: -8 }}
@@ -647,7 +647,7 @@ export default function CircuitSimulatorPage() {
               >
                 <span className="material-symbols-outlined text-base">remove</span>
               </button>
-              <span className="px-2 min-w-[40px] text-center text-xs font-bold text-text-primary">
+              <span className="px-2 min-w-10 text-center text-xs font-bold text-text-primary">
                 {zoom}%
               </span>
               <button

@@ -23,9 +23,13 @@ export default function ProfilePage() {
   return (
     <PageWrapper searchPlaceholder="Search your profile...">
       <div className="mx-auto max-w-6xl p-8">
-        <section className="rounded-[1.5rem] bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
+        <section className="rounded-3xl bg-surface-lowest p-8 card-shadow dark:card-shadow-dark">
           <div className="flex flex-col gap-6 md:flex-row md:items-center">
-            <img alt={user.name} src={user.avatar} className="h-24 w-24 rounded-2xl object-cover" />
+            <img
+              alt={user.name}
+              src={user.avatar || undefined}
+              className="h-24 w-24 rounded-2xl object-cover"
+            />
             <div className="flex-1">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
                 Academic Curator
@@ -57,7 +61,7 @@ export default function ProfilePage() {
           ).map((course) => (
             <div
               key={course.id}
-              className="rounded-[1.5rem] bg-surface-lowest p-6 card-shadow dark:card-shadow-dark"
+              className="rounded-3xl bg-surface-lowest p-6 card-shadow dark:card-shadow-dark"
             >
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-secondary">
                 {course.category}

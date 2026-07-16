@@ -22,7 +22,7 @@ export function Topbar({
   const [value, setValue] = useState("");
 
   return (
-    <header className="sticky top-0 z-40 flex h-[72px] items-center justify-between bg-topbar px-4 shadow-[0_20px_40px_rgba(15,23,42,0.06)] backdrop-blur-xl lg:ml-[260px] lg:px-8 dark:shadow-[0_20px_40px_rgba(0,0,0,0.28)]">
+    <header className="sticky top-0 z-40 flex h-18 items-center justify-between bg-topbar px-4 shadow-[0_20px_40px_rgba(15,23,42,0.06)] backdrop-blur-xl lg:ml-[260px] lg:px-8 dark:shadow-[0_20px_40px_rgba(0,0,0,0.28)]">
       <div className="flex flex-1 items-center">
         <div className="relative w-full max-w-xl">
           <Icon
@@ -74,7 +74,7 @@ export function Topbar({
             </Link>
             <img
               alt={user.name}
-              src={user.avatar}
+              src={user.avatar || undefined}
               className="h-10 w-10 rounded-xl object-cover ring-2 ring-primary/10"
             />
             {pathname !== "/login" && pathname !== "/register" ? (

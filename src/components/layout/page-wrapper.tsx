@@ -12,7 +12,7 @@ export function PageWrapper({ children, searchPlaceholder, onSearch }: PageWrapp
     <div className="min-h-screen bg-background text-text-primary">
       <Sidebar />
       <Topbar searchPlaceholder={searchPlaceholder} onSearch={onSearch} />
-      <main className="lg:ml-[260px]">{children}</main>
+      <main className="lg:ml-65">{children}</main>
     </div>
   );
 }
